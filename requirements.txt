@@ -1,0 +1,8 @@
+bs4==0.0.1
+Flask==2.3.3
+Flask-Cors==4.0.0
+langchain==0.0.271
+pydantic==2.3.0
+pyngrok==6.0.0
+python-dotenv==1.0.0
+together==0.1.5

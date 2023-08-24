@@ -1,3 +1,9 @@
+#Environment files
+Backend
+
+#Vscode configuration
+.vscode
+
 # Logs
 logs
 *.log
