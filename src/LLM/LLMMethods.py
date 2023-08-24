@@ -18,7 +18,7 @@ def init_model():
 
 
 def get_prompt(query, system_prompt=SYSTEM_PROMPT):
-    template = system_prompt + query
+    template = B_INST + system_prompt + query + E_INST
     prompt = PromptTemplate(
         template=template,
         input_variables=["query", "content"]
@@ -45,7 +45,7 @@ def remove_substring(string, substring):
 def generate(query, content, llm):
     s_prompt = get_prompt(S_INSTRUCTION, S_SYSTEM_PROMPOT)
     prompt = get_prompt(INSTRUCTION)
-    print(prompt)
+    # print(prompt)
 
     s_llm_chain = LLMChain(prompt=s_prompt, llm=llm)
     s_content: str = s_llm_chain.run(content)

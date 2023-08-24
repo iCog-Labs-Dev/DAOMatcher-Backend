@@ -11,12 +11,12 @@ def handle_request():
     if request.method == "GET":
         return "Send post request"
     elif request.method == "POST":
-        print(request)
         query = request.json["query"]
         content = request.json["content"]
+
         response = generate(query, content, llm)
         data = {"response": response}
-        print(response)
+
         return jsonify(data)
 
 
