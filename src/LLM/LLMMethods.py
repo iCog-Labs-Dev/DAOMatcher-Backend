@@ -5,7 +5,7 @@ from LLM import TogetherLLM
 from langchain import PromptTemplate, LLMChain
 from Prompts import *
 import requests
-from LLMServer import LLMPort
+from config import *
 
 
 # llm = HuggingFacePipeline(pipeline = pipe, model_kwargs = {'temperature':0})
@@ -55,11 +55,10 @@ def parse_text(text):
 def generate_search(query, content):
     headers = {"Content-Type": "application/json"}  # Specify JSON content type
     data = {"query": query, "content": content}
+    Url = LLM_URL if LLM_URL else LocalLLMURL
 
     try:
-        response = requests.post(
-            f"http://localhost:{LLMPort}", json=data, headers=headers
-        )
+        response = requests.post(Url, json=data, headers=headers)
         response.raise_for_status()  # Raise an exception for HTTP errors
 
         # Assuming the server returns JSON data as well

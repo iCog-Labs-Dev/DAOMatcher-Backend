@@ -1,12 +1,6 @@
-import os
 from flask import Flask, request
-from pyngrok import ngrok
-from dotenv import load_dotenv
 from src.ServerLogic.StoringUsers import *
-
-load_dotenv()
-
-port_no = 5000
+from src.config import LocalAppPort as port_no
 
 app = Flask(__name__)
 
