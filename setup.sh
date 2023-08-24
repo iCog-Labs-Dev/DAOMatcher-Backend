@@ -2,7 +2,7 @@
 
 cleanup() {
     echo  ""
-    echo "Cleaning up..."
+    echo -e "\nCleaning up..."
     if [ -n "$llm_pid" ]; then
         kill -TERM "$llm_pid"
     fi
