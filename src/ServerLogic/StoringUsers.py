@@ -6,7 +6,7 @@ from ..ServerLogic.ScrapingMethods import *
 user_heap = []
 
 Limit = 2
-user_limit = 3
+user_limit = 2
 
 
 def store_items(item, limit):

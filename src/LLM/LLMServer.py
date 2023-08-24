@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from ..LLM.LLMMethods import *
 
 app = Flask(__name__)
@@ -15,8 +15,9 @@ def handle_request():
         query = request.json["query"]
         content = request.json["content"]
         response = generate(query, content, llm)
+        data = {"response": response}
         print(response)
-        return response
+        return jsonify(data)
 
 
 app.run(port=LOCAL_LLM_PORT)
