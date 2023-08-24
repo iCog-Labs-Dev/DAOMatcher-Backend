@@ -11,7 +11,7 @@ Given a person who is described as follows, display a single number denoting how
 "Given a person who is described as follows, display a single number denoting how much the person would be interested in the given topic from 1-100. If there is no indication that the person is not interested in the query, output 0. If there are things that indicate the person is absolutly interested on the subject output 100. You can also output a single digit between 1 and 100 to indicate how likely the person is to be interested in the topic based on the given description. Please only output a single number and nothing else. DO NOT explain anything, Just output the number."
 
 SUMMERIZE_SYSTEM_PROMPT = """
-    You are an expert post summerizer who can pin point the general topic of a post without losing its context in a single sentence.
+    Given lists of posts, you job is to shorten each post into a smaller number of sentences. You need to summerize each and every post separately and join them into the same paragraph in your response.
   """
 
 B_INST, E_INST = "[INST]", "[/INST]"
