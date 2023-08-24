@@ -3,7 +3,7 @@ Backend
 
 #Vscode configuration
 .vscode
-
+__pycache__
 # Logs
 logs
 *.log

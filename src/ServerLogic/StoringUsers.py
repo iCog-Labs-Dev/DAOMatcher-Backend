@@ -1,7 +1,7 @@
 from collections import *
 from heapq import *
-from LLM.LLMMethods import *
-from ScrapingMethods import *
+from ..LLM.LLMMethods import *
+from ..ServerLogic.ScrapingMethods import *
 
 user_heap = []
 

@@ -1,9 +1,9 @@
 import textwrap
 import together
 import requests
-from TogetherLLM import TogetherLLM
+from ..LLM.Prompts import *
+from ..LLM.TogetherLLM import TogetherLLM
 from langchain import PromptTemplate, LLMChain
-from Prompts import *
 import requests
 
 
