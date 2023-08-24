@@ -47,15 +47,15 @@ def generate(query, content, llm):
     prompt = get_prompt(INSTRUCTION)
     # print(prompt)
 
-    s_llm_chain = LLMChain(prompt=s_prompt, llm=llm)
-    s_content: str = s_llm_chain.run(content)
-    s_content = s_content.replace("\n", "")
+    # s_llm_chain = LLMChain(prompt=s_prompt, llm=llm)
+    # s_content: str = s_llm_chain.run(content)
+    # s_content = s_content.replace("\n", "")
 
-    print("Short content: ", s_content)
+    # print("Short content: ", s_content)
 
     llm_chain = LLMChain(prompt=prompt, llm=llm)
-    response = llm_chain.run({"query": query, "content": s_content})
-    # print(f"Prompt: {prompt}") #For debugging only
+    response = llm_chain.run({"query": query, "content": content})
+    print(f"Prompt: {prompt.template}")  # For debugging only
     return response
 
 
