@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
+from config import MASTEDON_BASE_URL
 
 
 def extractText(html):
@@ -11,8 +12,9 @@ def extractText(html):
 
 
 def getProfile(server, acc):
+    BASE_URL = MASTEDON_BASE_URL.format(server=server)
     try:
-        response = requests.get(f"https://{server}/api/v1/accounts/lookup?acct={acc}")
+        response = requests.get(f"{BASE_URL}/lookup?acct={acc}")
         response.raise_for_status()
         return response.json()
     except:
@@ -20,14 +22,16 @@ def getProfile(server, acc):
 
 
 def getFollowers(server, id):
-    response2 = requests.get(f"https://{server}/api/v1/accounts/{id}/following")
+    BASE_URL = MASTEDON_BASE_URL.format(server=server)
+
+    response2 = requests.get(f"{BASE_URL}/{id}/following")
     response2.raise_for_status()
     return response2.json()
 
 
 def getContent(server, id):
-    response = requests.get(
-        f"https://{server}/api/v1/accounts/{id}/statuses?exclude_replies=true"
-    )
+    BASE_URL = MASTEDON_BASE_URL.format(server=server)
+
+    response = requests.get(f"{BASE_URL}/{id}/statuses?exclude_replies=true")
     response.raise_for_status()
     return response.json()

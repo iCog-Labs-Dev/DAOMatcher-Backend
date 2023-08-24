@@ -55,7 +55,7 @@ def parse_text(text):
 def generate_search(query, content):
     headers = {"Content-Type": "application/json"}  # Specify JSON content type
     data = {"query": query, "content": content}
-    Url = LLM_URL if LLM_URL else LocalLLMURL
+    Url = LLM_URL if LLM_URL else LOCAL_LLM_URL
 
     try:
         response = requests.post(Url, json=data, headers=headers)
