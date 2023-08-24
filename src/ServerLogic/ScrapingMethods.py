@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
-from config import MASTEDON_BASE_URL
+
+MASTEDON_BASE_URL = """https://{server}/api/v1/accounts"""
 
 
 def extractText(html):

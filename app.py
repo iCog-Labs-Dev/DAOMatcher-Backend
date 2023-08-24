@@ -1,8 +1,9 @@
 from flask import Flask, request
 from src.ServerLogic.StoringUsers import *
-from src.config import LocalAppPort as port_no
 
 app = Flask(__name__)
+
+LOCAL_APP_PORT = 5000
 
 
 @app.route("/", methods=["GET", "POST"])
@@ -16,4 +17,4 @@ def semantic_search_query():
         return scour(user_list, query, user_limit)
 
 
-app.run(port=port_no)
+app.run(port=LOCAL_APP_PORT)

@@ -1,11 +1,10 @@
 import textwrap
 import together
 import requests
-from LLM import TogetherLLM
+from TogetherLLM import TogetherLLM
 from langchain import PromptTemplate, LLMChain
 from Prompts import *
 import requests
-from config import *
 
 
 # llm = HuggingFacePipeline(pipeline = pipe, model_kwargs = {'temperature':0})
@@ -52,9 +51,16 @@ def parse_text(text):
     return wrapped_text
 
 
+# These vaiables are only used for the following function, hence defined here
+LOCAL_LLM_PORT = 5001
+LOCAL_LLM_URL = f"http://localhost:{LOCAL_LLM_PORT}"
+LLM_URL = None
+
+
 def generate_search(query, content):
     headers = {"Content-Type": "application/json"}  # Specify JSON content type
     data = {"query": query, "content": content}
+
     Url = LLM_URL if LLM_URL else LOCAL_LLM_URL
 
     try:

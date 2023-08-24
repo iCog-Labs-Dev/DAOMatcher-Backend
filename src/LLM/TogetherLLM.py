@@ -1,14 +1,14 @@
 import os
 import together
-from dotenv import load_env
 from pydantic import Extra
 from langchain.llms.base import LLM
 from langchain.utils import get_from_dict_or_env
 from typing import Any, Dict
+from dotenv import load_dotenv
 
 
 # set API key
-load_env()
+load_dotenv()
 together.api_key = os.environ["TOGETHER_API_KEY"]
 
 

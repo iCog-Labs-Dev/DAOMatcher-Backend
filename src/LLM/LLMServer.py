@@ -1,9 +1,9 @@
 from flask import Flask, request
-from src.LLM.LLMMethods import *
-from config import LocalLLMPort as LLMPort
+from LLMMethods import *
 
 app = Flask(__name__)
 llm = init_model()
+LOCAL_LLM_PORT = 5001
 
 
 @app.route("/", methods=["GET", "POST"])
@@ -19,5 +19,5 @@ def semantic_search_query():
         return prompt
 
 
-app.run(port=LLMPort)
+app.run(port=LOCAL_LLM_PORT)
 together.Models.stop("togethercomputer/llama-2-70b-chat")
