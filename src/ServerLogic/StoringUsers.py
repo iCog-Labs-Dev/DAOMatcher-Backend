@@ -20,7 +20,6 @@ def scour(starting_users, query, user_limit):
     accounts = deque(starting_users)
 
     visited = set()
-    results = []
     count = 0
 
     while accounts and count < Limit:

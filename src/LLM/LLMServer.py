@@ -1,12 +1,9 @@
-from pyngrok import ngrok
 from flask import Flask, request
 from src.LLM.LLMMethods import *
 
 port_no = 5001
 
 app = Flask(__name__)
-ngrok.set_auth_token("2TeUpGO7kAzr6rQYvURgNGIO0qG_25bMqYYu3vAcyUf72tc9i")
-public_url = ngrok.connect(port_no).public_url
 llm = init_model()
 
 

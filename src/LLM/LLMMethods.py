@@ -2,6 +2,7 @@ import textwrap
 import together
 from LLM import TogetherLLM
 from langchain import PromptTemplate, LLMChain
+from Prompts import *
 
 
 # llm = HuggingFacePipeline(pipeline = pipe, model_kwargs = {'temperature':0})
@@ -12,17 +13,6 @@ def init_model():
     together.Models.start("togethercomputer/llama-2-70b-chat")
     print("Model started successfully")
     return llm
-
-
-DEFAULT_SYSTEM_PROMPT = """\
-    You are an expert person interest rator who specialized in rating a person's interest given a list of posts made by the person. Your task is to rate the persons interest out of 100 and display only the number. The person you are working with hates reasoning and will fire you if you give any further explanation.
-  """
-
-B_INST, E_INST = "[INST]", "[/INST]"
-B_SYS, E_SYS = "<<SYS>>\n", "\n<</SYS>>\n\n"
-
-
-SYSTEM_PROMPT = B_SYS + DEFAULT_SYSTEM_PROMPT + E_SYS
 
 
 def get_prompt(query):

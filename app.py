@@ -9,8 +9,6 @@ load_dotenv()
 port_no = 5000
 
 app = Flask(__name__)
-ngrok.set_auth_token(os.environ["NGROK_API_KEY"])
-public_url = ngrok.connect(port_no).public_url
 
 
 @app.route("/", methods=["GET", "POST"])
