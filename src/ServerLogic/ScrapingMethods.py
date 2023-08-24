@@ -1,7 +1,13 @@
-# These function specific to Mastodon Scraping
-
 import requests
 from bs4 import BeautifulSoup
+
+
+def extractText(html):
+    soup = BeautifulSoup(html)
+    return soup.getText()
+
+
+# These function specific to Mastodon Scraping
 
 
 def getProfile(server, acc):
@@ -25,8 +31,3 @@ def getContent(server, id):
     )
     response.raise_for_status()
     return response.json()
-
-
-def extractText(html):
-    soup = BeautifulSoup(html)
-    return soup.getText()
