@@ -1,7 +1,7 @@
 from flask import Flask, request
 from src.LLM.LLMMethods import *
 
-port_no = 5001
+LLMPort = 5001
 
 app = Flask(__name__)
 llm = init_model()

@@ -1,8 +1,11 @@
 import textwrap
 import together
+import requests
 from LLM import TogetherLLM
 from langchain import PromptTemplate, LLMChain
 from Prompts import *
+import requests
+from LLMServer import LLMPort
 
 
 # llm = HuggingFacePipeline(pipeline = pipe, model_kwargs = {'temperature':0})
@@ -36,12 +39,11 @@ def remove_substring(string, substring):
 
 
 def generate(query, content, llm):
-    prompt = get_prompt(
-        "Rate the person's interest on the topic of {query} given the following posts/n Posts: {content}"
-    )
+    prompt = get_prompt(INSTRUCTION)
     llm_chain = LLMChain(prompt=prompt, llm=llm)
+
     response = llm_chain.run({"query": query, "content": content})
-    print(f"Prompt: {prompt}")
+    # print(f"Prompt: {prompt}") #For debugging only
     return response
 
 
@@ -51,20 +53,22 @@ def parse_text(text):
 
 
 def generate_search(query, content):
-    prompt = format_prompt(query, content)
-    generated_text = generate(prompt)
-    parsed_text = parse_text(generated_text)
+    headers = {"Content-Type": "application/json"}  # Specify JSON content type
+    data = {"query": query, "content": content}
 
-    return parsed_text
+    try:
+        response = requests.post(
+            f"http://localhost:{LLMPort}", json=data, headers=headers
+        )
+        response.raise_for_status()  # Raise an exception for HTTP errors
 
+        # Assuming the server returns JSON data as well
+        generated_text = response.json()
+        print("POST request successful")
+        print("Response:", generated_text)
+        parsed_text = parse_text(generated_text)
+        return parsed_text
 
-def format_prompt(query, content):
-    return """
-### query:
-{query}
-
-### Posts:
-{content}
-""".format(
-        content=content, query=query
-    )
+    except requests.exceptions.RequestException as e:
+        print(f"POST request failed: {e}")
+        return "Request not successful"
