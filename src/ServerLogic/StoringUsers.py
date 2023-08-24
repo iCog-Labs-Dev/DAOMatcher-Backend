@@ -38,6 +38,7 @@ def scour(starting_users, query, user_limit):
                     content.append(extractText(c["content"]))
                     # print(content[-1])
             content = "\n\n------------------\n".join(content)
+            print(content)
             store_items(((generate_search(query, content), account)), user_limit)
 
             for follower in getFollowers(server, id):
