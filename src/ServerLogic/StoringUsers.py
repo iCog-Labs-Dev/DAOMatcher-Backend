@@ -5,7 +5,7 @@ from ..ServerLogic.ScrapingMethods import *
 
 user_heap = []
 
-Limit = 3
+Limit = 2
 user_limit = 3
 
 

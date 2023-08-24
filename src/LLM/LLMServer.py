@@ -7,16 +7,16 @@ LOCAL_LLM_PORT = 5001
 
 
 @app.route("/", methods=["GET", "POST"])
-def semantic_search_query():
+def handle_request():
     if request.method == "GET":
         return "Send post request"
     elif request.method == "POST":
         print(request)
         query = request.json["query"]
         content = request.json["content"]
-        prompt = generate(query, content, llm)
-        print(prompt)
-        return prompt
+        response = generate(query, content, llm)
+        print(response)
+        return response
 
 
 app.run(port=LOCAL_LLM_PORT)

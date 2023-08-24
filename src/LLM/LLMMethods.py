@@ -39,6 +39,7 @@ def remove_substring(string, substring):
 
 def generate(query, content, llm):
     prompt = get_prompt(INSTRUCTION)
+    print(prompt)
     llm_chain = LLMChain(prompt=prompt, llm=llm)
 
     response = llm_chain.run({"query": query, "content": content})
