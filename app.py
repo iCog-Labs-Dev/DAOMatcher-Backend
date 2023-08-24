@@ -1,13 +1,16 @@
-from pyngrok import ngrok
+import os
 from flask import Flask, request
-from src.LLM.LLMMethods import *
+from pyngrok import ngrok
+from dotenv import load_dotenv
+from src.ServerLogic.StoringUsers import *
 
-port_no = 5001
+load_dotenv()
+
+port_no = 5000
 
 app = Flask(__name__)
-ngrok.set_auth_token("2TeUpGO7kAzr6rQYvURgNGIO0qG_25bMqYYu3vAcyUf72tc9i")
+ngrok.set_auth_token(os.environ["NGROK_API_KEY"])
 public_url = ngrok.connect(port_no).public_url
-llm = init_model()
 
 
 @app.route("/", methods=["GET", "POST"])
@@ -15,15 +18,12 @@ def semantic_search_query():
     if request.method == "GET":
         return "Send post request"
     elif request.method == "POST":
-        print(request)
         query = request.json["query"]
-        content = request.json["content"]
-        prompt = generate(query, content, llm)
-        print(prompt)
-        return prompt
+        user_list = request.json["user_list"]
+        user_limit = request.json["user_limit"]
+        return scour(user_list, query, user_limit)
 
 
 print(f"Public url for the API... {public_url}")
 
 app.run(port=port_no)
-together.Models.stop("togethercomputer/llama-2-70b-chat")
