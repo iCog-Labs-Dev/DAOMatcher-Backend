@@ -20,7 +20,5 @@ def semantic_search_query():
         return prompt
 
 
-print(f"Public url for the API... {public_url}")
-
 app.run(port=port_no)
 together.Models.stop("togethercomputer/llama-2-70b-chat")

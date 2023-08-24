@@ -22,6 +22,4 @@ def semantic_search_query():
         return scour(user_list, query, user_limit)
 
 
-print(f"Public url for the API... {public_url}")
-
 app.run(port=port_no)
