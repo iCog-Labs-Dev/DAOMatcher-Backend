@@ -5,7 +5,7 @@ from ..ServerLogic.ScrapingMethods import *
 
 user_heap = []
 
-Limit = 5
+Limit = 3
 user_limit = 3
 
 
@@ -38,7 +38,7 @@ def scour(starting_users, query, user_limit):
                     content.append(extractText(c["content"]))
                     # print(content[-1])
             content = "\n\n------------------\n".join(content)
-            store_items(int((generate_search(query, content), account)), user_limit)
+            store_items(((generate_search(query, content), account)), user_limit)
 
             for follower in getFollowers(server, id):
                 username = follower["acct"]

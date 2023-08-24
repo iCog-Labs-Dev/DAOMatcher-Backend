@@ -1,7 +1,6 @@
 #!/bin/bash
 
 cleanup() {
-    echo  ""
     echo -e "\nCleaning up..."
     if [ -n "$llm_pid" ]; then
         kill -TERM "$llm_pid"

@@ -76,4 +76,4 @@ def generate_search(query, content):
 
     except requests.exceptions.RequestException as e:
         print(f"POST request failed: {e}")
-        return "Request not successful"
+        return str(e)
