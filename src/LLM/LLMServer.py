@@ -1,5 +1,5 @@
 from flask import Flask, request
-from LLMMethods import *
+from ..LLM.LLMMethods import *
 
 app = Flask(__name__)
 llm = init_model()
