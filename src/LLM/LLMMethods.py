@@ -58,3 +58,23 @@ def generate(query, content, llm):
 def parse_text(text):
     wrapped_text = textwrap.fill(text, width=100)
     return wrapped_text
+
+
+def generate_search(query, content):
+    prompt = format_prompt(query, content)
+    generated_text = generate(prompt)
+    parsed_text = parse_text(generated_text)
+
+    return parsed_text
+
+
+def format_prompt(query, content):
+    return """
+### query:
+{query}
+
+### Posts:
+{content}
+""".format(
+        content=content, query=query
+    )
