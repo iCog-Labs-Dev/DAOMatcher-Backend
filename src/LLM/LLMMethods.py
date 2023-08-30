@@ -49,12 +49,13 @@ def generate(query, content, llm):
 
     s_llm_chain = LLMChain(prompt=s_prompt, llm=llm)
     s_content: str = s_llm_chain.run(content)
-    s_content = s_content.replace("\n", "")
+    s_content = s_content.replace("\n", "").replace("*", "").split("Response:")[1]
 
     print("Short content: ", s_content)
 
     llm_chain = LLMChain(prompt=prompt, llm=llm)
     response = llm_chain.run({"query": query, "content": s_content})
+    response = response.split("Response:")[1]
     print(f"Prompt: {prompt.template}")  # For debugging only
     return response
 
