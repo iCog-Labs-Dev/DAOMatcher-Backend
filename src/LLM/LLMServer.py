@@ -15,6 +15,8 @@ def handle_request():
         content = request.json["content"]
 
         response = generate(query, content, llm)
+        response = response.strip()
+        
         data = {"response": response}
 
         return jsonify(data)
