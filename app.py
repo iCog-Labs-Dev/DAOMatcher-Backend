@@ -1,13 +1,16 @@
 from flask import Flask, request, jsonify
 from src.ServerLogic.StoringUsers import *
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 LOCAL_APP_PORT = 5000
 
 
 @app.route("/", methods=["GET", "POST"])
 def semantic_search_query():
+    print(request.json)
     if request.method == "GET":
         return "Send post request"
     elif request.method == "POST":
