@@ -27,7 +27,7 @@ step 4: ouput a single number based on your analysis
 topic: <{query}>
 Description: ```{content}```
 
-Strictly follow the following output format. Don't include any response that is not included in here.
+Strictly provide your output as follows. Don't include any explanation or any text.
 Response: <single number from 1-100>
 """
 S_INSTRUCTION = """Shorten each of the following posts that are put into separate paragraph. Summerize each post without losing its context and topic into a single sentence. You should responde with a single long paragraph that has all summeries about the posts.

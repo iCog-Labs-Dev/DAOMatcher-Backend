@@ -21,7 +21,7 @@ class TogetherLLM(LLM):
     together_api_key: str = os.environ["TOGETHER_API_KEY"]
     """Together API key"""
 
-    temperature: float = 0.7
+    temperature: float = 0.0
     """What sampling temperature to use."""
 
     max_tokens: int = 512
