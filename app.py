@@ -15,7 +15,9 @@ def semantic_search_query():
         user_list = request.json["user_list"]
         user_limit = request.json["user_limit"]
         result = scour(user_list, query, user_limit)
+        
         data = {"result": result}
+        
         return jsonify(data)
 
 
