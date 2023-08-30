@@ -17,11 +17,12 @@ B_SYS, E_SYS = "<<SYS>>\n", "\n<</SYS>>\n\n"
 SYSTEM_PROMPT = B_SYS + DEFAULT_SYSTEM_PROMPT + E_SYS
 S_SYSTEM_PROMPOT = B_SYS + SUMMERIZE_SYSTEM_PROMPT + E_SYS
 
-INSTRUCTION = """For the following topic in '<>' and description in '``````' perform the following steps
-step 1: from the given description about a user, identify sentences that are related to the given topic
-step 2: if you can find sentences related to the provided topics procced with step 3 other wise output 0 and end your analysis.
-step 3: rate how much interested can the user be on the given topic on the scale of 1-100 based on the identified sentences and their correlation with the topic.
-step 4: ouput a single number based on step 2.
+INSTRUCTION = """For the following topic in '<>' and posts separated by '------------------'  in '``````' perform the following steps
+step 1: summarize each post that is separated by '------------------' at most 50 words.
+step 2: from the summarized posts above, identify sentences that are related to the given topic.
+step 3: if you can find sentences related to the provided topics procced with step 3 other wise output 0 and end your analysis.
+step 4: rate how much interested the user can be on the given topic on the scale of 1-100 based on the identified sentences and their correlation with the topic.
+step 5: ouput a single number based on step 4.
 
 topic: <{query}>
 Description: ```{content}```
