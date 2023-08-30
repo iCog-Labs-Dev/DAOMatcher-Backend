@@ -5,10 +5,6 @@ from ..ServerLogic.ScrapingMethods import *
 
 user_heap = []
 
-Limit = 2
-user_limit = 2
-
-
 def store_items(item, limit):
     if len(user_heap) == limit:
         heappushpop(user_heap, item)
@@ -22,7 +18,7 @@ def scour(starting_users, query, user_limit):
     visited = set()
     count = 0
 
-    while accounts and count < Limit:
+    while accounts and count < user_limit:
         account = accounts.popleft()
         _, acc, server = account.split("@")
         profile = getProfile(server, acc)
