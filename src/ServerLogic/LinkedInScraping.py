@@ -8,6 +8,10 @@ import json
 load_dotenv()
 
 api_key = os.getenv("API_KEY")
+payload={}
+headers = {
+  'Authorization': api_key
+}
 
 def handleException(response:requests.Response):
   if response.ok:
@@ -22,11 +26,6 @@ def getBasicUserInfo(username):
   
   url = f"https://api.lix-it.com/v1/person?profile_link=https://linkedin.com/in/{username}"
 
-  payload={}
-  headers = {
-    'Authorization': api_key  
-  }
-
   response = requests.request("GET", url, headers=headers, data=payload)
   userInfo = handleException(response)
   return userInfo
@@ -36,12 +35,6 @@ def getBasicUserInfo(username):
 #Get user Connections
 def getUserConnections(username, count):
   url = f"https://api.lix-it.com/v1/connections?count={count}&start=0&viewer_id={username}"
-  
-  payload={}
-  headers={
-    'Authorization': api_key  
-  }
-  
   response = requests.request("GET", url, headers=headers, data=payload)
   userConns = handleException(response)
   return userConns
@@ -49,10 +42,6 @@ def getUserConnections(username, count):
 #Supposed to fetch email address but doesn't work as expected
 def getEmailAddress(username):
   url = f"https://api.lix-it.com/v1/contact/email/by-linkedin?url=https://linkedin.com/in/{username}"
-  payload={}
-  headers={
-    'Authorization': api_key  
-  }
   
   response = requests.request("GET", url, headers=headers, data=payload)
   userEmails = handleException(response)
@@ -74,11 +63,6 @@ def getPostsByUser(userInfo):
   
   # print(postUrl) #Uncomment this for debugging
   print(url) #Uncomment this for debugging
-  
-  payload={}
-  headers={
-    'Authorization': api_key
-  }
   response = requests.request("GET", url, headers=headers, data=payload)
   userPosts = handleException(response)
   return userPosts
