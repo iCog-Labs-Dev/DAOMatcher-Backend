@@ -18,8 +18,20 @@ def semantic_search_query():
         user_list = request.json["user_list"]
         user_limit = request.json["user_limit"]
         result = scour(user_list, query, user_limit)
+        print(f"result: {users}")
         
-        data = {"result": result}
+        users = []
+        for user in result:
+            score , handle, userInfo = user
+            users.append({
+                "id": userInfo["id"],
+                "username": userInfo["username"],
+                "name": userInfo["name"],
+                "score": score,
+                "handle": handle
+            })
+        
+        data = {"result": users}
         
         return jsonify(data)
 

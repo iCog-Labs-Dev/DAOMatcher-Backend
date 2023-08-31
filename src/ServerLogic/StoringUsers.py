@@ -36,7 +36,13 @@ def scour(starting_users, query, user_limit):
             content = "\n\n------------------\n".join(content)
             # print(content)
             score = generate_search(query, content)["response"]
-            store_items(((int(score), account)), user_limit)
+            user = {
+                "id": profile["id"],
+                "name": profile["display_name"],
+                "username": profile["username"],
+            }
+            store_items(((int(score), account, user)), user_limit)
+
 
             for follower in getFollowers(server, id):
                 username = follower["acct"]
