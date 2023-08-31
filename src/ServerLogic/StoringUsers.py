@@ -15,13 +15,12 @@ def store_items(item, limit):
 def get_mastodon_user(acc, server):
     profile = getProfile(server, acc)
     if profile:
-        id = profile["id"]
         content = []
         # print(id)
         if "note" in profile:
             content.append(extractText(profile["note"]))
             # print(content[-1])
-        for c in getContent(server, id):
+        for c in getContent(server, profile["id"]):
             if "content" in c and c["content"]:
                 content.append(extractText(c["content"]))
                 # print(content[-1])
@@ -79,7 +78,7 @@ def scour(starting_users, query, user_limit):
             content, user = get_mastodon_user(acc, server)
 
             # Get mastodon followers
-            for follower in getFollowers(server, id):
+            for follower in getFollowers(server, user["id"]):
                 username = follower["acct"]
                 if "@" in username:
                     username = "@" + username

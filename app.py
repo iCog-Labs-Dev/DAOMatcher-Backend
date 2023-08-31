@@ -9,7 +9,7 @@ LOCAL_APP_PORT = 5000
 
 
 @app.route("/", methods=["GET", "POST"])
-def semantic_search_query():
+def scoring_user():
     print(request.json)
     if request.method == "GET":
         return "Send post request"
