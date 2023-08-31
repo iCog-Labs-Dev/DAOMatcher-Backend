@@ -1,9 +1,13 @@
+from dotenv import load_dotenv
 import requests
 import os
 import urllib.parse
 import json
 
-#Loaing api key from environment file
+#Loading api key from environment file
+# load_dotenv() # Uncomment for debugging
+# print(api_key) # Uncomment for debugging
+
 api_key = os.getenv("LIX_API_KEY")
 payload={}
 headers = {
@@ -18,7 +22,10 @@ def handleException(response:requests.Response):
     error = json.loads(response.text)
     raise Exception(f"Lix Error: {error['error']['message']}")
 
-#Used to get user information displayed on the profile page of the user
+#Used to get user information displayed on the profile page of the user. 
+#Username used here is the handle LinkedIn uses to identify the user publicly
+#It can be found from the link on the user profile
+#i.e alfie-lambert
 def getProfile(username):
   
   url = f"https://api.lix-it.com/v1/person?profile_link=https://linkedin.com/in/{username}"
