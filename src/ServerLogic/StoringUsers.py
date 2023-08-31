@@ -2,6 +2,7 @@ from collections import *
 from heapq import *
 from ..LLM.LLMMethods import *
 from .MastodonScraping import *
+from .LinkedInScraping import * 
 
 user_heap = []
 
@@ -11,7 +12,7 @@ def store_items(item, limit):
     else:
         heappush(user_heap, item)
 
-#Returns mastodon user content and user profile
+#Returns mastodon user content and dictionary user(id, name, username)
 def get_mastodon_user(acc, server):
     profile = getProfile(server, acc)
     if profile:
@@ -42,8 +43,11 @@ def scour(starting_users, query, user_limit):
 
     while accounts and count < user_limit:
         account = accounts.popleft()
-        _, acc, server = account.split("@")
-        content, user = get_mastodon_user(acc, server)
+        if "@" in account: # If it contains @ it is mastodon otherwise it is LinkedIn URL
+            _, acc, server = account.split("@")
+            content, user = get_mastodon_user(acc, server)
+        else:
+            pass
         if user:
             score = generate_search(query, content)["response"]
             store_items(((int(score), account, user)), user_limit)

@@ -26,7 +26,7 @@ def handleException(response:requests.Response):
 #Username used here is the handle LinkedIn uses to identify the user publicly
 #It can be found from the link on the user profile
 #i.e alfie-lambert
-def getProfile(username):
+def getLinkedInProfile(username):
   
   url = f"https://api.lix-it.com/v1/person?profile_link=https://linkedin.com/in/{username}"
 
