@@ -77,9 +77,6 @@ def scour(starting_users, query, user_limit):
         account = accounts.popleft()
         if "@" in account: # If it contains @ it is mastodon otherwise it is LinkedIn URL
             _, acc, server = account.split("@")
-            print("###############################")
-            print(f"acc: {acc} server: {server}")
-            print("###############################")
             content, user = get_mastodon_user(acc, server)
             
             # If there is no user found, no point in excuting the rest of the code
