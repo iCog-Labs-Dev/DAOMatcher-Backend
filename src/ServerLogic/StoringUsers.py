@@ -1,7 +1,7 @@
 from collections import *
 from heapq import *
 from ..LLM.LLMMethods import *
-from ..ServerLogic.ScrapingMethods import *
+from .MastodonScraping import *
 
 user_heap = []
 
@@ -11,6 +11,28 @@ def store_items(item, limit):
     else:
         heappush(user_heap, item)
 
+#Returns mastodon user content and user profile
+def get_mastodon_user(acc, server):
+    profile = getProfile(server, acc)
+    if profile:
+        id = profile["id"]
+        content = []
+        # print(id)
+        if "note" in profile:
+            content.append(extractText(profile["note"]))
+            # print(content[-1])
+        for c in getContent(server, id):
+            if "content" in c and c["content"]:
+                content.append(extractText(c["content"]))
+                # print(content[-1])
+        content = "\n\n------------------\n".join(content)
+        user = {
+                "id": profile["id"],
+                "name": profile["display_name"],
+                "username": profile["username"],
+            }
+        # print(content)
+        return content, user
 
 def scour(starting_users, query, user_limit):
     accounts = deque(starting_users)
@@ -21,26 +43,9 @@ def scour(starting_users, query, user_limit):
     while accounts and count < user_limit:
         account = accounts.popleft()
         _, acc, server = account.split("@")
-        profile = getProfile(server, acc)
-        if profile:
-            id = profile["id"]
-            content = []
-            # print(id)
-            if "note" in profile:
-                content.append(extractText(profile["note"]))
-                # print(content[-1])
-            for c in getContent(server, id):
-                if "content" in c and c["content"]:
-                    content.append(extractText(c["content"]))
-                    # print(content[-1])
-            content = "\n\n------------------\n".join(content)
-            # print(content)
+        content, user = get_mastodon_user(acc, server)
+        if user:
             score = generate_search(query, content)["response"]
-            user = {
-                "id": profile["id"],
-                "name": profile["display_name"],
-                "username": profile["username"],
-            }
             store_items(((int(score), account, user)), user_limit)
 
 
