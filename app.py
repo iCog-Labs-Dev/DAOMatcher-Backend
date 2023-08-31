@@ -18,7 +18,6 @@ def semantic_search_query():
         user_list = request.json["user_list"]
         user_limit = request.json["user_limit"]
         result = scour(user_list, query, user_limit)
-        print(f"result: {users}")
         
         users = []
         for user in result:
@@ -31,8 +30,8 @@ def semantic_search_query():
                 "handle": handle
             })
         
+        print(f"result: {users}")
         data = {"result": users}
-        
         return jsonify(data)
 
 
