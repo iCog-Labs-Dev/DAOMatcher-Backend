@@ -11,8 +11,7 @@ def store_items(item, limit):
         heappushpop(user_heap, item)
     else:
         heappush(user_heap, item)
-
-#Returns mastodon user content and dictionary user(id, name, username)
+#Returns Mastodon user content and user in a dictionary of keys id, name, username
 def get_mastodon_user(acc, server):
     profile = getProfile(server, acc)
     if profile:
@@ -35,6 +34,38 @@ def get_mastodon_user(acc, server):
         # print(content)
         return content, user
 
+#Returns LinkedIn user content and user in a dictionary of keys id, name, username
+def get_linkedIn_user(username):
+    
+    profile = getLinkedInProfile(username)
+    
+    if profile:
+        
+        content = []
+        
+        if "aboutSummaryText" in profile and profile["aboutSummaryText"]:
+            content.append(profile["aboutSummaryText"])
+        
+        for p in getUserPosts(profile):
+            if "text" in p and p["text"]:
+                content.append(p["text"])
+                
+        content = "\n\n------------------\n".join(content)
+        saleNavId = getSaleNavId(profile["salesNavLink"])
+        username  = getUsername(profile["link"])
+        
+        user ={
+            "id": saleNavId,
+            "name": profile["name"],
+            "username": username
+        }
+        
+        return content, user
+        
+    
+    
+    
+    
 def scour(starting_users, query, user_limit):
     accounts = deque(starting_users)
 

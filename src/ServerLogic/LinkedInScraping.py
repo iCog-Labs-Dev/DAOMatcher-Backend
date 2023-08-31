@@ -50,15 +50,23 @@ def getEmail(username):
   userEmails = handleException(response)
   return userEmails
 
-def getUserPosts(userInfo):
-  
+#Given the linked in url of a profile this function returns the public linkedin id
+#i.e from https://www.linkedin.com/in/yeabesera-derese-7a9075224 returns yeabesera-derese-7a9075224
+def getUsername(link):
+    return link.split("/")[-1]
+
+def getSaleNavId(salesNavLink):
   #Extracting user sales navigation link given the user information json
-  salesNavLink:str = userInfo["salesNavLink"]
   salesNavLink = salesNavLink.split("lead")[1]
   
   #Sales navigation Id is used by linkedIn to identify posts made by a user
   salesNavigationID = salesNavLink.split("/")[-1].split(",")[0]
-  
+  return salesNavigationID
+
+#Given the userInfo returned from user profile,
+#this function can return the posts made by a user
+def getUserPosts(userInfo):
+  salesNavigationID = getSaleNavId(userInfo["salesNavLink"])
   postUrl = f'https://www.linkedin.com/search/results/content/?fromMember={salesNavigationID}&origin=SWITCH_SEARCH_VERTICAL&sid=G;z'
   postUrl = urllib.parse.quote(postUrl, safe='')
   
