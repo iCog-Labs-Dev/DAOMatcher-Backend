@@ -40,6 +40,12 @@ def getConnections(username, count):
   url = f"https://api.lix-it.com/v1/connections?count={count}&start=0&viewer_id={username}"
   response = requests.request("GET", url, headers=headers, data=payload)
   userConns = handleException(response)
+  
+  if "elements" in userConns:
+    userConns = userConns["elements"]
+  else:
+    userConns = []
+    
   return userConns
 
 #Supposed to fetch email address but doesn't work as expected
@@ -77,6 +83,12 @@ def getUserPosts(userInfo):
   
   response = requests.request("GET", url, headers=headers, data=payload)
   userPosts = handleException(response)
+  
+  if "posts" in userPosts:
+    userPosts = userPosts["posts"]
+  else: 
+    userPosts = []
+  
   return userPosts
 
 
