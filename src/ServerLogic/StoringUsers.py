@@ -4,9 +4,7 @@ from ..LLM.LLMMethods import *
 from .MastodonScraping import *
 from .LinkedInScraping import * 
 
-user_heap = []
-
-def store_items(item, limit):
+def store_items(item, limit, user_heap):
     if len(user_heap) == limit:
         heappushpop(user_heap, item)
     else:
@@ -66,6 +64,8 @@ def get_linkedIn_user(username):
     
     
 def scour(starting_users, query, user_limit):
+    user_heap = []
+    
     accounts = deque(starting_users)
 
     visited = set()
@@ -99,7 +99,7 @@ def scour(starting_users, query, user_limit):
 
         if user:
             score = generate_search(query, content)["response"]
-            store_items(((int(score), account, user)), user_limit)
+            store_items(((int(score), account, user)), user_limit, user_heap)
             
             # print(count)
             count += 1
