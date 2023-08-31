@@ -19,7 +19,7 @@ def handleException(response:requests.Response):
     raise Exception(f"Lix Error: {error['error']['message']}")
 
 #Used to get user information displayed on the profile page of the user
-def getBasicUserInfo(username):
+def getProfile(username):
   
   url = f"https://api.lix-it.com/v1/person?profile_link=https://linkedin.com/in/{username}"
 
@@ -27,24 +27,23 @@ def getBasicUserInfo(username):
   userInfo = handleException(response)
   return userInfo
     
-  
 
-#Get user Connections
-def getUserConnections(username, count):
+#Get user Connections(Followers)
+def getConnections(username, count):
   url = f"https://api.lix-it.com/v1/connections?count={count}&start=0&viewer_id={username}"
   response = requests.request("GET", url, headers=headers, data=payload)
   userConns = handleException(response)
   return userConns
 
 #Supposed to fetch email address but doesn't work as expected
-def getEmailAddress(username):
+def getEmail(username):
   url = f"https://api.lix-it.com/v1/contact/email/by-linkedin?url=https://linkedin.com/in/{username}"
   
   response = requests.request("GET", url, headers=headers, data=payload)
   userEmails = handleException(response)
   return userEmails
 
-def getPostsByUser(userInfo):
+def getUserPosts(userInfo):
   
   #Extracting user sales navigation link given the user information json
   salesNavLink:str = userInfo["salesNavLink"]
