@@ -1,13 +1,10 @@
-from dotenv import load_dotenv
 import requests
 import os
 import urllib.parse
 import json
 
 #Loaing api key from environment file
-load_dotenv()
-
-api_key = os.getenv("API_KEY")
+api_key = os.getenv("LIX_API_KEY")
 payload={}
 headers = {
   'Authorization': api_key
