@@ -30,6 +30,7 @@ def get_mastodon_user(acc, server):
             }
         # print(content)
         return content, user
+    return None, None
 
 #Returns LinkedIn user content and user in a dictionary of keys id, name, username
 def get_linkedIn_user(username):
@@ -58,6 +59,7 @@ def get_linkedIn_user(username):
         }
         
         return content, user
+    return None,None
         
     
     
@@ -75,7 +77,14 @@ def scour(starting_users, query, user_limit):
         account = accounts.popleft()
         if "@" in account: # If it contains @ it is mastodon otherwise it is LinkedIn URL
             _, acc, server = account.split("@")
+            print("###############################")
+            print(f"acc: {acc} server: {server}")
+            print("###############################")
             content, user = get_mastodon_user(acc, server)
+            
+            # If there is no user found, no point in excuting the rest of the code
+            if not user:
+                continue
 
             # Get mastodon followers
             for follower in getFollowers(server, user["id"]):
