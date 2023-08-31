@@ -63,24 +63,10 @@ def getPostsByUser(userInfo):
   
   # print(postUrl) #Uncomment this for debugging
   print(url) #Uncomment this for debugging
+  
   response = requests.request("GET", url, headers=headers, data=payload)
   userPosts = handleException(response)
   return userPosts
-
-def saveJsonFile(fileName, info):
-  with open(f"{fileName}.json", "w") as file:
-    file.write(info)
-    return True
-
-def readJsonFile(filename):
-  with open(filename, "r") as file:
-    return json.loads(file.read())
-
-# userInfo = getBasicUserInfo("alfie-lambert")
-# saveJsonFile("UserBasicAlfie", json.dumps(userInfo))
-userInfo = readJsonFile("userInfo.json")
-userPosts = getPostsByUser(userInfo)
-saveJsonFile("userYabsPosts", json.dumps(userPosts))
 
 
 
