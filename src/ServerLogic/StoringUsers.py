@@ -78,6 +78,7 @@ def scour(starting_users, query, user_limit):
             _, acc, server = account.split("@")
             content, user = get_mastodon_user(acc, server)
 
+            # Get mastodon followers
             for follower in getFollowers(server, id):
                 username = follower["acct"]
                 if "@" in username:
@@ -89,12 +90,10 @@ def scour(starting_users, query, user_limit):
                     visited.add(username)
         else:
             content, user = get_linkedIn_user(account)
+            
+            #Get followers for linkedIn
             for follower in getConnections(account, 1000):
-                username = follower["acct"]
-                if "@" in username:
-                    username = "@" + username
-                else:
-                    username = "@" + username + "@" + server
+                username = follower["publicIdentifier"]
                 if username not in visited:
                     accounts.append(username)
                     visited.add(username)
@@ -102,8 +101,6 @@ def scour(starting_users, query, user_limit):
         if user:
             score = generate_search(query, content)["response"]
             store_items(((int(score), account, user)), user_limit)
-
-
             
             # print(count)
             count += 1
