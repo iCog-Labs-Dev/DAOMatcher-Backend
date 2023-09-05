@@ -1,14 +1,7 @@
 from collections import *
 from heapq import *
-from src.ServerLogic.MastodonScraping import *
-from src.Scraping.LinkedIn import LinkedIn
-from src.Scraping.Mastodon import Mastodon
-from src.LLM.LLMServer import LLMServer
 import requests
-
-llm_server = LLMServer()
-linkedIn = LinkedIn()
-mastodon = Mastodon()
+from src.ServerLogic import mastodon, linkedIn, llm_server
 
 
 def store_items(item, limit, user_heap):
