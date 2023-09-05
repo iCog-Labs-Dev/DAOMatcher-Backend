@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify, abort
-from src.ServerLogic.StoringUsers import StoreUsers
+from src.ServerLogic.Users import Users
 from flask_cors import CORS
 import requests
 
@@ -7,7 +7,7 @@ app = Flask(__name__)
 CORS(app)
 
 LOCAL_APP_PORT = 5000
-storeUsers = StoreUsers()
+users = Users()
 
 
 @app.route("/", methods=["GET", "POST"])
@@ -28,7 +28,7 @@ def scoring_user():
         user_list = request.json["user_list"]
         user_limit = request.json["user_limit"]
         try:
-            result = storeUsers.scour(user_list, query, user_limit)
+            result = users.scour(user_list, query, user_limit)
             users = []
             for user in result:
                 score, handle, userInfo = user
