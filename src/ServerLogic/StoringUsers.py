@@ -1,8 +1,10 @@
 from collections import *
 from heapq import *
-from ..LLM.LLMMethods import *
+from LLM.LLMServer import LLMServer
 from .MastodonScraping import *
 from .LinkedInScraping import * 
+
+llm = LLMServer()
 
 def store_items(item, limit, user_heap):
     if len(user_heap) == limit:
@@ -104,7 +106,7 @@ def scour(starting_users, query, user_limit):
                     visited.add(username)
 
         if user:
-            score = generate_search(query, content)["response"]
+            score = llm.generate_search(query, content)["response"]
             store_items(((int(score), account, user)), user_limit, user_heap)
             
             # print(count)
