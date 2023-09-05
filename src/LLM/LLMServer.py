@@ -51,3 +51,8 @@ class LLMServer:
         except requests.exceptions.RequestException as e:
             print(f"POST request failed: {e}")
             return str(e)
+        
+if __name__ == "__main__":
+    server = LLMServer()
+    server.start()
+    print(f"LLM Server up and running on {LOCAL_LLM_URL}")

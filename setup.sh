@@ -23,10 +23,6 @@ source Backend/bin/activate
 echo "Installing requirements"
 pip -q install -r requirements.txt
 
-echo "Starting LLM server on port 5001"
-python3 -m src.LLM.LLMServer & 
-llm_pid=$!
-
 echo "Starting App server on port 5000"
 python3 app.py &
 app_pid=$!
