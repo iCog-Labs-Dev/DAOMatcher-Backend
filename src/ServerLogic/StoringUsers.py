@@ -2,10 +2,13 @@ from collections import *
 from heapq import *
 from src.ServerLogic.MastodonScraping import *
 from src.Scraping.LinkedIn import LinkedIn
+from src.Scraping.Mastodon import Mastodon
 from src.LLM.LLMServer import LLMServer
+import requests
 
 llm_server = LLMServer()
 linkedIn = LinkedIn()
+mastodon = Mastodon()
 
 
 def store_items(item, limit, user_heap):
@@ -17,16 +20,16 @@ def store_items(item, limit, user_heap):
 
 # Returns Mastodon user content and user in a dictionary of keys id, name, username
 def get_mastodon_user(acc, server):
-    profile = getProfile(server, acc)
+    profile = mastodon.getProfile(server, acc)
     if profile:
         content = []
         # print(id)
         if "note" in profile:
-            content.append(extractText(profile["note"]))
+            content.append(mastodon.extractText(profile["note"]))
             # print(content[-1])
-        for c in getContent(server, profile["id"]):
+        for c in mastodon.getContent(server, profile["id"]):
             if "content" in c and c["content"]:
-                content.append(extractText(c["content"]))
+                content.append(mastodon.extractText(c["content"]))
                 # print(content[-1])
         content = "\n\n------------------\n".join(content)
         user = {
@@ -84,7 +87,7 @@ def scour(starting_users, query, user_limit):
                 continue
 
             # Get mastodon followers
-            for follower in getFollowers(server, user["id"]):
+            for follower in mastodon.getFollowers(server, user["id"]):
                 username = follower["acct"]
                 if "@" in username:
                     username = "@" + username
