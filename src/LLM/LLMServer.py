@@ -21,7 +21,7 @@ class LLMServer:
                 query = request.json["query"]
                 content = request.json["content"]
 
-                response = self.llm.generate(query, content, self.llm)
+                response = self.llm.generate(query, content)
                 response = response.strip()
 
                 data = {"response": response}
@@ -29,8 +29,8 @@ class LLMServer:
                 return jsonify(data)
 
 
-            self.app.run(port=LOCAL_LLM_PORT)
-            self.llm.model.stop()
+        self.app.run(port=LOCAL_LLM_PORT, debug=True)
+        self.llm.model.stop()
             
     def generate_search(self, query, content):
         headers = {"Content-Type": "application/json"}  # Specify JSON content type
@@ -46,13 +46,14 @@ class LLMServer:
             generated_text = response.json()
             print("POST request successful")
             print("Response:", generated_text)
+            raise Exception("Something went wrong")
             return generated_text
 
         except requests.exceptions.RequestException as e:
             print(f"POST request failed: {e}")
-            return str(e)
-        
+            raise e.strerror
+
 if __name__ == "__main__":
-    server = LLMServer()
-    server.start()
+    llm_server = LLMServer()
+    llm_server.start()
     print(f"LLM Server up and running on {LOCAL_LLM_URL}")

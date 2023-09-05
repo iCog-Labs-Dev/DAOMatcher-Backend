@@ -1,16 +1,16 @@
 import textwrap
-from src.LLM import INSTRUCTION, SYSTEM_PROMPT
+from src.LLM import INSTRUCTION, SYSTEM_PROMPT, B_INST, E_INST
 from langchain import PromptTemplate
 
 class Prompt:
   
   def get_prompt_template(self, query=INSTRUCTION, system_prompt=SYSTEM_PROMPT):
-    template = self.B_INST + system_prompt + query + self.E_INST
+    template = B_INST + system_prompt + query + E_INST
     
     prompt = PromptTemplate(
         template=template,
         input_variables=["query", "content"]
-        if system_prompt == self.SYSTEM_PROMPT
+        if system_prompt == SYSTEM_PROMPT
         else ["content"],
     )
     return prompt

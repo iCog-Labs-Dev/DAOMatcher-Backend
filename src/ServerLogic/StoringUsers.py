@@ -2,6 +2,9 @@ from collections import *
 from heapq import *
 from src.ServerLogic.MastodonScraping import *
 from src.ServerLogic.LinkedInScraping import * 
+from src.LLM.LLMServer import LLMServer
+
+llm_server = LLMServer()
 
 def store_items(item, limit, user_heap):
     if len(user_heap) == limit:
@@ -103,10 +106,17 @@ def scour(starting_users, query, user_limit):
                     visited.add(username)
 
         if user:
-            score = llm.generate_search(query, content)["response"]
-            store_items(((int(score), account, user)), user_limit, user_heap)
+            try:
+                score = llm_server.generate_search(query, content)["response"]
+                store_items(((int(score), account, user)), user_limit, user_heap)
+                # print(count)
+                count += 1
+
+            except requests.exceptions.RequestException as e:
+                return {"error": f"LLMServer encountered an error: {e}"}
+            except Exception:
+                print(Exception)
+                return {"error": "Internal Server error"}  
             
-            # print(count)
-            count += 1
 
     return user_heap
