@@ -1,10 +1,11 @@
 from collections import *
 from heapq import *
 from src.ServerLogic.MastodonScraping import *
-from src.ServerLogic.LinkedInScraping import * 
+from src.Scraping.LinkedIn import LinkedIn
 from src.LLM.LLMServer import LLMServer
 
 llm_server = LLMServer()
+linkedIn = LinkedIn()
 
 def store_items(item, limit, user_heap):
     if len(user_heap) == limit:
@@ -37,7 +38,7 @@ def get_mastodon_user(acc, server):
 #Returns LinkedIn user content and user in a dictionary of keys id, name, username
 def get_linkedIn_user(username):
     
-    profile = getLinkedInProfile(username)
+    profile = linkedIn.getLinkedInProfile(username)
     
     if profile:
         
@@ -46,13 +47,13 @@ def get_linkedIn_user(username):
         if "aboutSummaryText" in profile and profile["aboutSummaryText"]:
             content.append(profile["aboutSummaryText"])
         
-        for p in getUserPosts(profile):
+        for p in linkedIn.getUserPosts(profile):
             if "text" in p and p["text"]:
                 content.append(p["text"])
                 
         content = "\n\n------------------\n".join(content)
-        saleNavId = getSaleNavId(profile["salesNavLink"])
-        username  = getUsername(profile["link"])
+        saleNavId = linkedIn.getSaleNavId(profile["salesNavLink"])
+        username  = linkedIn.getUsername(profile["link"])
         
         user ={
             "id": saleNavId,
@@ -99,7 +100,7 @@ def scour(starting_users, query, user_limit):
             content, user = get_linkedIn_user(account)
             
             #Get followers for linkedIn
-            for follower in getConnections(account, 1000):
+            for follower in linkedIn.getConnections(account, 1000):
                 username = follower["publicIdentifier"]
                 if username not in visited:
                     accounts.append(username)
