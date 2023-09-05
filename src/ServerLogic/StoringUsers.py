@@ -7,12 +7,15 @@ from src.LLM.LLMServer import LLMServer
 llm_server = LLMServer()
 linkedIn = LinkedIn()
 
+
 def store_items(item, limit, user_heap):
     if len(user_heap) == limit:
         heappushpop(user_heap, item)
     else:
         heappush(user_heap, item)
-#Returns Mastodon user content and user in a dictionary of keys id, name, username
+
+
+# Returns Mastodon user content and user in a dictionary of keys id, name, username
 def get_mastodon_user(acc, server):
     profile = getProfile(server, acc)
     if profile:
@@ -27,50 +30,42 @@ def get_mastodon_user(acc, server):
                 # print(content[-1])
         content = "\n\n------------------\n".join(content)
         user = {
-                "id": profile["id"],
-                "name": profile["display_name"],
-                "username": profile["username"],
-            }
+            "id": profile["id"],
+            "name": profile["display_name"],
+            "username": profile["username"],
+        }
         # print(content)
         return content, user
     return None, None
 
-#Returns LinkedIn user content and user in a dictionary of keys id, name, username
+
+# Returns LinkedIn user content and user in a dictionary of keys id, name, username
 def get_linkedIn_user(username):
-    
     profile = linkedIn.getLinkedInProfile(username)
-    
+
     if profile:
-        
         content = []
-        
+
         if "aboutSummaryText" in profile and profile["aboutSummaryText"]:
             content.append(profile["aboutSummaryText"])
-        
+
         for p in linkedIn.getUserPosts(profile):
             if "text" in p and p["text"]:
                 content.append(p["text"])
-                
+
         content = "\n\n------------------\n".join(content)
         saleNavId = linkedIn.getSaleNavId(profile["salesNavLink"])
-        username  = linkedIn.getUsername(profile["link"])
-        
-        user ={
-            "id": saleNavId,
-            "name": profile["name"],
-            "username": username
-        }
-        
+        username = linkedIn.getUsername(profile["link"])
+
+        user = {"id": saleNavId, "name": profile["name"], "username": username}
+
         return content, user
-    return None,None
-        
-    
-    
-    
-    
+    return None, None
+
+
 def scour(starting_users, query, user_limit):
     user_heap = []
-    
+
     accounts = deque(starting_users)
 
     visited = set()
@@ -78,10 +73,12 @@ def scour(starting_users, query, user_limit):
 
     while accounts and count < user_limit:
         account = accounts.popleft()
-        if "@" in account: # If it contains @ it is mastodon otherwise it is LinkedIn URL
+        if (
+            "@" in account
+        ):  # If it contains @ it is mastodon otherwise it is LinkedIn URL
             _, acc, server = account.split("@")
             content, user = get_mastodon_user(acc, server)
-            
+
             # If there is no user found, no point in excuting the rest of the code
             if not user:
                 continue
@@ -98,8 +95,8 @@ def scour(starting_users, query, user_limit):
                     visited.add(username)
         else:
             content, user = get_linkedIn_user(account)
-            
-            #Get followers for linkedIn
+
+            # Get followers for linkedIn
             for follower in linkedIn.getConnections(account, 1000):
                 username = follower["publicIdentifier"]
                 if username not in visited:
@@ -116,6 +113,5 @@ def scour(starting_users, query, user_limit):
                 raise e
             except Exception as e:
                 raise Exception("Error encountered on storing the scores")
-            
 
     return user_heap
