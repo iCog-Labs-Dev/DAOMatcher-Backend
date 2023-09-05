@@ -4,22 +4,17 @@ from pydantic import Extra
 from langchain.llms.base import LLM
 from langchain.utils import get_from_dict_or_env
 from typing import Any, Dict
-from dotenv import load_dotenv
-
-
-
-# set API key
-load_dotenv()
-together.api_key = os.environ["TOGETHER_API_KEY"]
+from src.LLM import TOGETHER_API_KEY
 
 
 class TogetherLLM(LLM):
+
     """Together large language models."""
 
     model: str = "togethercomputer/llama-2-70b-chat"
     """model endpoint to use"""
 
-    together_api_key: str = os.environ["TOGETHER_API_KEY"]
+    together_api_key: str = TOGETHER_API_KEY
     """Together API key"""
 
     temperature: float = 0.0
@@ -30,6 +25,9 @@ class TogetherLLM(LLM):
 
     class Config:
         extra = Extra.forbid
+
+    def __init__(self):
+        together.api_key = TOGETHER_API_KEY
 
     @staticmethod
     def validate_environment(cls, values: Dict) -> Dict:
@@ -58,12 +56,11 @@ class TogetherLLM(LLM):
         )
         text = output["output"]["choices"][0]["text"]
         return text
-    
+
     def start(self):
         together.Models.start("togethercomputer/llama-2-70b-chat")
         print("Model started successfully")
-        
+
     def stop(self):
         together.Models.stop("togethercomputer/llama-2-70b-chat")
         print("Model stopped successfully")
-        

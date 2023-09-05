@@ -1,3 +1,7 @@
+import os
+
+TOGETHER_API_KEY = os.environ["TOGETHER_API_KEY"]
+
 LOCAL_LLM_PORT = 5001
 LOCAL_LLM_URL = f"http://127.0.0.1:{LOCAL_LLM_PORT}"
 LLM_URL = None
@@ -20,8 +24,8 @@ INSTRUCTION = """For the following topic in '<>' and posts separated by '-------
   Strictly provide your output as follows. Don't include any explanation or any text.
   Response: <single number from 1-100>
   """
-  
+
 B_INST, E_INST = "[INST]", "[/INST]"
 B_SYS, E_SYS = "<<SYS>>\n", "\n<</SYS>>\n\n"
-  
+
 SYSTEM_PROMPT = B_SYS + DEFAULT_SYSTEM_PROMPT + E_SYS
