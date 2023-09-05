@@ -1,9 +1,8 @@
 import os
 
-lix_api_key = os.getenv("LIX_API_KEY")
-lix_base_url = "https://api.lix-it.com/v1"
-linkedIn_payload={}
+LIX_API_KEY = os.getenv("LIX_API_KEY")
+LIX_BASE_URL = "https://api.lix-it.com/v1"
+LINKEDIN_PAYLOAD = {}
+LINKEDIN_HEADERS = {"Authorization": LIX_API_KEY}
 
-linkedIn_headers = {
-  'Authorization': lix_api_key
-}
+MASTEDON_BASE_URL = "https://{server}/api/v1/accounts"

@@ -2,9 +2,9 @@ import requests
 import urllib.parse
 import json
 from src.Scraping import (
-    linkedIn_headers as headers,
-    linkedIn_payload as payload,
-    lix_base_url as base_url,
+    LINKEDIN_HEADERS as headers,
+    LINKEDIN_PAYLOAD as payload,
+    LIX_BASE_URL as base_url,
 )
 
 

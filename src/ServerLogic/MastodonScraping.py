@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 
-MASTEDON_BASE_URL = """https://{server}/api/v1/accounts"""
+MASTEDON_BASE_URL = "https://{server}/api/v1/accounts"
 
 
 def extractText(html):
