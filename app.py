@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, abort
 from src.ServerLogic.StoringUsers import *
 from flask_cors import CORS
 
@@ -14,6 +14,12 @@ def scoring_user():
     if request.method == "GET":
         return "Send post request"
     elif request.method == "POST":
+        jsonRequest = request.json
+        
+        if not all(key in jsonRequest for key in ("query", "user_list", "user_limit")):
+            abort(400, description="Invalid JSON request. Make sure the request has set 'query', 'user_list' and 'user_limit'")
+
+        
         query = request.json["query"]
         user_list = request.json["user_list"]
         user_limit = request.json["user_limit"]
@@ -33,8 +39,10 @@ def scoring_user():
             print(f"result: {users}")
             data = {"result": users}
             return jsonify(data)
-        except Exception:
-            return jsonify(result)
+        except requests.exceptions.RequestException as e:
+            abort(e.response.status_code, description=f"Invalid response submitted to the LLM server")
+        except Exception as e:
+            abort(500, description="Server encountered Unknown error")
 
 
 app.run(port=LOCAL_APP_PORT, debug=True)

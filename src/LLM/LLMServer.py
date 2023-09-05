@@ -26,6 +26,7 @@ class LLMServer:
 
                 data = {"response": response}
 
+
                 return jsonify(data)
 
 
@@ -46,12 +47,11 @@ class LLMServer:
             generated_text = response.json()
             print("POST request successful")
             print("Response:", generated_text)
-            raise Exception("Something went wrong")
             return generated_text
 
         except requests.exceptions.RequestException as e:
             print(f"POST request failed: {e}")
-            raise e.strerror
+            raise e
 
 if __name__ == "__main__":
     llm_server = LLMServer()

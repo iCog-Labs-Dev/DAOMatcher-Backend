@@ -111,12 +111,10 @@ def scour(starting_users, query, user_limit):
                 store_items(((int(score), account, user)), user_limit, user_heap)
                 # print(count)
                 count += 1
-
             except requests.exceptions.RequestException as e:
-                return {"error": f"LLMServer encountered an error: {e}"}
-            except Exception:
-                print(Exception)
-                return {"error": "Internal Server error"}  
+                raise e
+            except Exception as e:
+                raise Exception("Error encountered on storing the scores")
             
 
     return user_heap
