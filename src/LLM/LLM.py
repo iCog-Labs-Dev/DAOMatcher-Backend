@@ -12,10 +12,6 @@ from ..LLM.Prompts import *
 
 class LLM:
     
-    LOCAL_LLM_PORT = 5001
-    LOCAL_LLM_URL = f"http://localhost:{LOCAL_LLM_PORT}"
-    LLM_URL = None
-    
     def __init__(self, temperature=0.1, max_tokens=512):
         llm = TogetherLLM(
             model="togethercomputer/llama-2-70b-chat", temperature=temperature, max_tokens=max_tokens

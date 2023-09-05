@@ -1,3 +1,4 @@
+from LLM import LLM_URL, LOCAL_LLM_PORT, LOCAL_LLM_URL
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from ..LLM.LLMMethods import *
@@ -5,10 +6,8 @@ from ..LLM.LLM import *
 
 class LLMServer:
     
-    def __init__(self, local_port=5001, llm_url=None) -> None:
+    def __init__(self) -> None:
         self.app = Flask(__name__)
-        self.LLM_URL = llm_url
-        self.LOCAL_LLM_URL = f"http://localhost:{local_port}"
         self.llm = LLM()
         CORS(self.app)
         
@@ -30,14 +29,14 @@ class LLMServer:
                 return jsonify(data)
 
 
-            self.app.run(port=self.LOCAL_LLM_PORT)
+            self.app.run(port=LOCAL_LLM_PORT)
             self.llm.model.stop()
             
     def generate_search(self, query, content):
         headers = {"Content-Type": "application/json"}  # Specify JSON content type
         data = {"query": query, "content": content}
 
-        Url = self.LLM_URL if self.LLM_URL else self.LOCAL_LLM_URL
+        Url = LLM_URL if LLM_URL else LOCAL_LLM_URL
 
         try:
             response = requests.post(Url, json=data, headers=headers)
