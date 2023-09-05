@@ -5,6 +5,8 @@ from langchain.llms.base import LLM
 from langchain.utils import get_from_dict_or_env
 from typing import Any, Dict
 from dotenv import load_dotenv
+import textwrap
+
 
 
 # set API key
@@ -57,3 +59,12 @@ class TogetherLLM(LLM):
         )
         text = output["output"]["choices"][0]["text"]
         return text
+    
+    def start(self):
+        together.Models.start("togethercomputer/llama-2-70b-chat")
+        print("Model started successfully")
+        
+    def stop(self):
+        together.Models.stop("togethercomputer/llama-2-70b-chat")
+        print("Model stopped successfully")
+        
