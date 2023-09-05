@@ -1,8 +1,6 @@
-from ..LLM.Prompts import *
-from ..LLM.TogetherLLM import TogetherLLM
+from src.LLM.TogetherLLM import TogetherLLM
+from src.LLM.Prompt import *
 from langchain import LLMChain
-from ..LLM.LLMMethods import *
-from ..LLM.Prompts import *
 
 
 class LLM:

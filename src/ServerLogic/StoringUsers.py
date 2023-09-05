@@ -1,10 +1,7 @@
 from collections import *
 from heapq import *
-from LLM.LLMServer import LLMServer
-from .MastodonScraping import *
-from .LinkedInScraping import * 
-
-llm = LLMServer()
+from src.ServerLogic.MastodonScraping import *
+from src.ServerLogic.LinkedInScraping import * 
 
 def store_items(item, limit, user_heap):
     if len(user_heap) == limit:

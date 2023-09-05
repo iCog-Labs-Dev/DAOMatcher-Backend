@@ -1,5 +1,5 @@
 import textwrap
-from LLM import INSTRUCTION, SYSTEM_PROMPT
+from src.LLM import INSTRUCTION, SYSTEM_PROMPT
 from langchain import PromptTemplate
 
 class Prompt:

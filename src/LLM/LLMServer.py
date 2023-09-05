@@ -1,8 +1,8 @@
-from LLM import LLM_URL, LOCAL_LLM_PORT, LOCAL_LLM_URL
+from src.LLM import LLM_URL, LOCAL_LLM_PORT, LOCAL_LLM_URL
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from ..LLM.LLMMethods import *
-from ..LLM.LLM import *
+from src.LLM.LLM import *
+import requests
 
 class LLMServer:
     
