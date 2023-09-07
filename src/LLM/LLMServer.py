@@ -3,6 +3,7 @@ from flask import Flask, request, jsonify, abort
 from flask_cors import CORS
 from src.LLM.LLM import LLM
 import requests
+import together
 
 
 class LLMServer:
@@ -16,20 +17,40 @@ class LLMServer:
         def method_not_allowed(error):
             return jsonify(error=str(error.description)), 405
 
+        @self.app.errorhandler(400)
+        def bad_request(error):
+            return (
+                jsonify(
+                    error=f"Invalid request sent to the server. Make sure the request is sending JSON object with key of 'query' and 'content'. And make sure both of them are set to a value"
+                ),
+                400,
+            )
+
+        @self.app.errorhandler(503)
+        def server_not_responding(error):
+            return jsonify(error="Connection to deployed LLM server failed"), 404
+
         @self.app.route("/", methods=["POST"])
         def handle_request():
             if request.method == "POST":
-                query = request.json["query"]
-                content = request.json["content"]
+                if "query" in request.json and "content" in request.json:
+                    if not (request.json["content"] and request.json["query"]):
+                        abort(400)
+                    query = request.json["query"]
+                    content = request.json["content"]
+                    try:
+                        response = self.llm.generate(query, content)
+                        response = response.strip()
 
-                response = self.llm.generate(query, content)
-                response = response.strip()
+                        data = {"response": response}
 
-                data = {"response": response}
-
-                return jsonify(data)
+                        return jsonify(data)
+                    except together.error.ResponseError:
+                        abort(503)
+                else:
+                    abort(400)
             else:
-                abort(405, "Please send Post request only")
+                abort(405)
 
         self.app.run(port=LOCAL_LLM_PORT, debug=True)
         self.llm.model.stop()
