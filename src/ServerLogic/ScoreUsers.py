@@ -109,7 +109,6 @@ class ScoreUsers:
                     )
                     # print(count)
                     count += 1
-                    raise Exception("error")
                 except requests.exceptions.RequestException as e:
                     raise e
                 except Exception:

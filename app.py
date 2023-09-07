@@ -10,11 +10,6 @@ LOCAL_APP_PORT = 5000
 scoreUsers = ScoreUsers()
 
 
-@app.errorhandler(405)
-def method_not_allowed(error):
-    return jsonify(error=str(error.description)), 405
-
-
 @app.errorhandler(400)
 def bad_request(error):
     return (
@@ -22,6 +17,19 @@ def bad_request(error):
             error="Invalid request. Make sure you are sending JSON object with keys 'query', 'user_list' and 'user_limit' all set to acceptable value"
         ),
         400,
+    )
+
+
+@app.errorhandler(405)
+def method_not_allowed(error):
+    return jsonify(error=str(error.description)), 405
+
+
+@app.errorhandler(500)
+def internal_server_error(error):
+    return (
+        jsonify(error=str(error.description)),
+        500,
     )
 
 
@@ -33,21 +41,13 @@ def service_not_available(error):
                 f"LLM server failed with the following error: {error.description}"
             )
         ),
-        503,
+        502,
     )
 
 
 @app.errorhandler(503)
 def service_not_available(error):
     return jsonify(error=error.description), 503
-
-
-@app.errorhandler(500)
-def internal_server_error(error):
-    return (
-        jsonify(error=str(error.description)),
-        500,
-    )
 
 
 @app.route("/", methods=["POST"])
