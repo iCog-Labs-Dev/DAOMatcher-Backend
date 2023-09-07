@@ -113,13 +113,11 @@ class ScoreUsers:
                     count += 1
                     sse.publish(
                         {
-                            "data": {
-                                "id": user["id"],
-                                "username": user["username"],
-                                "name": user["name"],
-                                "score": score,
-                                "handle": account,
-                            }
+                            "id": user["id"],
+                            "username": user["username"],
+                            "name": user["name"],
+                            "score": score,
+                            "handle": account,
                         }
                     )
 

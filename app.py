@@ -7,10 +7,10 @@ from flask_sse import sse
 
 app = Flask(__name__)
 CORS(app)
-app.config["REDIS_URL"] = "redis://localhost:5002/0"  # Redis server for SSE
+app.config["REDIS_URL"] = "redis://localhost:5002"  # Redis server for SSE
 
 # Initialize the SSE extension
-sse.init_app(app)
+app.register_blueprint(sse, url_prefix="/stream")
 
 LOCAL_APP_PORT = 5000
 scoreUsers = ScoreUsers()
@@ -100,6 +100,7 @@ def scoring_user():
         except Exception as e:
             abort(500)
     else:
+        print(request.method)
         abort(405)
 
 
