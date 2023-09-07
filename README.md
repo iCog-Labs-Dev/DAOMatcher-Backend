@@ -8,14 +8,18 @@
 - Run the script `./setup` and that's it
 - If you are not mac or debian user, install `redis-server` and run the `./setup` script
 - Make a post request to http://localhost:5000 with the following format
+
 ```
 {
       "query":"Politics",
-      "user_list":["@example@server", "https://www.linkedin.com/in/{linkedIn public identifier}/"],
+      "user_list":["@example@server", "{LinkedIn public identifier}"],
       "user_limit":5
 }
 ```
-- Use the `@example@server` for Mastodon and the LinkedIn profile url for LinkedIn
+
+- Use the `@example@server` for Mastodon
+- linkedIn public identifier is the last part of the profile url for LinkedIn example:
+  > LinkedIn Profile url: `https://www.linkedin.com/in/yeabsesra-ic-4859b5287/`, LinkedIn Public Identifier: `yeabsesra-ic-4859b5287`
 
 ## SSE
 
