@@ -19,7 +19,9 @@
 
 - Use the `@example@server` for Mastodon
 - linkedIn public identifier is the last part of the profile url for LinkedIn example:
+
   > LinkedIn Profile url: `https://www.linkedin.com/in/yeabsesra-ic-4859b5287/`
+
   > LinkedIn Public Identifier: `yeabsesra-ic-4859b5287`
 
 ## SSE
