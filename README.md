@@ -9,11 +9,12 @@
 - If you are not mac or debian user, install `redis-server` and run the `./setup` script
 - Make a post request to http://localhost:5000 with the following format
 ```
-      {
+{
       "query":"Politics",
       "user_list":["@example@server", "https://www.linkedin.com/in/{linkedIn public identifier}/"],
       "user_limit":5
-  }```
+}
+```
 
 ## SSE
 
