@@ -1,10 +1,16 @@
 from flask import Flask, request, jsonify, abort
 from src.ServerLogic.ScoreUsers import ScoreUsers
 from flask_cors import CORS
+from flask_sse import sse
 import requests
+from flask_sse import sse
 
 app = Flask(__name__)
 CORS(app)
+app.config["REDIS_URL"] = "redis://localhost:5002/0"  # Redis server for SSE
+
+# Initialize the SSE extension
+sse.init_app(app)
 
 LOCAL_APP_PORT = 5000
 scoreUsers = ScoreUsers()
