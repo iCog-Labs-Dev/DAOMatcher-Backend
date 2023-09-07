@@ -26,9 +26,6 @@ class TogetherLLM(LLM):
     class Config:
         extra = Extra.forbid
 
-    def __init__(self):
-        together.api_key = TOGETHER_API_KEY
-
     @staticmethod
     def validate_environment(cls, values: Dict) -> Dict:
         """Validate that the API key is set."""

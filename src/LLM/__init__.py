@@ -1,6 +1,8 @@
 import os
+import together
 
 TOGETHER_API_KEY = os.environ["TOGETHER_API_KEY"]
+together.api_key = TOGETHER_API_KEY
 
 LOCAL_LLM_PORT = 5001
 LOCAL_LLM_URL = f"http://127.0.0.1:{LOCAL_LLM_PORT}"
