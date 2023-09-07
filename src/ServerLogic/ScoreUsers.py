@@ -90,6 +90,10 @@ class ScoreUsers:
             else:
                 content, user = self.__get_linkedIn_user(account)
 
+                # If there is no user found, no point in excuting the rest of the code
+                if not user:
+                    continue
+
                 # Get followers for linkedIn
                 for follower in linkedIn.getConnections(account, 1000):
                     username = follower["publicIdentifier"]
@@ -105,9 +109,10 @@ class ScoreUsers:
                     )
                     # print(count)
                     count += 1
+                    raise Exception("error")
                 except requests.exceptions.RequestException as e:
                     raise e
-                except Exception as e:
+                except Exception:
                     raise Exception("Error encountered on storing the scores")
 
         return user_heap

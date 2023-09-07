@@ -57,7 +57,7 @@ class LLMServer:
 
     def generate_search(self, query, content):
         headers = {"Content-Type": "application/json"}  # Specify JSON content type
-        data = {"query": query, "content": content}
+        data = {"query": query, "contents": content}
 
         Url = LLM_URL if LLM_URL else LOCAL_LLM_URL
 

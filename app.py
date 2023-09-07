@@ -25,6 +25,31 @@ def bad_request(error):
     )
 
 
+@app.errorhandler(502)
+def service_not_available(error):
+    return (
+        jsonify(
+            error=str(
+                f"LLM server failed with the following error: {error.description}"
+            )
+        ),
+        503,
+    )
+
+
+@app.errorhandler(503)
+def service_not_available(error):
+    return jsonify(error=error.description), 503
+
+
+@app.errorhandler(500)
+def internal_server_error(error):
+    return (
+        jsonify(error=str(error.description)),
+        500,
+    )
+
+
 @app.route("/", methods=["POST"])
 def scoring_user():
     print(request.json)
@@ -60,12 +85,14 @@ def scoring_user():
             data = {"result": users}
             return jsonify(data)
         except requests.exceptions.RequestException as e:
-            abort(
-                e.response.status_code,
-                description=f"Invalid request submitted to the LLM server",
-            )
+            response = e.response
+            if response != None:
+                error = e.response.json()["error"]
+                abort(502, description=error)
+            else:
+                abort(503, description="The LLM server isn't responding")
         except Exception as e:
-            abort(500, description=str(e))
+            abort(500)
     else:
         abort(405)
 
