@@ -15,6 +15,7 @@
       "user_limit":5
 }
 ```
+- Use the `@example@server` for Mastodon and the LinkedIn profile url for LinkedIn
 
 ## SSE
 
