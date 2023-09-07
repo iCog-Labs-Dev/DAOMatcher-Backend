@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify, abort
-from src.ServerLogic.Users import Users
+from src.ServerLogic.ScoreUsers import ScoreUsers
 from flask_cors import CORS
 import requests
 
@@ -7,28 +7,42 @@ app = Flask(__name__)
 CORS(app)
 
 LOCAL_APP_PORT = 5000
-users = Users()
+scoreUsers = ScoreUsers()
 
 
-@app.route("/", methods=["GET", "POST"])
+@app.errorhandler(405)
+def method_not_allowed(error):
+    return jsonify(error=str(error.description)), 405
+
+
+@app.errorhandler(400)
+def bad_request(error):
+    return (
+        jsonify(
+            error="Invalid request. Make sure you are sending JSON object with keys 'query', 'user_list' and 'user_limit' all set to acceptable value"
+        ),
+        400,
+    )
+
+
+@app.route("/", methods=["POST"])
 def scoring_user():
     print(request.json)
-    if request.method == "GET":
-        return "Send post request"
-    elif request.method == "POST":
+    if request.method == "POST":
         jsonRequest = request.json
 
         if not all(key in jsonRequest for key in ("query", "user_list", "user_limit")):
-            abort(
-                400,
-                description="Invalid JSON request. Make sure the request has set 'query', 'user_list' and 'user_limit'",
-            )
+            abort(400)
 
         query = request.json["query"]
         user_list = request.json["user_list"]
         user_limit = request.json["user_limit"]
+
+        if not all([query, user_list, user_limit]):
+            abort(400)
+
         try:
-            result = users.scour(user_list, query, user_limit)
+            result = scoreUsers.scour(user_list, query, user_limit)
             users = []
             for user in result:
                 score, handle, userInfo = user
@@ -48,10 +62,12 @@ def scoring_user():
         except requests.exceptions.RequestException as e:
             abort(
                 e.response.status_code,
-                description=f"Invalid response submitted to the LLM server",
+                description=f"Invalid request submitted to the LLM server",
             )
         except Exception as e:
-            abort(500, description="Server encountered Unknown error")
+            abort(500, description=str(e))
+    else:
+        abort(405)
 
 
 app.run(port=LOCAL_APP_PORT, debug=True)

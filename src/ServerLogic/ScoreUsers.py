@@ -4,7 +4,7 @@ import requests
 from src.ServerLogic import mastodon, linkedIn, llm_server
 
 
-class Users:
+class ScoreUsers:
     def __store_items(self, item, limit, user_heap):
         if len(user_heap) == limit:
             heappushpop(user_heap, item)
