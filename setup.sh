@@ -65,8 +65,11 @@ python3 -m src.LLM.LLMServer &
 llm_pid=$!
 
 echo "Starting App server on port 5000"
-python3 app.py &
+source Backend/bin/activate
+gunicorn app:app --worker-class gevent --bind 127.0.0.1:5004 &
 app_pid=$!
+
+wait
 
 # Start Redis server
 echo "Starting Redis server..."
