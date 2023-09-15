@@ -13,43 +13,18 @@ def create_app():
     # Initialize the SSE extension
     app.register_blueprint(sse, url_prefix="/stream")
 
-    LOCAL_APP_PORT = 5000
     scoreUsers = ScoreUsers()
 
     @app.errorhandler(400)
     def bad_request(error):
         return (
             jsonify(
-                error="Invalid request. Make sure you are sending JSON object with keys 'query', 'user_list' and 'user_limit' all set to acceptable value"
+                error="Invalid request. Make sure you are sending a JSON object with keys 'query', 'user_list', and 'user_limit' all set to acceptable values"
             ),
             400,
         )
 
-    @app.errorhandler(405)
-    def method_not_allowed(error):
-        return jsonify(error=str(error.description)), 405
-
-    @app.errorhandler(500)
-    def internal_server_error(error):
-        return (
-            jsonify(error=str(error.description)),
-            500,
-        )
-
-    @app.errorhandler(502)
-    def service_not_available(error):
-        return (
-            jsonify(
-                error=str(
-                    f"LLM server failed with the following error: {error.description}"
-                )
-            ),
-            502,
-        )
-
-    @app.errorhandler(503)
-    def service_not_available(error):
-        return jsonify(error=error.description), 503
+    # Add your other error handlers here...
 
     @app.route("/", methods=["POST"])
     def scoring_user():
@@ -100,4 +75,4 @@ def create_app():
             print(request.method)
             abort(405)
 
-        return app
+    return app
