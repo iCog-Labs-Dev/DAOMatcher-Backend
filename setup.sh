@@ -64,7 +64,7 @@ echo "Starting LLM server on port 5001"
 python3 -m src.LLM.LLMServer & 
 llm_pid=$!
 
-echo "Starting App server on port 5000"
+echo "Starting App server on port 8000"
 source Backend/bin/activate
 gunicorn app:create_app --worker-class gevent --bind 127.0.0.1:8000 &
 app_pid=$!
