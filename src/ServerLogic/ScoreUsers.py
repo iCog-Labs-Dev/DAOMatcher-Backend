@@ -111,15 +111,7 @@ class ScoreUsers:
                     )
                     # print(count)
                     count += 1
-                    sse.publish(
-                        {
-                            "id": user["id"],
-                            "username": user["username"],
-                            "name": user["name"],
-                            "score": score,
-                            "handle": account,
-                        }
-                    )
+                    sse.publish({"user_count": len(user_heap)})
 
                 except requests.exceptions.RequestException as e:
                     raise e
