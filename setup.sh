@@ -66,7 +66,7 @@ llm_pid=$!
 
 echo "Starting App server on port 5000"
 source Backend/bin/activate
-gunicorn app:app --worker-class gevent --bind 127.0.0.1:5004 &
+gunicorn -w 4 app:create_app &
 app_pid=$!
 
 wait
