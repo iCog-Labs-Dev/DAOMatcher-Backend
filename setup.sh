@@ -66,10 +66,8 @@ llm_pid=$!
 
 echo "Starting App server on port 8000"
 source Backend/bin/activate
-gunicorn app:create_app --worker-class gevent --bind 127.0.0.1:8000 &
+gunicorn 'app:create_app()' --worker-class gevent --bind 127.0.0.1:8000 &
 app_pid=$!
-
-wait
 
 # Start Redis server
 echo "Starting Redis server..."

@@ -66,6 +66,7 @@ def create_app():
                 response = e.response
                 if response != None:
                     error = e.response.json()["error"]
+                    print(error)
                     abort(502, description=error)
                 else:
                     abort(503, description="The LLM server isn't responding")

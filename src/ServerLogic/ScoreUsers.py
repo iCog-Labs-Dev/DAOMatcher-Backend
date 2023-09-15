@@ -105,18 +105,21 @@ class ScoreUsers:
 
             if user:
                 try:
-                    score = llm_server.generate_search(query, content)["response"]
-                    self.__store_items(
-                        ((int(score), account, user)), user_limit, user_heap
-                    )
-                    # print(count)
-                    count += 1
-                    sse.publish({"user_count": len(user_heap)})
+                    if query and content:
+                        score = llm_server.generate_search(query, content)["response"]
+                        self.__store_items(
+                            ((int(score), account, user)), user_limit, user_heap
+                        )
+                        # print(count)
+                        count += 1
+                        sse.publish({"progress": len(user_heap), "curr_user": account})
+                    else:
+                        continue
 
                 except requests.exceptions.RequestException as e:
-                    raise e
+                    sse.publish({"error": str(e)})
                 except Exception as e:
-                    print(e)
-                    raise Exception("Error encountered on storing the scores")
+                    sse.publish({"error": str(e)})
+                    # raise Exception("Error encountered on storing the scores")
 
         return user_heap
