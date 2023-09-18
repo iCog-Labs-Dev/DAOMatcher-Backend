@@ -69,6 +69,7 @@ def create_app():
                     print("error from RequestException: ", error)
                     abort(502, description=error)
                 else:
+                    print("Error from ResponseException but no error reported")
                     abort(503, description="The LLM server isn't responding")
             except Exception as e:
                 abort(500)

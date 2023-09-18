@@ -69,39 +69,42 @@ class ScoreUsers:
 
         while accounts and count < user_limit:
             account = accounts.popleft()
-            if (
-                "@" in account
-            ):  # If it contains @ it is mastodon otherwise it is LinkedIn URL
-                _, acc, server = account.split("@")
-                content, user = self.__get_mastodon_user(acc, server)
+            try:
+                if (
+                    "@" in account
+                ):  # If it contains @ it is mastodon otherwise it is LinkedIn URL
+                    _, acc, server = account.split("@")
+                    content, user = self.__get_mastodon_user(acc, server)
 
-                # If there is no user found, no point in excuting the rest of the code
-                if not user:
-                    continue
+                    # If there is no user found, no point in excuting the rest of the code
+                    if not user:
+                        continue
 
-                # Get mastodon followers
-                for follower in mastodon.getFollowers(server, user["id"]):
-                    username = follower["acct"]
-                    if "@" in username:
-                        username = "@" + username
-                    else:
-                        username = "@" + username + "@" + server
-                    if username not in visited:
-                        accounts.append(username)
-                        visited.add(username)
-            else:
-                content, user = self.__get_linkedIn_user(account)
+                    # Get mastodon followers
+                    for follower in mastodon.getFollowers(server, user["id"]):
+                        username = follower["acct"]
+                        if "@" in username:
+                            username = "@" + username
+                        else:
+                            username = "@" + username + "@" + server
+                        if username not in visited:
+                            accounts.append(username)
+                            visited.add(username)
+                else:
+                    content, user = self.__get_linkedIn_user(account)
 
-                # If there is no user found, no point in excuting the rest of the code
-                if not user:
-                    continue
+                    # If there is no user found, no point in excuting the rest of the code
+                    if not user:
+                        continue
 
-                # Get followers for linkedIn
-                for follower in linkedIn.getConnections(account, 1000):
-                    username = follower["publicIdentifier"]
-                    if username not in visited:
-                        accounts.append(username)
-                        visited.add(username)
+                    # Get followers for linkedIn
+                    for follower in linkedIn.getConnections(account, 1000):
+                        username = follower["publicIdentifier"]
+                        if username not in visited:
+                            accounts.append(username)
+                            visited.add(username)
+            except Exception as e:
+                sse.publish({"error": str(e)})
 
             if user:
                 try:
