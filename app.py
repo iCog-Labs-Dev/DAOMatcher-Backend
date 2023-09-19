@@ -40,12 +40,13 @@ def create_app():
             query = request.json["query"]
             user_list = request.json["user_list"]
             user_limit = request.json["user_limit"]
+            depth = request.json["depth"]
 
             if not all([query, user_list, user_limit]):
                 abort(400)
 
             try:
-                result = scoreUsers.scour(user_list, query, user_limit)
+                result = scoreUsers.scour(user_list, query, user_limit, depth)
                 users = []
                 for user in result:
                     score, handle, userInfo = user
