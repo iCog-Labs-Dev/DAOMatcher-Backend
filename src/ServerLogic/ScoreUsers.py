@@ -58,7 +58,7 @@ class ScoreUsers:
             return content, user
         return None, None
 
-    def scour(self, starting_users, query, user_limit):
+    def scour(self, starting_users, query, user_limit, depth):
         user_heap = []
         temp_users = []
 
@@ -67,7 +67,7 @@ class ScoreUsers:
         visited = set()
         count = 0
 
-        while accounts and count < user_limit:
+        while accounts and count < depth:
             account = accounts.popleft()
             try:
                 if (
