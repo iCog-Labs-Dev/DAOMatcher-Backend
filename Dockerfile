@@ -12,7 +12,6 @@ COPY app.py /app
 COPY src/LLM/ /app/src/LLM/
 COPY src/Scraping/ /app/src/Scraping/
 COPY src/ServerLogic/ /app/src/ServerLogic/
-COPY .env /app/
 
 # Copy your Bash script into the container
 COPY setup.sh /app
