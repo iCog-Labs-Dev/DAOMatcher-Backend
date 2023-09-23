@@ -21,12 +21,12 @@ trap cleanup SIGINT
 
 echo "Installing requirements..."
 pip install -r requirements.txt
-echo "Starting LLM server on port 5001"
+echo "Starting LLM server on port $LLM_PORT"
 python3 -m src.LLM.LLMServer & 
 llm_pid=$!
 
-echo "Starting App server on port 8000"
-gunicorn 'app:create_app()' --worker-class gevent --bind 127.0.0.1:8000 &
+echo "Starting App server on port $PORT"
+gunicorn 'app:create_app()' --worker-class gevent --bind 0.0.0.1:$PORT &
 app_pid=$!
 
 wait
