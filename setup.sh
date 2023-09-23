@@ -32,7 +32,7 @@ llm_pid=$!
 
 source Backend/bin/activate
 echo "Starting App server on port $PORT"
-gunicorn 'app:create_app()' --worker-class gevent --bind 0.0.0.1:$PORT &
+gunicorn 'app:create_app()' --worker-class gevent --bind 0.0.0.0:$PORT &
 app_pid=$!
 
 wait
