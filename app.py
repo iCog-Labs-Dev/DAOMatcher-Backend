@@ -28,7 +28,7 @@ def create_app():
 
     # Add your other error handlers here...
 
-    @app.route("/", methods=["POST"])
+    @app.route("/", methods=["POST", "HEAD"])
     def scoring_user():
         print(request.json)
         if request.method == "POST":
