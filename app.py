@@ -76,8 +76,5 @@ def create_app():
                     abort(503, description="The LLM server isn't responding")
             except Exception as e:
                 abort(500)
-        else:
-            print(request.method)
-            abort(405)
 
     return app
