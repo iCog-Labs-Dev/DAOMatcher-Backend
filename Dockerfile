@@ -24,4 +24,4 @@ RUN chmod +x setup.sh
 EXPOSE $PORT1
 
 # Define the command to run both Flask apps
-CMD ["/bin/bash","-c","source .env && ./setup.sh"]
+CMD ["./setup.sh"]
