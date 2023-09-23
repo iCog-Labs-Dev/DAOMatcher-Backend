@@ -115,7 +115,7 @@ class ScoreUsers:
                         )
                         # print(count)
                         count += 1
-                        sse.publish({"progress": len(user_heap), "curr_user": account})
+                        sse.publish({"progress": count, "curr_user": account})
                     else:
                         continue
 
