@@ -28,7 +28,7 @@ def create_app():
 
     # Add your other error handlers here...
 
-    @app.route("/", methods=["POST", "GET"])
+    @app.route("/", methods=["POST", "HEAD"])
     def scoring_user():
         # print(request.json)
         if request.method == "POST":
@@ -75,6 +75,9 @@ def create_app():
                     print("Error from ResponseException but no error reported")
                     abort(503, description="The LLM server isn't responding")
             except Exception as e:
+                print(e)
                 abort(500)
+        else:
+            print("Other type of request with method ", request.method)
 
     return app
