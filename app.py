@@ -30,7 +30,7 @@ def create_app():
 
     @app.route("/", methods=["POST", "GET"])
     def scoring_user():
-        print(request.json)
+        # print(request.json)
         if request.method == "POST":
             jsonRequest = request.json
 
