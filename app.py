@@ -79,5 +79,6 @@ def create_app():
                 abort(500)
         else:
             print("Other type of request with method ", request.method)
+            return jsonify({"success": True})
 
     return app
