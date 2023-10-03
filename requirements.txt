@@ -10,3 +10,4 @@ pyngrok
 python-dotenv
 together
 flask-socketio
+gevent-websocket
