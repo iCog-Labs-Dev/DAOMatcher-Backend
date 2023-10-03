@@ -9,3 +9,4 @@ pydantic
 pyngrok
 python-dotenv
 together
+flask-socketio

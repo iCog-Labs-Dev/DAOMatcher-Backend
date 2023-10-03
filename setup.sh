@@ -22,10 +22,12 @@ trap cleanup SIGINT
 echo "Setting up environment"
 
 python3 -m venv Backend
-source Backend/bin/activate   
+source Backend/bin/activate
+source .env
 
 echo "Installing requirements..."
 pip install -r requirements.txt
+
 echo "Starting LLM server on port $LLM_PORT"
 python3 -m src.LLM.LLMServer & 
 llm_pid=$!

@@ -4,7 +4,7 @@ import together
 TOGETHER_API_KEY = os.environ["TOGETHER_API_KEY"]
 together.api_key = TOGETHER_API_KEY
 
-LOCAL_LLM_PORT = os.environ["LLM_PORT"]
+LOCAL_LLM_PORT = os.environ.get("LLM_PORT")
 LOCAL_LLM_URL = f"http://127.0.0.1:{LOCAL_LLM_PORT}"
 LLM_URL = None
 

@@ -1,18 +1,14 @@
 import os
 from flask import Flask, request, jsonify, abort
 from src.ServerLogic.ScoreUsers import ScoreUsers
+from src.ServerLogic import socketio
 from flask_cors import CORS
-from flask_sse import sse
 import requests
 
 
 def create_app():
     app = Flask(__name__)
     CORS(app)
-    app.config["REDIS_URL"] = os.environ.get("REDIS_URL")  # Redis server for SSE
-
-    # Initialize the SSE extension
-    app.register_blueprint(sse, url_prefix="/stream")
 
     scoreUsers = ScoreUsers()
 
@@ -30,11 +26,13 @@ def create_app():
     @app.route("/", methods=["POST", "HEAD", "GET"])
     def scoring_user():
         # print(request.json)
+        socketio.init_app(app)
         if request.method == "POST":
             jsonRequest = request.json
 
             if not all(
-                key in jsonRequest for key in ("query", "user_list", "user_limit")
+                key in jsonRequest
+                for key in ("query", "user_list", "user_limit", "depth")
             ):
                 abort(400)
 
