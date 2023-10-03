@@ -3,13 +3,13 @@ from src.ServerLogic.ScoreUsers import ScoreUsers
 from flask_cors import CORS
 from flask_sse import sse
 import requests
+import os
 
 
 def create_app():
     app = Flask(__name__)
     CORS(app)
-    app.config["REDIS_URL"] = "redis://localhost:5002"  # Redis server for SSE
-
+    app.config["REDIS_URL"] = os.environ.get("REDIS_URL")  # Redis server for SSE
     # Initialize the SSE extension
     app.register_blueprint(sse, url_prefix="/stream")
 
