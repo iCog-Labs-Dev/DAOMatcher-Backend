@@ -19,13 +19,20 @@ cleanup() {
 
 trap cleanup SIGINT
 
-echo "Starting LLM server on port 5001"
+echo "Setting up environment"
+
+python3 -m venv Backend
+source Backend/bin/activate   
+
+echo "Installing requirements..."
+pip install -r requirements.txt
+echo "Starting LLM server on port $LLM_PORT"
 python3 -m src.LLM.LLMServer & 
 llm_pid=$!
 
-echo "Starting App server on port 8000"
 source Backend/bin/activate
-gunicorn 'app:create_app()' --worker-class gevent --bind 127.0.0.1:8000 &
+echo "Starting App server on port $PORT"
+gunicorn 'app:create_app()' --worker-class gevent --bind 0.0.0.0:$PORT &
 app_pid=$!
 
 wait
