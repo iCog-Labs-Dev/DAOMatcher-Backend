@@ -31,9 +31,54 @@ def create_app():
         print(channel)
         socketio.emit("new_user_connected", {"channel": channel})
 
-    @socketio.on("cancel")
-    def handle_cancel():
+    @socketio.on("stop")
+    def handle_cancel(data):
+        print("Request Canceled: ", scoreUsers.cancel, data)
         scoreUsers.cancel = True
+
+    @socketio.on("start")
+    def handle_start(data):
+        jsonRequest = data
+
+        if not all(
+            key in jsonRequest for key in ("query", "user_list", "user_limit", "depth")
+        ):
+            abort(400)
+        query = request.json["query"]
+        user_list = request.json["user_list"]
+        user_limit = request.json["user_limit"]
+        depth = request.json["depth"]
+        if not all([query, user_list, user_limit]):
+            abort(400)
+        try:
+            result = scoreUsers.scour(user_list, query, user_limit, depth)
+            users = []
+            for user in result:
+                score, handle, userInfo = user
+                users.append(
+                    {
+                        "id": userInfo["id"],
+                        "username": userInfo["username"],
+                        "name": userInfo["name"],
+                        "score": score,
+                        "handle": handle,
+                    }
+                )
+            print(f"result: {users}")
+            data = {"result": users}
+            return jsonify(data)
+        except requests.exceptions.RequestException as e:
+            response = e.response
+            if response != None:
+                error = e.response.json()["error"]
+                print("error from RequestException: ", error)
+                abort(502, description=error)
+            else:
+                print("Error from ResponseException but no error reported")
+                abort(503, description="The LLM server isn't responding")
+        except Exception as e:
+            print(e)
+            abort(500)
 
     @socketio.on("disconnect")
     def handle_disconnect():

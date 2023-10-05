@@ -71,7 +71,7 @@ class ScoreUsers:
         count = 0
         self.cancel = False
 
-        while (not self.cancel) and accounts and count < depth:
+        while (not self.cancel) and accounts and (count < depth):
             account = accounts.popleft()
             try:
                 if (
