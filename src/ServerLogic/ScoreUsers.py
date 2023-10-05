@@ -5,6 +5,10 @@ from src.ServerLogic import mastodon, linkedIn, llm_server, socketio
 
 
 class ScoreUsers:
+    def __init__(self, channelId="") -> None:
+        self.channelId = channelId
+        self.cancel = False
+
     def __store_items(self, item, limit, user_heap):
         if len(user_heap) == limit:
             heappushpop(user_heap, item)
@@ -65,8 +69,9 @@ class ScoreUsers:
 
         visited = set()
         count = 0
+        self.cancel = False
 
-        while accounts and count < depth:
+        while (not self.cancel) and accounts and count < depth:
             account = accounts.popleft()
             try:
                 if (
@@ -103,7 +108,7 @@ class ScoreUsers:
                             accounts.append(username)
                             visited.add(username)
             except Exception as e:
-                socketio.emit("update", {"error": str(e)})
+                socketio.emit(f"update-{self.channelId}", {"error": str(e)})
 
             if user:
                 try:
@@ -114,16 +119,18 @@ class ScoreUsers:
                         )
                         # print(count)
                         count += 1
+                        print("Sending to channelId", f"update-{self.channelId}")
                         socketio.emit(
-                            "update", {"progress": count, "curr_user": account}
+                            f"update-{self.channelId}",
+                            {"progress": count, "curr_user": account},
                         )
                     else:
                         continue
 
                 except requests.exceptions.RequestException as e:
-                    socketio.emit("update", {"error": str(e)})
+                    socketio.emit(f"update-{self.channelId}", {"error": str(e)})
                 except Exception as e:
-                    socketio.emit("update", {"error": str(e)})
+                    socketio.emit(f"update-{self.channelId}", {"error": str(e)})
                     # raise Exception("Error encountered on storing the scores")
 
         return user_heap

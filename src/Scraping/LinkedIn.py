@@ -61,7 +61,7 @@ class LinkedIn:
         url = f"{base_url}/li/linkedin/search/posts?url={postUrl}"
 
         # print(postUrl) #Uncomment this for debugging
-        print(url)  # Uncomment this for debugging
+        # print(url)  # Uncomment this for debugging
 
         response = requests.request("GET", url, headers=headers, data=payload)
         userPosts = self.__handleException(response)

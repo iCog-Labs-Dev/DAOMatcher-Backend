@@ -3,9 +3,18 @@ from flask import Flask, request, jsonify, abort
 from src.ServerLogic.ScoreUsers import ScoreUsers
 
 from src.ServerLogic import socketio
+import src.ServerLogic as ServerLogic
 
 from flask_cors import CORS
 import requests
+import secrets
+import string
+
+
+def generate_random_string(length):
+    characters = string.ascii_letters + string.digits
+    random_string = "".join(secrets.choice(characters) for _ in range(length))
+    return random_string
 
 
 def create_app():
@@ -17,11 +26,18 @@ def create_app():
 
     @socketio.on("connect")
     def handle_connect():
-        print("Client connected")
+        channel = generate_random_string(32)
+        scoreUsers.channelId = channel
+        print(channel)
+        socketio.emit("new_user_connected", {"channel": channel})
+
+    @socketio.on("cancel")
+    def handle_cancel():
+        scoreUsers.cancel = True
 
     @socketio.on("disconnect")
     def handle_disconnect():
-        print("Client disconnected")
+        scoreUsers.channelId = ""
 
     @app.errorhandler(400)
     def bad_request(error):

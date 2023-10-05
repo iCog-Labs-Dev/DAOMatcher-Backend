@@ -67,8 +67,8 @@ class LLMServer:
 
             # Assuming the server returns JSON data as well
             generated_text = response.json()
-            print("POST request successful")
-            print("Response:", generated_text)
+            # print("POST request successful")
+            # print("Response:", generated_text)
             return generated_text
 
         except requests.exceptions.RequestException as e:
