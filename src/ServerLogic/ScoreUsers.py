@@ -118,7 +118,6 @@ class ScoreUsers:
                         )
                         # print(count)
                         count += 1
-                        print("Sending to channelId", f"update")
                         socketio.emit(
                             f"update",
                             {"progress": count, "curr_user": account},
