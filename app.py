@@ -26,28 +26,25 @@ def create_app():
 
     @socketio.on("connect")
     def handle_connect():
-        channel = generate_random_string(32)
-        scoreUsers.channelId = channel
-        print(channel)
-        socketio.emit("new_user_connected", {"channel": channel})
+        print("User connected")
 
     @socketio.on("stop")
     def handle_cancel(data):
-        print("Request Canceled: ", scoreUsers.cancel, data)
         scoreUsers.cancel = True
+        print("Request Canceled: ", scoreUsers.cancel)
 
-    @socketio.on("start")
+    @socketio.on("get_users")
     def handle_start(data):
         jsonRequest = data
-
+        print("Recieved data: ", data)
         if not all(
             key in jsonRequest for key in ("query", "user_list", "user_limit", "depth")
         ):
             abort(400)
-        query = request.json["query"]
-        user_list = request.json["user_list"]
-        user_limit = request.json["user_limit"]
-        depth = request.json["depth"]
+        query = jsonRequest["query"]
+        user_list = jsonRequest["user_list"]
+        user_limit = jsonRequest["user_limit"]
+        depth = jsonRequest["depth"]
         if not all([query, user_list, user_limit]):
             abort(400)
         try:
@@ -66,7 +63,8 @@ def create_app():
                 )
             print(f"result: {users}")
             data = {"result": users}
-            return jsonify(data)
+            socketio.emit("get_users", data)
+            return
         except requests.exceptions.RequestException as e:
             response = e.response
             if response != None:
@@ -82,7 +80,7 @@ def create_app():
 
     @socketio.on("disconnect")
     def handle_disconnect():
-        scoreUsers.channelId = ""
+        print("User disconnected")
 
     @app.errorhandler(400)
     def bad_request(error):
