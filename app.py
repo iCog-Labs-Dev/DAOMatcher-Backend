@@ -34,25 +34,35 @@ def create_app():
         print("Request Canceled: ", scoreUsers.cancel)
 
     @socketio.on("get_users")
-    def handle_start(data):
+    def handle_get_users(data):
         jsonRequest = data
         print("Recieved data: ", data)
         if not all(
             key in jsonRequest for key in ("query", "user_list", "user_limit", "depth")
         ):
-            abort(400)
+            socketio.emit(
+                "something_went_wrong",
+                {
+                    "message": "Invalid request. Make sure you are sending a JSON object with keys 'query', 'user_list', and 'user_limit' all set to acceptable values",
+                    "status": 400,
+                },
+            )
+            print("error emitted")
+
+            return
         query = jsonRequest["query"]
         user_list = jsonRequest["user_list"]
         user_limit = jsonRequest["user_limit"]
         depth = jsonRequest["depth"]
         if not all([query, user_list, user_limit]):
             socketio.emit(
-                "error",
+                "something_went_wrong",
                 {
                     "message": "Invalid request. Make sure you are sending a JSON object with keys 'query', 'user_list', and 'user_limit' all set to acceptable values",
                     "status": 400,
                 },
             )
+            print("error emitted")
             return
         try:
             result = scoreUsers.scour(user_list, query, user_limit, depth)
@@ -77,16 +87,18 @@ def create_app():
             if response != None:
                 error = e.response.json()["error"]
                 print("error from RequestException: ", error)
-                socketio.emit("error", {"message": str(error), "status": 502})
+                socketio.emit(
+                    "something_went_wrong", {"message": str(error), "status": 502}
+                )
             else:
                 print("Error from ResponseException but no error reported")
                 socketio.emit(
-                    "error",
+                    "something_went_wrong",
                     {"message": "The LLM server isn't responding", "status": 503},
                 )
             return
         except Exception as e:
-            socketio.emit("error", {"message": "Internal server error"})
+            socketio.emit("something_went_wrong", {"message": "Internal server error"})
             return
 
     @socketio.on("disconnect")
