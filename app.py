@@ -1,7 +1,9 @@
 import os
 from flask import Flask, request, jsonify, abort
 from src.ServerLogic.ScoreUsers import ScoreUsers
+
 from src.ServerLogic import socketio
+
 from flask_cors import CORS
 import requests
 
@@ -9,8 +11,17 @@ import requests
 def create_app():
     app = Flask(__name__)
     CORS(app)
+    socketio.init_app(app)
 
     scoreUsers = ScoreUsers()
+
+    @socketio.on("connect")
+    def handle_connect():
+        print("Client connected")
+
+    @socketio.on("disconnect")
+    def handle_disconnect():
+        print("Client disconnected")
 
     @app.errorhandler(400)
     def bad_request(error):

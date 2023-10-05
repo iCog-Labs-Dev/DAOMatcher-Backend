@@ -103,7 +103,7 @@ class ScoreUsers:
                             accounts.append(username)
                             visited.add(username)
             except Exception as e:
-                socketio.emit({"error": str(e)})
+                socketio.emit("update", {"error": str(e)})
 
             if user:
                 try:
@@ -114,14 +114,16 @@ class ScoreUsers:
                         )
                         # print(count)
                         count += 1
-                        socketio.emit({"progress": count, "curr_user": account})
+                        socketio.emit(
+                            "update", {"progress": count, "curr_user": account}
+                        )
                     else:
                         continue
 
                 except requests.exceptions.RequestException as e:
-                    socketio.emit({"error": str(e)})
+                    socketio.emit("update", {"error": str(e)})
                 except Exception as e:
-                    socketio.emit({"error": str(e)})
+                    socketio.emit("update", {"error": str(e)})
                     # raise Exception("Error encountered on storing the scores")
 
         return user_heap

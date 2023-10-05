@@ -6,4 +6,4 @@ from flask_socketio import SocketIO
 llm_server = LLMServer()
 linkedIn = LinkedIn()
 mastodon = Mastodon()
-socketio = SocketIO(cors_allowed_origins="*")
+socketio = SocketIO()
