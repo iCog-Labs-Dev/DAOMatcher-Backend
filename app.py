@@ -46,7 +46,14 @@ def create_app():
         user_limit = jsonRequest["user_limit"]
         depth = jsonRequest["depth"]
         if not all([query, user_list, user_limit]):
-            abort(400)
+            socketio.emit(
+                "error",
+                {
+                    "message": "Invalid request. Make sure you are sending a JSON object with keys 'query', 'user_list', and 'user_limit' all set to acceptable values",
+                    "status": 400,
+                },
+            )
+            return
         try:
             result = scoreUsers.scour(user_list, query, user_limit, depth)
             users = []
@@ -70,13 +77,17 @@ def create_app():
             if response != None:
                 error = e.response.json()["error"]
                 print("error from RequestException: ", error)
-                abort(502, description=error)
+                socketio.emit("error", {"message": str(error), "status": 502})
             else:
                 print("Error from ResponseException but no error reported")
-                abort(503, description="The LLM server isn't responding")
+                socketio.emit(
+                    "error",
+                    {"message": "The LLM server isn't responding", "status": 503},
+                )
+            return
         except Exception as e:
-            print(e)
-            abort(500)
+            socketio.emit("error", {"message": "Internal server error"})
+            return
 
     @socketio.on("disconnect")
     def handle_disconnect():
