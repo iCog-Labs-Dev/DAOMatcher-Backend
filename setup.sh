@@ -34,7 +34,7 @@ llm_pid=$!
 
 source Backend/bin/activate
 echo "Starting App server on port $PORT"
-gunicorn 'app:create_app()' --bind 0.0.0.0:$PORT --worker-class gevent &
+gunicorn -k "geventwebsocket.gunicorn.workers.GeventWebSocketWorker" 'app:create_app()' --bind 0.0.0.0:$PORT &
 app_pid=$!
 
 wait
