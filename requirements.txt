@@ -2,6 +2,7 @@ bs4
 Flask
 Flask-Cors
 Flask-SSE
+flask-login
 gevent
 gunicorn
 langchain

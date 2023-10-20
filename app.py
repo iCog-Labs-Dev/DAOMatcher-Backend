@@ -6,6 +6,15 @@ from src.ServerLogic import socketio
 import src.ServerLogic as ServerLogic
 
 from flask_cors import CORS
+from flask_login import (
+    LoginManager,
+    UserMixin,
+    login_user,
+    logout_user,
+    login_required,
+    current_user,
+)
+
 import requests
 import secrets
 import string
@@ -19,8 +28,35 @@ def generate_random_string(length):
 
 def create_app():
     app = Flask(__name__)
+    app.secret_key = "your_secret_key_here"
     CORS(app)
     socketio.init_app(app)
+    login_manager = LoginManager(app)
+
+    class User(UserMixin):
+        def __init__(self, user_id):
+            self.id = user_id
+
+    @login_manager.user_loader
+    def load_user(user_id):
+        return User(user_id)
+
+    @app.route("/login", methods=["POST"])
+    def login():
+        user_id = request.form.get("user_id")
+        if user_id:
+            user = User(user_id)
+            login_user(user)
+            return jsonify({"message": "Logged in successfully"})
+        else:
+            print(user_id)
+            return jsonify({"message": f"Login failed"}), 401
+
+    @app.route("/logout", methods=["POST"])
+    @login_required
+    def logout():
+        logout_user()
+        return jsonify({"message": "Logged out successfully"})
 
     scoreUsers = ScoreUsers()
 
@@ -114,9 +150,19 @@ def create_app():
             400,
         )
 
-    # Add your other error handlers here...
+    @app.errorhandler(401)
+    def bad_request(error):
+        return (
+            jsonify(error="Unauthorized"),
+            401,
+        )
 
-    @app.route("/", methods=["POST", "HEAD", "GET"])
+    @app.route("/", methods=["GET", "HEAD"])
+    def wake_handler():
+        return jsonify({"message": "Wake up successfull"})
+
+    @app.route("/get_users", methods=["POST", "HEAD", "GET"])
+    @login_required
     def scoring_user():
         # print(request.json)
         socketio.init_app(app)
