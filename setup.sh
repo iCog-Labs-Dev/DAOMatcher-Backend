@@ -26,7 +26,7 @@ source Backend/bin/activate
 source .env
 
 echo "Installing requirements..."
-pip install -r requirements.txt
+pip install -qr requirements.txt
 
 echo "Starting LLM server on port $LLM_PORT"
 python3 -m src.LLM.LLMServer & 
