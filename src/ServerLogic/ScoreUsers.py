@@ -1,11 +1,13 @@
 from collections import *
 from heapq import *
 import requests
-from src.ServerLogic import mastodon, linkedIn, llm_server
-from flask_sse import sse
+from src.ServerLogic import mastodon, linkedIn, llm_server, socketio
 
 
 class ScoreUsers:
+    def __init__(self) -> None:
+        self.cancel = False
+
     def __store_items(self, item, limit, user_heap):
         if len(user_heap) == limit:
             heappushpop(user_heap, item)
@@ -66,8 +68,9 @@ class ScoreUsers:
 
         visited = set()
         count = 0
+        self.cancel = False
 
-        while accounts and count < depth:
+        while (not self.cancel) and accounts and (count < depth):
             account = accounts.popleft()
             try:
                 if (
@@ -104,7 +107,7 @@ class ScoreUsers:
                             accounts.append(username)
                             visited.add(username)
             except Exception as e:
-                sse.publish({"error": str(e)})
+                socketio.emit(f"update", {"error": str(e)})
 
             if user:
                 try:
@@ -115,14 +118,17 @@ class ScoreUsers:
                         )
                         # print(count)
                         count += 1
-                        sse.publish({"progress": count, "curr_user": account})
+                        socketio.emit(
+                            f"update",
+                            {"progress": count, "curr_user": account},
+                        )
                     else:
                         continue
 
                 except requests.exceptions.RequestException as e:
-                    sse.publish({"error": str(e)})
+                    socketio.emit(f"update", {"error": str(e)})
                 except Exception as e:
-                    sse.publish({"error": str(e)})
+                    socketio.emit(f"update", {"error": str(e)})
                     # raise Exception("Error encountered on storing the scores")
 
         return user_heap
