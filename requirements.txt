@@ -5,8 +5,6 @@ Flask-SSE
 gevent
 gunicorn
 langchain
-pydantic
-pyngrok
 python-dotenv
 together
 flask-socketio
