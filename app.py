@@ -43,7 +43,7 @@ def create_app():
             socketio.emit(
                 "something_went_wrong",
                 {
-                    "message": "Invalid request. Make sure you are sending a JSON object with keys 'query', 'user_list', and 'user_limit' all set to acceptable values",
+                    "message": "Invalid request. Make sure you are sending a JSON object with keys 'query', 'user_list', 'depth' and 'user_limit' all set to acceptable values",
                     "status": 400,
                 },
             )
