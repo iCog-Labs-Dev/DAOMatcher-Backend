@@ -55,9 +55,9 @@ class TogetherLLM(LLM):
         return text
 
     def start(self):
-        together.Models.start("togethercomputer/llama-2-70b-chat")
+        together.Models.start(self.model)
         print("Model started successfully")
 
     def stop(self):
-        together.Models.stop("togethercomputer/llama-2-70b-chat")
+        together.Models.stop(self.model)
         print("Model stopped successfully")
