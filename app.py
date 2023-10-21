@@ -75,18 +75,18 @@ def create_app():
     scoreUsers = ScoreUsers()
 
     @socketio.on("connect")
-    @login_manager.user_loader
+    @login_required
     def handle_connect():
         print("User connected")
 
     @socketio.on("stop")
-    @login_manager.user_loader
+    @login_required
     def handle_cancel(data):
         scoreUsers.cancel = True
         print("Request Canceled: ", scoreUsers.cancel)
 
     @socketio.on("get_users")
-    @login_manager.user_loader
+    @login_required
     def handle_get_users(data):
         jsonRequest = data
         print("Recieved data: ", data)
