@@ -52,29 +52,35 @@ def create_app():
             if user_id == admin_id and user_pass == admin_pass:
                 user = User(user_id)
                 login_user(user)
-                return jsonify({"message": "Logged in successfully"})
-            return jsonify({"message": "Email or password incorrect"}), 401
+                return jsonify({"message": "Logged in successfully", "success": True})
+            return (
+                jsonify({"message": "Email or password incorrect", "success": False}),
+                401,
+            )
         else:
-            return jsonify({"message": f"Login failed"}), 401
+            return jsonify({"message": f"Login failed", "success": False}), 401
 
     @app.route("/logout", methods=["POST"])
     @login_required
     def logout():
         logout_user()
-        return jsonify({"message": "Logged out successfully"})
+        return jsonify({"message": "Logged out successfully", "success": True})
 
     scoreUsers = ScoreUsers()
 
     @socketio.on("connect")
+    @login_manager.user_loader
     def handle_connect():
         print("User connected")
 
     @socketio.on("stop")
+    @login_manager.user_loader
     def handle_cancel(data):
         scoreUsers.cancel = True
         print("Request Canceled: ", scoreUsers.cancel)
 
     @socketio.on("get_users")
+    @login_manager.user_loader
     def handle_get_users(data):
         jsonRequest = data
         print("Recieved data: ", data)
@@ -143,6 +149,7 @@ def create_app():
             return
 
     @socketio.on("disconnect")
+    @login_manager.user_loader
     def handle_disconnect():
         print("User disconnected")
 
