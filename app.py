@@ -3,7 +3,6 @@ from flask import Flask, request, jsonify, abort
 from src.ServerLogic.ScoreUsers import ScoreUsers
 
 from src.ServerLogic import FRONTEND_URL, socketio
-import src.ServerLogic as ServerLogic
 
 from flask_cors import CORS
 from flask_login import (
@@ -12,7 +11,6 @@ from flask_login import (
     login_user,
     logout_user,
     login_required,
-    current_user,
 )
 
 import requests
