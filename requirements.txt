@@ -1,8 +1,8 @@
 bs4
-Flask==2.3.3
+Flask
 Flask-Cors
 Flask-SSE
-flask-login==0.6.2
+flask-login
 gevent
 gunicorn
 langchain
