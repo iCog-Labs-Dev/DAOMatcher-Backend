@@ -43,11 +43,14 @@ def create_app():
 
     @app.route("/login", methods=["POST"])
     def login():
-        user_id = request.form.get("email")
-        user_pass = request.form.get("password")
+        data = request.get_json()
+        user_id = data.get("email")
+        user_pass = data.get("password")
         admin_id = os.environ.get("ADMIN_ID")
         admin_pass = os.environ.get("ADMIN_PASS")
-
+        print(
+            f"userId: {user_id} userPass: {user_pass} adminId: {admin_id} adminPass: {admin_pass}"
+        )
         if user_id and user_pass:
             if user_id == admin_id and user_pass == admin_pass:
                 user = User(user_id)
