@@ -28,7 +28,7 @@ def generate_random_string(length):
 
 def create_app():
     app = Flask(__name__)
-    app.secret_key = "your_secret_key_here"
+    app.secret_key = "Secret to be replaced with environment"
     CORS(app)
     socketio.init_app(app)
     login_manager = LoginManager(app)
@@ -43,13 +43,18 @@ def create_app():
 
     @app.route("/login", methods=["POST"])
     def login():
-        user_id = request.form.get("user_id")
-        if user_id:
-            user = User(user_id)
-            login_user(user)
-            return jsonify({"message": "Logged in successfully"})
+        user_id = request.form.get("email")
+        user_pass = request.form.get("password")
+        admin_id = os.environ.get("ADMIN_ID")
+        admin_pass = os.environ.get("ADMIN_PASS")
+
+        if user_id and user_pass:
+            if user_id == admin_id and user_pass == admin_pass:
+                user = User(user_id)
+                login_user(user)
+                return jsonify({"message": "Logged in successfully"})
+            return jsonify({"message": "Email or password incorrect"}), 401
         else:
-            print(user_id)
             return jsonify({"message": f"Login failed"}), 401
 
     @app.route("/logout", methods=["POST"])
