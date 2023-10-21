@@ -153,7 +153,6 @@ def create_app():
             return
 
     @socketio.on("disconnect")
-    @login_manager.user_loader
     def handle_disconnect():
         print("User disconnected")
 
@@ -180,8 +179,7 @@ def create_app():
     @app.route("/get_users", methods=["POST", "HEAD", "GET"])
     @login_required
     def scoring_user():
-        # print(request.json)
-        socketio.init_app(app)
+        print(request.json)
         if request.method == "POST":
             jsonRequest = request.json
 
