@@ -1,9 +1,8 @@
 import os
 from flask import Flask, request, jsonify, abort
-from src import FRONTEND_URL
 from src.ServerLogic.ScoreUsers import ScoreUsers
 
-from src.ServerLogic import socketio
+from src.ServerLogic import FRONTEND_URL, socketio
 import src.ServerLogic as ServerLogic
 
 from flask_cors import CORS
