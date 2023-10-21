@@ -52,7 +52,7 @@ class LLMServer:
             else:
                 abort(405)
 
-        self.app.run(port=LOCAL_LLM_PORT, debug=True)
+        self.app.run(port=LOCAL_LLM_PORT, debug=False)
         self.llm.model.stop()
 
     def generate_search(self, query, content):
