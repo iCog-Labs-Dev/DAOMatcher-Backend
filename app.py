@@ -30,7 +30,7 @@ def generate_random_string(length):
 def create_app():
     app = Flask(__name__)
     app.secret_key = "Secret to be replaced with environment"
-    origins = ["http://localhost:5173", FRONTEND_URL]
+    origins = [FRONTEND_URL if FRONTEND_URL else "http://localhost:5173"]
 
     CORS(app, supports_credentials=True, origins=origins)
     socketio.init_app(app)
