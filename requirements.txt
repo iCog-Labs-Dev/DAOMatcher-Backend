@@ -10,3 +10,4 @@ python-dotenv
 together
 flask-socketio
 gevent-websocket
+Werkzeug==2.2.2
