@@ -23,18 +23,17 @@ echo "Setting up environment"
 
 python3 -m venv Backend
 source Backend/bin/activate
-source .env
 
 echo "Installing requirements..."
 pip install -qr requirements.txt
 
-echo "Starting LLM server on port $LLM_PORT"
+echo "Starting LLM server on port 5001"
 python3 -m src.LLM.LLMServer & 
 llm_pid=$!
 
 source Backend/bin/activate
-echo "Starting App server on port $PORT"
-gunicorn -k "geventwebsocket.gunicorn.workers.GeventWebSocketWorker" 'app:create_app()' --bind 0.0.0.0:$PORT &
+echo "Starting App server on port 8000"
+gunicorn -k "geventwebsocket.gunicorn.workers.GeventWebSocketWorker" 'app:create_app()' --bind 0.0.0.0:8000 &
 app_pid=$!
 
 wait
