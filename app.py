@@ -29,7 +29,7 @@ def generate_random_string(length):
 def create_app():
     app = Flask(__name__)
     app.secret_key = "Secret to be replaced with environment"
-    CORS(app)
+    CORS(app, supports_credentials=True, origins=["http://localhost:5173"])
     socketio.init_app(app)
     login_manager = LoginManager(app)
 
