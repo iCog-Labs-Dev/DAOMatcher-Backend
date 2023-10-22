@@ -85,7 +85,7 @@ def create_app():
         print("User connected")
 
     @socketio.on("stop")
-    @login_required
+    # @login_required
     def handle_cancel(data):
         scoreUsers.cancel = True
         print("Request Canceled: ", scoreUsers.cancel)
