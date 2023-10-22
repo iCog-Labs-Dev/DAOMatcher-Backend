@@ -77,6 +77,8 @@ def create_app():
     @socketio.on("connect")
     @login_required
     def handle_connect():
+        email = request.cookies["email"]
+        login_user(email)
         print("User connected")
 
     @socketio.on("stop")
