@@ -28,10 +28,12 @@ class ScoreUsers:
                     content.append(mastodon.extractText(c["content"]))
                     # print(content[-1])
             content = "\n\n------------------\n".join(content)
+            # print(f"Profile: {profile}")
             user = {
                 "id": profile["id"],
                 "name": profile["display_name"],
                 "username": profile["username"],
+                "image": profile["avatar"],
             }
             # print(content)
             return content, user

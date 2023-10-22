@@ -134,6 +134,7 @@ def create_app():
                         "name": userInfo["name"],
                         "score": score,
                         "handle": handle,
+                        "image": userInfo["image"],
                     }
                 )
             print(f"result: {users}")
@@ -216,6 +217,7 @@ def create_app():
                             "name": userInfo["name"],
                             "score": score,
                             "handle": handle,
+                            "image": userInfo["image"],
                         }
                     )
 
