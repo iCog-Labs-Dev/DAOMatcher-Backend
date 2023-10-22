@@ -75,7 +75,7 @@ def create_app():
     scoreUsers = ScoreUsers()
 
     @socketio.on("connect")
-    @login_required
+    #@login_required
     def handle_connect():
         email = request.cookies["email"]
         print(email)
