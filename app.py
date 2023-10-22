@@ -75,12 +75,13 @@ def create_app():
     scoreUsers = ScoreUsers()
 
     @socketio.on("connect")
-    #@login_required
-    def handle_connect():
-        email = request.cookies["email"]
-        print(email)
-        user = User(email)
-        login_user(user)
+    def handle_connect(request):
+        # print(request)
+        # if request:
+        #     email = request.cookies.get("email")
+        #     print(email)
+        #     user = User(email)
+        #     login_user(user)
         print("User connected")
 
     @socketio.on("stop")
@@ -90,7 +91,7 @@ def create_app():
         print("Request Canceled: ", scoreUsers.cancel)
 
     @socketio.on("get_users")
-    @login_required
+    # @login_required
     def handle_get_users(data):
         jsonRequest = data
         print("Recieved data: ", data)
