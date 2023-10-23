@@ -18,7 +18,7 @@ INSTRUCTION = """For the following topic in '<>' and posts separated by '-------
   step 2: from the summarized posts above, identify sentences that are related to the given topic.
   step 3: if you can find sentences related to the provided topics procced with step 3 other wise output 0 and end your analysis.
   step 4: rate how much interested the user can be on the given topic on the scale of 1-100 based on the identified sentences and their correlation with the topic.
-  step 5: ouput a single number based on step 4.
+  step 5: ouput a single number that is precise and detailed with a variety of ranges that is between 1-100 based on step 4.
 
   topic: <{query}>
   Description: ```{content}```

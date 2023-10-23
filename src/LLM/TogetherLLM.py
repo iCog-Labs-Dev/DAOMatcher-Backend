@@ -17,7 +17,7 @@ class TogetherLLM(LLM):
     together_api_key: str = TOGETHER_API_KEY
     """Together API key"""
 
-    temperature: float = 0.0
+    temperature: float = 0.7
     """What sampling temperature to use."""
 
     max_tokens: int = 512

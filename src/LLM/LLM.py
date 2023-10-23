@@ -9,7 +9,7 @@ class LLM:
         self.temperature = temperature
         self.max_tokens = max_tokens
         self.prompt = Prompt().get_prompt_template()
-        self.chain = LLMChain(prompt=self.prompt, llm=self.model)
+        self.chain = LLMChain(prompt=self.prompt, llm=self.model, verbose=True)
 
     def generate(self, query, content):
         response = self.chain.run({"query": query, "content": content})
