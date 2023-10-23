@@ -28,7 +28,8 @@ echo "Installing requirements..."
 pip install -qr requirements.txt
 
 echo "Starting LLM server on port 5001"
-python3 -m src.LLM.LLMServer & 
+gunicorn -k "geventwebsocket.gunicorn.workers.GeventWebSocketWorker" 'src.LLM.LLMServer:create_llm_server()' --bind 127.0.0.1:5001 &
+# python3 -m src.LLM.LLMServer &
 llm_pid=$!
 
 source Backend/bin/activate

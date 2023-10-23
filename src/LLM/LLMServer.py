@@ -52,8 +52,8 @@ class LLMServer:
             else:
                 abort(405)
 
-        self.app.run(port=LOCAL_LLM_PORT, debug=False)
-        self.llm.model.stop()
+        # self.app.run(port=LOCAL_LLM_PORT, debug=False)
+        # self.llm.model.stop()
 
     def generate_search(self, query, content):
         headers = {"Content-Type": "application/json"}  # Specify JSON content type
@@ -76,7 +76,7 @@ class LLMServer:
             raise e
 
 
-if __name__ == "__main__":
+def create_llm_server():
     llm_server = LLMServer()
     llm_server.start()
-    print(f"LLM Server up and running on {LOCAL_LLM_URL}")
+    return llm_server.app
