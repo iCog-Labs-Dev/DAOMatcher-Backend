@@ -29,13 +29,13 @@ INSTRUCTION = """For the above topic in '<>' and posts separated by '-----------
   Action: <Find the user's top interests given the posts>
   Observation: <All of the user's top interests in one sentence>
   Thought: <Is {query} found in the User's interest>
-  Action Input: <User interests>
-  Action: <Search for {query} in the User interests>
+  Action Input: <User's top interests>
+  Action: <Search for {query} in the User's top interests>
   Observation: <Is the user interested in {query}>
   Thought: <How much can a user be interested in {query} if the user currenly given the current interests.>
-  Action Input: <User's interest>
-  Action: <Analyze the user's interests and find a number corresponding to the users interest in {query}>
-  Obervation: <Found estimation number for the user's interest on {query} and why he might be interested in this>
+  Action Input: <User's top interest, Interested or not>
+  Action: <Analyze the user's top interests and Interested or not to find a number corresponding to the user interest in {query}>
+  Obervation: <Found estimation number for the user's interest on {query} and why he might be interested>
 
   Response: <single number from 1-100>
   """
