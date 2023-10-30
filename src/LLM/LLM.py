@@ -15,6 +15,7 @@ class LLM:
         response = self.chain.run({"query": query, "content": content})
         print("\033[94m" + response + "\033[0m")
         response = response.split("Response:")[1]
+        response = response.split("\n")[0].strip()
         response = "".join(char for char in response if char.isdigit())
         if not all(char.isdigit() for char in response):
             return "0"
