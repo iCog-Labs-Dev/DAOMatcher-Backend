@@ -23,14 +23,20 @@ INSTRUCTION = """For the above topic in '<>' and posts separated by '-----------
   step 4: rate how much interested the user can be on the given topic on the scale of 1-100 based on the identified sentences and their correlation with the topic.
   step 5: ouput a single number that is precise and detailed with a variety of ranges that is between 1-100 based on step 4.
 
-  Strictly provide your output as follows. Don't include any explanation or any text.
-  Thought: You need to know what the user is interested in.
-  Action: Find the user interest given the posts
-  Observation: The interest of the user
-  Thought: You need to know the likelyhood of the user being interested in the topic
-  Action Input: User's interest
-  Action: Estimate a number corresponding to the users interest in the topic given the User's interest
-  Obervation: Found estimation number for the user's interest
+  Use the following format for your output. Don't ouput any text after the "Response:"
+  Thought: <How do you find the user's interest given the posts>
+  Action Input: <Method to find the user's interest>
+  Action: <Find the user's top interests given the posts>
+  Observation: <All of the user's top interests in one sentence>
+  Thought: <Is {query} found in the User's interest>
+  Action Input: <User interests>
+  Action: <Search for {query} in the User interests>
+  Observation: <Is the user interested in {query}>
+  Thought: <How much can a user be interested in {query} if the user currenly given the current interests.>
+  Action Input: <User's interest>
+  Action: <Analyze the user's interests and find a number corresponding to the users interest in {query}>
+  Obervation: <Found estimation number for the user's interest on {query} and why he might be interested in this>
+
   Response: <single number from 1-100>
   """
 
