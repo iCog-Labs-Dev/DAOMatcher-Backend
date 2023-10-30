@@ -14,7 +14,7 @@ DEFAULT_SYSTEM_PROMPT = """
   You should never provide any explantion to the output, your response should be only in numbers corresponding to the scores, nothing else.
 
   topic: <{query}>
-  Description: ```{content}```
+  Posts: ```{content}```
   """
 INSTRUCTION = """For the above topic in '<>' and posts separated by '------------------'  in '``````' perform the following steps
   step 1: summarize each post that is separated by '------------------' at most 50 words.
@@ -24,6 +24,13 @@ INSTRUCTION = """For the above topic in '<>' and posts separated by '-----------
   step 5: ouput a single number that is precise and detailed with a variety of ranges that is between 1-100 based on step 4.
 
   Strictly provide your output as follows. Don't include any explanation or any text.
+  Thought: You need to know what the user is interested in.
+  Action: Find the user interest given the posts
+  Observation: The interest of the user
+  Thought: You need to know the likelyhood of the user being interested in the topic
+  Action Input: User's interest
+  Action: Estimate a number corresponding to the users interest in the topic given the User's interest
+  Obervation: Found estimation number for the user's interest
   Response: <single number from 1-100>
   """
 

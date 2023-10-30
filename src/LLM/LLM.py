@@ -13,6 +13,7 @@ class LLM:
 
     def generate(self, query, content):
         response = self.chain.run({"query": query, "content": content})
+        print("\033[94m" + response + "\033[0m")
         response = response.split("Response:")[1]
         # print(f"Prompt: {prompt.template}")  # For debugging only
 
