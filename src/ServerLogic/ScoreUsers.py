@@ -1,5 +1,6 @@
 from collections import *
 from heapq import *
+from urllib.parse import urlparse
 import requests
 from src.ServerLogic import mastodon, linkedIn, llm_server, socketio
 
@@ -14,6 +15,13 @@ class ScoreUsers:
         else:
             heappush(user_heap, item)
 
+    def __is_link(self, string):
+        try:
+            parsed_url = urlparse(string)
+            return parsed_url.scheme in ["http", "https"] and parsed_url.netloc != ""
+        except ValueError:
+            return False
+
     # Returns Mastodon user content and user in a dictionary of keys id, name, username
     def __get_mastodon_user(self, acc, server):
         profile = mastodon.getProfile(server, acc)
@@ -25,7 +33,10 @@ class ScoreUsers:
                 # print(content[-1])
             for c in mastodon.getContent(server, profile["id"]):
                 if "content" in c and c["content"]:
-                    content.append(mastodon.extractText(c["content"]))
+                    text = mastodon.extractText(c["content"])
+                    # Added filter to check if content is only link
+                    if not self.__is_link(text):
+                        content.append(text)
                     # print(content[-1])
             content = "\n\n------------------\n".join(content)
             # print(f"Profile: {profile}")

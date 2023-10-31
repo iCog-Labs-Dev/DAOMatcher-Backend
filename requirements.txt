@@ -10,4 +10,5 @@ python-dotenv
 together
 flask-socketio
 gevent-websocket
+google-generativeai
 Werkzeug==2.2.2
