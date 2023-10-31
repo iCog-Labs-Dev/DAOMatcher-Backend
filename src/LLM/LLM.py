@@ -54,6 +54,9 @@ class LLM:
             if not all(char.isdigit() for char in response):
                 return ""
 
+            if len(response) > 2 and response != "100":
+                return ""
+
             return response
         except Exception as e:
             print(f"\033[91;1m{e}.\033[0m")

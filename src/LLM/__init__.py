@@ -47,7 +47,7 @@ Observation: verbal description of what you learned after perorming the above ac
 (... this pattern 'Thought/Action/Action Input/Observation' can be repeated N times as needed)
 
 Final Thought: you now know what the final respond should be.
-Response: final single number from 1-100 using {InterestLevels} as a guide.
+Response: only single number from 1-100 using {InterestLevels} as a guide.
 """
 
 B_INST, E_INST = "[INST]", "[/INST]"
