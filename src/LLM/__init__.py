@@ -15,7 +15,7 @@ LLM_URL = None
 ACTIONS = [
     "Search for explicit mentions of the topic in the posts",
     "Search for indication of interest in the topic from the posts",
-    "Search for similar topics to the given topic in the posts",
+    "Search for topics that could belong to the same category as the given topic",
     "Pick a number from the interest levels matching the user's interest in the topic of question",
 ]
 
@@ -46,7 +46,10 @@ Action Input: the input to the action
 Observation: verbal description of what you learned after perorming the above action
 (... this pattern 'Thought/Action/Action Input/Observation' can be repeated N times as needed)
 
-Final Thought: you now know what the final respond should be.
+Analysis: your analysis of the user's interest based on Explicit mentions, Indications of interest and similar topics or field of work to the given topic
+Observation: What you learned after perfoming the above action and what led to such conclusion
+
+Final Thought: you now know what the final response should be.
 Response: Choose a single number from 1-100 using {InterestLevels} as a guide.
 """
 

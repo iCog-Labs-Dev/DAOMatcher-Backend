@@ -11,22 +11,22 @@ class LLM:
         self.temperature = temperature
         self.max_tokens = max_tokens
         self.prompt = Prompt().get_prompt_template()
-        self.chain = LLMChain(prompt=self.prompt, llm=self.model, verbose=True)
+        self.chain = LLMChain(prompt=self.prompt, llm=self.model)
 
     def generate(self, query, content):
         content = self.clean_content(content)
         print(
-            f"Token: {len(self.prompt.format_prompt(query=query, content=content).text) / 4}"
+            f"\033[94;1mToken: {len(self.prompt.format_prompt(query=query, content=content).text) / 4}\033[0m"
         )
         try:
             response = self.chain.run({"query": query, "content": content})
-            print("\033[94m" + response + "\033[0m")
+            print("\033[92;1m" + response + "\033[0m\n")
             response = self.extract_response(response)
             # print(f"Prompt: {prompt.template}")  # For debugging only
 
             return response
         except IndexError:
-            print("\033[91;1mThe model can't process this user.\033[0m")
+            print("\033[91;1mThe model can't process this user.\033[0m\n")
             return ""
 
     def clean_content(self, input_string):
@@ -59,5 +59,5 @@ class LLM:
 
             return response
         except Exception as e:
-            print(f"\033[91;1m{e}.\033[0m")
+            print(f"\033[91;1m{e}.\033[0m\n")
             return ""

@@ -125,6 +125,7 @@ class ScoreUsers:
             if user:
                 try:
                     if query and content:
+                        print(f"\033[93;1m{account}\033[0m")
                         score = llm_server.generate_search(query, content)["response"]
                         self.__store_items(
                             ((int(score), account, user)), user_limit, user_heap
