@@ -44,7 +44,6 @@ class LLM:
 
     def extract_response(self, response):
         try:
-            print("\033[94m" + response + "\033[0m")
             if "Response:" in response:
                 response = response.split("Response:")[1]
             elif "Observation:" in response:
