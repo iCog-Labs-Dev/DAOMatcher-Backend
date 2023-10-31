@@ -14,14 +14,13 @@ LLM_URL = None
 
 ACTIONS = [
     "Find the user's top interests from the posts",
-    "Search the topic given in the User's top interests",
-    "Analyze the user's top interests to find a number corresponding to the user's interest in given topic",
+    "Search the topic in question in the User's top interests",
+    "Analyze the user's top interests to find a number corresponding to the user's interest in the topic in question",
     "Decide which level of interest the user has from the Interest level list",
-    "Pick a number from the interest level matching the user's interest in the given topic",
+    "Pick a number from the interest level matching the user's interest in the topic in question",
 ]
 
 InterestLevels = [
-    "Extremely unlikely(0-10)",
     "very unlikely(10-20)",
     "unlikely(20-30)",
     "maybe unlikely(30-40)",
@@ -39,7 +38,8 @@ Posts: {content}"""
 INSTRUCTION = """Given the topic below and the Posts above. you should respond with the following format strictly and always include the "Response:" No matter what.
 
 Use the following format:
-Question: the input question you must answer
+Question: the interest level of the user in the topic asked by the human
+
 Thought: you should always think about what to do
 Action: the action to take, should be one of {actions}
 Action Input: the input to the action
@@ -49,7 +49,7 @@ Observation: what you learned after perorming the above action
 Thought: you now know how to respond.
 Response: single number from 1-100 using the {InterestLevels} as guide
 
-topic: {query}
+human: {query}
 AI:
 """
 

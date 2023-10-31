@@ -20,11 +20,7 @@ class LLM:
         )
         response = self.chain.run({"query": query, "content": content})
         print("\033[94m" + response + "\033[0m")
-        response = response.split("Response:")[1]
-        response = response.split("\n")[0].strip()
-        response = "".join(char for char in response if char.isdigit())
-        if not all(char.isdigit() for char in response):
-            return "0"
+        response = self.extract_response(response)
         # print(f"Prompt: {prompt.template}")  # For debugging only
 
         return response
@@ -41,3 +37,19 @@ class LLM:
         filtered_string = filtered_string.replace("------------------", "")
 
         return filtered_string
+
+    def extract_response(self, response):
+        try:
+            print("\033[94m" + response + "\033[0m")
+            if "Response:" in response:
+                response = response.split("Response:")[1]
+            elif "Observation:" in response:
+                response = response.split("Observation:")[1]
+            response = response.split("\n")[0].strip()
+            response = "".join(char for char in response if char.isdigit())
+
+            if not all(char.isdigit() for char in response):
+                return ""
+        except Exception as e:
+            print(f"\033[91m{e}\033[0m")
+            return ""
