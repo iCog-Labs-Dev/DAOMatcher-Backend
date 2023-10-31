@@ -13,20 +13,30 @@ LOCAL_LLM_URL = f"http://127.0.0.1:{LOCAL_LLM_PORT}"
 LLM_URL = None
 
 ACTIONS = [
-    "Find the user's top interests given the posts",
+    "Find the user's top interests from the posts",
     "Search the topic given in the User's top interests",
-    "Analyze the user's top interests and Interested or not to find a number corresponding to the user interest in topic",
+    "Analyze the user's top interests to find a number corresponding to the user's interest in given topic",
+    "Decide which level of interest the user has from the Interest level list",
+    "Pick a number from the interest level matching the user's interest in the given topic",
+]
+
+InterestLevels = [
+    "Extremely unlikely(0-10)",
+    "very unlikely(10-20)",
+    "unlikely(20-30)",
+    "maybe unlikely(30-40)",
+    "neutral(40-50)",
+    "maybe likely(50-60)",
+    "likely(60-70)",
+    "very likely(70-80)",
+    "Extremely likely(70-100)",
 ]
 
 DEFAULT_SYSTEM_PROMPT = """
-  You are expert topic interest inferer. Your task is to provide an interest of a human on a given topic on the scale of 1-100. Your response output should contain only one number that coresponds to the interest of the person on the topic.
-  If the user seems to be extremly likely to be interested in the topic output 100. If the user doesn't seem to be likely to be interested at all output 0.
-  You should never provide any explantion to the output, your response should be only in numbers corresponding to the scores, nothing else.
+You are expert topic interest inferer. Your task is to provide an interest of a human on a given topic on the scale of 1-100. Your response output should contain only one number that coresponds to the interest of the person on the topic. If the user seems to be extremly likely to be interested in the topic output 100. If the user doesn't seem to be likely to be interested at all output 0. If the user's interest is between the two, output a flexible number between 0 and 100 corresponding to the user's interest in the given topic as preciely as possible. You should always respond with "Response:" in the end what ever value you decide on.
 
-  Posts: ```{content}```
-  """
-INSTRUCTION = """
-Given the topic below and the Posts above in `````` which are separated by "------------------" you should respond with the following format strictly.
+Posts: {content}"""
+INSTRUCTION = """Given the topic below and the Posts above. you should respond with the following format strictly and always include the "Response:" No matter what.
 
 Use the following format:
 Question: the input question you must answer
@@ -35,8 +45,9 @@ Action: the action to take, should be one of {actions}
 Action Input: the input to the action
 Observation: what you learned after perorming the above action
 (repeat the above set of formats 'Thought/Action/Action Input/Oversvation' N times if you aren't sure what to respond)
+
 Thought: you now know how to respond.
-Response: single number from 1-100
+Response: single number from 1-100 using the {InterestLevels} as guide
 
 topic: {query}
 AI:

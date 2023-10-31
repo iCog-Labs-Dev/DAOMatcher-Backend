@@ -31,4 +31,5 @@ class Mastodon:
 
         response = requests.get(f"{BASE_URL}/{id}/statuses?exclude_replies=true")
         response.raise_for_status()
+
         return response.json()

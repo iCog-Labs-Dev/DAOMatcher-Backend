@@ -15,6 +15,9 @@ class LLM:
 
     def generate(self, query, content):
         content = self.clean_content(content)
+        print(
+            f"Token: {len(self.prompt.format_prompt(query=query, content=content).text) / 4}"
+        )
         response = self.chain.run({"query": query, "content": content})
         print("\033[94m" + response + "\033[0m")
         response = response.split("Response:")[1]
@@ -33,6 +36,8 @@ class LLM:
         # Use the pattern to filter out unwanted characters
         filtered_string = "".join(pattern.findall(input_string))
         filtered_string = filtered_string.replace("\n\n", "")
+        filtered_string = filtered_string.replace("  ", " ")
         filtered_string = filtered_string.replace("\n", "")
+        filtered_string = filtered_string.replace("------------------", "")
 
         return filtered_string

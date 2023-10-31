@@ -1,5 +1,5 @@
 import textwrap
-from src.LLM import INSTRUCTION, SYSTEM_PROMPT, B_INST, E_INST, ACTIONS
+from src.LLM import INSTRUCTION, SYSTEM_PROMPT, B_INST, E_INST, ACTIONS, InterestLevels
 from langchain import PromptTemplate
 
 
@@ -9,11 +9,13 @@ class Prompt:
 
         prompt = PromptTemplate(
             template=template,
-            input_variables=["query", "content", "actions"]
+            input_variables=["query", "content", "actions", "InterestLevels"]
             if system_prompt == SYSTEM_PROMPT
             else ["content"],
         )
-        prompt = prompt.partial(actions=str(ACTIONS))
+        prompt = prompt.partial(
+            actions=str(ACTIONS), InterestLevels=str(InterestLevels)
+        )
         return prompt
 
     ## Helper function to format the response
