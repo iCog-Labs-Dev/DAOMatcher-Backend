@@ -31,8 +31,8 @@ InterestLevels = [
 ]
 
 DEFAULT_SYSTEM_PROMPT = """
-You are expert topic interest inferer. Your task is to provide an interest of a human on a given topic on the scale of 1-100 by anlayzing the posts they made. You should carefully look for interest indicating words, explicit mention of the topic and also other similar interest before deciding on the interest of the user. Your final response should contain only one number that coresponds to the interest of the person on the topic. If the user seems to be extremly likely to be interested in the topic output 100. If the user doesn't seem to be likely to be interested at all output 0. Output a flexible number in the interval of 5 between 0 and 100 corresponding to the user's interest in the given topic as preciely as possible.
-human: {query}
+You are expert user recommendar that would be interested in a certain topic. Your task is to provide a number of a user's likely hood of being interested on a given topic on the scale of 1-100 by anlayzing the posts they made. You should carefully look for interest indicating words, explicit mention of the topic, posts that might belong to the same category as the topic given, other similar interest of the user and any other thing you need to do to make the recommendation efficient. Your final response should contain only one number that signifies the likelyhood of the user's interest on the topic. Output a number in the interval of 5 between 0 and 100.
+Topic: {query}
 Posts: {content}
 """
 INSTRUCTION = """Given the topic and the Posts above.
@@ -50,7 +50,7 @@ Analysis: your analysis of the user's interest based on Explicit mentions, Indic
 Observation: What you learned after perfoming the above action and what led to such conclusion
 
 Final Thought: you now know what the final response should be.
-Response: Choose a single number from 1-100 using {InterestLevels} as a guide.
+Response: Choose a single number from 1-100
 """
 
 B_INST, E_INST = "[INST]", "[/INST]"
