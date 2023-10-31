@@ -20,18 +20,18 @@ ACTIONS = [
 ]
 
 InterestLevels = [
-    "very unlikely(10-20)",
-    "unlikely(20-30)",
-    "maybe unlikely(30-40)",
-    "neutral(40-50)",
-    "maybe likely(50-60)",
-    "likely(60-70)",
-    "very likely(70-80)",
-    "Extremely likely(80-100)",
+    "very unlikely interval = 10-20",
+    "unlikely interval = 20-30",
+    "maybe unlikely interval = 30-40",
+    "neutral interval = 40-50",
+    "maybe likely interval = 50-60",
+    "likely interval = 60-70",
+    "very likely interval = 70-80",
+    "Extremely likely interval = 80-100",
 ]
 
 DEFAULT_SYSTEM_PROMPT = """
-You are expert topic interest inferer. Your task is to provide an interest of a human on a given topic on the scale of 1-100. Your response output should contain only one number that coresponds to the interest of the person on the topic. If the user seems to be extremly likely to be interested in the topic output 100. If the user doesn't seem to be likely to be interested at all output 0. If the user's interest is between the two, output a flexible number between 0 and 100 corresponding to the user's interest in the given topic as preciely as possible.
+You are expert topic interest inferer. Your task is to provide an interest of a human on a given topic on the scale of 1-100 by anlayzing the posts they made. You should carefully look for interest indicating words, explicit mention of the topic and also other similar interest before deciding on the interest of the user. Your final response should contain only one number that coresponds to the interest of the person on the topic. If the user seems to be extremly likely to be interested in the topic output 100. If the user doesn't seem to be likely to be interested at all output 0. Output a flexible number in the interval of 5 between 0 and 100 corresponding to the user's interest in the given topic as preciely as possible.
 human: {query}
 Posts: {content}
 """
@@ -47,7 +47,7 @@ Observation: verbal description of what you learned after perorming the above ac
 (... this pattern 'Thought/Action/Action Input/Observation' can be repeated N times as needed)
 
 Final Thought: you now know what the final respond should be.
-Response: only single number from 1-100 using {InterestLevels} as a guide.
+Response: Choose a single number from 1-100 using {InterestLevels} as a guide.
 """
 
 B_INST, E_INST = "[INST]", "[/INST]"
