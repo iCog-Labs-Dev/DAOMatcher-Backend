@@ -9,11 +9,11 @@ class Prompt:
 
         prompt = PromptTemplate(
             template=template,
-            input_variables=["query", "content", "actions"]
+            input_variables=["query", "content", "actions", "intervals"]
             if system_prompt == SYSTEM_PROMPT
             else ["content"],
         )
-        prompt = prompt.partial(actions=str(ACTIONS))
+        prompt = prompt.partial(actions=str(ACTIONS), intervals=str(InterestLevels))
         return prompt
 
     ## Helper function to format the response

@@ -46,11 +46,10 @@ class LLM:
         try:
             if "Response:" in response:
                 response = response.split("Response:")[1]
-            elif "Observation:" in response:
-                response = response.split("Observation:")[1]
+            elif "Final Thought:" in response:
+                response = response.split("Final Thought:")[1]
             response = response.split("\n")[0].strip()
             response = "".join(char for char in response if char.isdigit())
-
             if not all(char.isdigit() for char in response):
                 return ""
 

@@ -20,18 +20,15 @@ ACTIONS = [
 ]
 
 InterestLevels = [
-    "very unlikely interval = 10-20",
-    "unlikely interval = 20-30",
-    "maybe unlikely interval = 30-40",
-    "neutral interval = 40-50",
-    "maybe likely interval = 50-60",
-    "likely interval = 60-70",
-    "very likely interval = 70-80",
-    "Extremely likely interval = 80-100",
+    "The user's posts talks about completly different topic and show no interest in the topic given = 10-20",
+    "The user's posts talks about completly different topic but those topics might have something in common with the topic in question = 20-30",
+    "The user's posts talks about topics that can be under the same category and might be interested in the topic = 30-60",
+    "The user's posts shows clear signs of being interested in the topic in question = 60-80",
+    "The user's posts mention the topic in question and suggest a high likelyhood of being interested in the topic = 80-100",
 ]
 
 DEFAULT_SYSTEM_PROMPT = """
-You are expert user recommendar that would be interested in a certain topic. Your task is to provide a number of a user's likely hood of being interested on a given topic on the scale of 1-100 by anlayzing the posts they made. You should carefully look for interest indicating words, explicit mention of the topic, posts that might belong to the same category as the topic given, other similar interest of the user and any other thing you need to do to make the recommendation efficient. Your final response should contain only one number that signifies the likelyhood of the user's interest on the topic. Output a number in the interval of 5 between 0 and 100.
+You are expert user recommendar that would be interested in a certain topic. Your task is to provide a number of a user's likely hood of being interested on a given topic on the scale of 1-100 by anlayzing the posts they made. You should carefully look for interest indicating words, explicit mention of the topic, posts that might belong to the same category as the topic given, other similar interest of the user and any other thing you need to do to make the recommendation efficient. Your final response should contain only one number that signifies the likelyhood of the user's interest on the topic. Output a number in the interval of 5 between 0 and 100. You shouldn't use any type of formatting except the one provided.
 Topic: {query}
 Posts: {content}
 """
@@ -50,7 +47,7 @@ Analysis: your analysis of the user's interest based on Explicit mentions, Indic
 Observation: What you learned after perfoming the above action and what led to such conclusion
 
 Final Thought: you now know what the final response should be.
-Response: Choose a single number from 1-100
+Response: Choose a single number from 1-100 using the following intervals as guide {intervals}
 """
 
 B_INST, E_INST = "[INST]", "[/INST]"
