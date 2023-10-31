@@ -18,12 +18,16 @@ class LLM:
         print(
             f"Token: {len(self.prompt.format_prompt(query=query, content=content).text) / 4}"
         )
-        response = self.chain.run({"query": query, "content": content})
-        print("\033[94m" + response + "\033[0m")
-        response = self.extract_response(response)
-        # print(f"Prompt: {prompt.template}")  # For debugging only
+        try:
+            response = self.chain.run({"query": query, "content": content})
+            print("\033[94m" + response + "\033[0m")
+            response = self.extract_response(response)
+            # print(f"Prompt: {prompt.template}")  # For debugging only
 
-        return response
+            return response
+        except IndexError:
+            print("\033[91;1mThe model can't process this user.\033[0m")
+            return ""
 
     def clean_content(self, input_string):
         # Define a regular expression pattern to match alphanumeric and special characters
@@ -50,6 +54,8 @@ class LLM:
 
             if not all(char.isdigit() for char in response):
                 return ""
+
+            return response
         except Exception as e:
-            print(f"\033[91m{e}\033[0m")
+            print(f"\033[91;1m{e}.\033[0m")
             return ""

@@ -44,7 +44,7 @@ Thought: you should always think about what to do
 Action: the action to take, should be one of {actions}
 Action Input: the input to the action
 Observation: what you learned after perorming the above action
-(repeat the above set of formats 'Thought/Action/Action Input/Oversvation' N times if you aren't sure what to respond)
+(repeat the above set of formats 'Thought/Action/Action Input/Oversvation' N times as needed)
 
 Thought: you now know how to respond.
 Response: single number from 1-100 using the {InterestLevels} as guide
