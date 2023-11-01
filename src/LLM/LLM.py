@@ -16,7 +16,10 @@ class LLM:
     def generate(self, query, content):
         content = self.clean_content(content)
         print(
-            f"\033[94;1mToken: {len(self.prompt.format_prompt(query=query, content=content).text) / 4}\033[0m"
+            "\033[94;1m{:<12} {:10}\033[0m".format(
+                "Token: ",
+                len(self.prompt.format_prompt(query=query, content=content).text) / 4,
+            )
         )
         try:
             response = self.chain.run({"query": query, "content": content})

@@ -85,7 +85,13 @@ class ScoreUsers:
 
         while (not self.cancel) and accounts and (count < depth):
             account = accounts.popleft()
-            print("Processing: ", account, " From: ", len(accounts))
+
+            # Orgnanized logging for debugging purposes
+            print(
+                "\033[93;1m{:<15} {:<20} {:<8} {:<10}\033[0m".format(
+                    "Processing: ", account, " From: ", len(account)
+                )
+            )
             try:
                 if (
                     "@" in account
@@ -125,7 +131,6 @@ class ScoreUsers:
             if user:
                 try:
                     if query and content:
-                        print(f"\033[93;1m{account}\033[0m")
                         score = llm_server.generate_search(query, content)["response"]
                         self.__store_items(
                             ((int(score), account, user)), user_limit, user_heap
