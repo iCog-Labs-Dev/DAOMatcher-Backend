@@ -6,4 +6,5 @@ LINKEDIN_PAYLOAD = {}
 LINKEDIN_HEADERS = {"Authorization": LIX_API_KEY}
 
 MASTEDON_BASE_URL = "https://{server}/api/v1/accounts"
+TIMEOUT = 10
 # SECOND_MASTEDON_BASE_URL = "https://mastodon.social/api/v1/accounts"
