@@ -85,13 +85,13 @@ class ScoreUsers:
 
         while (not self.cancel) and accounts and (count < depth):
             account = accounts.popleft()
+            print("Processing: ", account, " From: ", len(accounts))
             try:
                 if (
                     "@" in account
                 ):  # If it contains @ it is mastodon otherwise it is LinkedIn URL
                     _, acc, server = account.split("@")
                     content, user = self.__get_mastodon_user(acc, server)
-
                     # If there is no user found, no point in excuting the rest of the code
                     if not user:
                         continue
