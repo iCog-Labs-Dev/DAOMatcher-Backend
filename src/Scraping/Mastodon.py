@@ -11,12 +11,16 @@ class Mastodon:
     # These function specific to Mastodon Scraping
 
     def getProfile(self, server, acc):
-        BASE_URL = MASTEDON_BASE_URL.format(server=server)
+        # BASE_URL = MASTEDON_BASE_URL.format(server=server)
+        BASE_URL = MASTEDON_BASE_URL
+        acc = "@".join([acc, server])
         try:
-            response = requests.get(f"{BASE_URL}/lookup?acct={acc}")
+            print(f"{BASE_URL}/lookup?acct=@{acc}")
+            response = requests.get(f"{BASE_URL}/lookup?acct=@{acc}")
             response.raise_for_status()
             return response.json()
-        except:
+        except Exception as e:
+            print(f"\033[91;1m{e}.\033[0m\n")
             return False
 
     def getFollowers(self, server, id):

@@ -88,7 +88,7 @@ class ScoreUsers:
 
             # Orgnanized logging for debugging purposes
             print(
-                "\033[93;1m{:<15} {:<20} {:<8} {:<10}\033[0m".format(
+                "\033[93;1m{:<15} {:<25} {:<8} {:<10}\033[0m".format(
                     "Processing: ", account, " From: ", len(account)
                 )
             )
@@ -126,6 +126,7 @@ class ScoreUsers:
                             accounts.append(username)
                             visited.add(username)
             except Exception as e:
+                print(f"\033[91;1m{e} In scour.\033[0m\n")
                 socketio.emit(f"update", {"error": str(e)})
 
             if user:

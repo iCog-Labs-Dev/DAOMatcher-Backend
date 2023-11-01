@@ -208,6 +208,7 @@ def create_app():
             try:
                 result = scoreUsers.scour(user_list, query, user_limit, depth)
                 users = []
+                print("Result: ", result)
                 for user in result:
                     score, handle, userInfo = user
                     users.append(
@@ -228,13 +229,15 @@ def create_app():
                 response = e.response
                 if response != None:
                     error = e.response.json()["error"]
-                    print("error from RequestException: ", error)
+                    print(f"\033[91;1mError from RequestException: {error}.\033[0m\n")
                     abort(502, description=error)
                 else:
-                    print("Error from ResponseException but no error reported")
+                    print(
+                        f"\033[91;1mError from ResponseException but no error reported\033[0m\n"
+                    )
                     abort(503, description="The LLM server isn't responding")
             except Exception as e:
-                print(e)
+                print(f"\033[91;1m{e}.\033[0m\n")
                 abort(500)
         else:
             print("Other type of request with method ", request.method)
