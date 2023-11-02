@@ -1,5 +1,10 @@
 import textwrap
-from src.LLM import INSTRUCTION, SYSTEM_PROMPT, B_INST, E_INST, ACTIONS, InterestLevels
+from src.utils.llm import (
+    INSTRUCTION,
+    SYSTEM_PROMPT,
+    ACTIONS,
+    InterestLevels,
+)
 from langchain import PromptTemplate
 
 

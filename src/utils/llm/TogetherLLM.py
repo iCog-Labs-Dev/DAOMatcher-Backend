@@ -4,7 +4,7 @@ from pydantic import Extra
 from langchain.llms.base import LLM
 from langchain.utils import get_from_dict_or_env
 from typing import Any, Dict
-from src.LLM import TOGETHER_API_KEY
+from src.utils.llm import TOGETHER_API_KEY
 
 
 class TogetherLLM(LLM):

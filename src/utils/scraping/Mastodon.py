@@ -1,6 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
-from src.Scraping import MASTEDON_BASE_URL, TIMEOUT
+from src.utils.scraping import MASTEDON_BASE_URL, TIMEOUT
 
 
 class Mastodon:

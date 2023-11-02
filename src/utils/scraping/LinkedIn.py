@@ -1,7 +1,7 @@
 import requests
 import urllib.parse
 import json
-from src.Scraping import (
+from src.utils.scraping import (
     LINKEDIN_HEADERS as headers,
     LINKEDIN_PAYLOAD as payload,
     LIX_BASE_URL as base_url,

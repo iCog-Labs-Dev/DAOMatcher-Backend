@@ -1,8 +1,8 @@
 import os
 from flask import Flask, request, jsonify, abort, session
-from src.ServerLogic.ScoreUsers import ScoreUsers
+from src.utils.serverLogic.ScoreUsers import ScoreUsers
 
-from src.ServerLogic import FRONTEND_URL, socketio, USERS, Sessions
+from src.utils.serverLogic import FRONTEND_URL, socketio, USERS, Sessions
 
 from flask_cors import CORS
 from flask_login import (

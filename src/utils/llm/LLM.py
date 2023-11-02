@@ -1,8 +1,8 @@
 import re
-from src.LLM.TogetherLLM import TogetherLLM
-from src.LLM.Prompt import *
+from src.utils.llm.TogetherLLM import TogetherLLM
+from src.utils.llm.Prompt import *
 from langchain import LLMChain
-from src.LLM import model
+from src.utils.llm import model
 
 
 class LLM:
