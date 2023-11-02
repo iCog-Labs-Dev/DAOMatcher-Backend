@@ -1,6 +1,7 @@
 import os
 from flask import Blueprint, request, jsonify, session
 from src.views import User
+from src.extensions import login_manager
 from flask_login import (
     login_user,
     logout_user,
@@ -8,6 +9,11 @@ from flask_login import (
 )
 
 auth = Blueprint("auth", __name__)
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User(user_id)
 
 
 @auth.route("/login", methods=["POST"])
