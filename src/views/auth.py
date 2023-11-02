@@ -1,10 +1,8 @@
-from flask import Blueprint, request, jsonify, session
-from src.controllers.auth import login, logout
+from flask import Blueprint
 from src.globals import User
 from src.extensions import login_manager
+from src.controllers.auth import login, logout
 from flask_login import (
-    login_user,
-    logout_user,
     login_required,
 )
 

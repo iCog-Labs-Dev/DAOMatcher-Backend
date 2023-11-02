@@ -1,7 +1,6 @@
 import requests
-from flask_login import login_required
+from flask import request, jsonify, abort
 from src.utils.serverLogic import ScoreUsers
-from flask import Blueprint, request, jsonify, abort
 
 
 def scoring_user():

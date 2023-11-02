@@ -1,5 +1,4 @@
 import os
-
 from flask_login import UserMixin
 from src.utils.serverLogic.LLMServer import create_llm_server
 

@@ -1,10 +1,9 @@
 import requests
 from random import choice
-from string import ascii_letters, digits
-
-from src.globals import USERS, Sessions
-from src.utils.serverLogic import ScoreUsers
 from src.extensions import socketio
+from src.globals import USERS, Sessions
+from string import ascii_letters, digits
+from src.utils.serverLogic import ScoreUsers
 
 
 def generate_random_string(length=8):

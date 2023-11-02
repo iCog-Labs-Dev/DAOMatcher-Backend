@@ -1,6 +1,4 @@
-import requests
 from flask import request
-from src.controllers.socket import on_connect
 from src.extensions import socketio
 from src.globals import USERS, Sessions
 from src.utils.serverLogic.ScoreUsers import ScoreUsers

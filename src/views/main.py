@@ -1,8 +1,6 @@
-import requests
 from flask_login import login_required
 from src.controllers.main import scoring_user
-from src.utils.serverLogic import ScoreUsers
-from flask import Blueprint, request, jsonify, abort
+from flask import Blueprint, jsonify
 
 main = Blueprint("main", __name__)
 
