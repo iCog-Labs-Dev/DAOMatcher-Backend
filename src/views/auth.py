@@ -1,6 +1,6 @@
 import os
 from flask import Blueprint, request, jsonify, session
-from src.views import User
+from src.globals import User
 from src.extensions import login_manager
 from flask_login import (
     login_user,

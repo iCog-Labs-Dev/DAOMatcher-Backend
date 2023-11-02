@@ -1,7 +1,7 @@
 from flask_cors import CORS
 from flask_login import LoginManager
 from flask_socketio import SocketIO
-from src.utils.serverLogic import FRONTEND_URL
+from src.globals import FRONTEND_URL
 
 origins = [FRONTEND_URL if FRONTEND_URL else "http://localhost:5173"]
 

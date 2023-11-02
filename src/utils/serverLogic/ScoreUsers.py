@@ -3,7 +3,8 @@ from heapq import *
 from collections import *
 from urllib.parse import urlparse
 from src.extensions import socketio
-from src.utils.serverLogic import mastodon, linkedIn, llm_server
+from src.globals import llm_server
+from src.utils.serverLogic import mastodon, linkedIn
 
 
 class ScoreUsers:

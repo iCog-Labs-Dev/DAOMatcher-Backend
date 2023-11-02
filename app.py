@@ -16,6 +16,6 @@ def create_app():
 
     app.register_blueprint(main)
     app.register_blueprint(auth)
-    app.register_error_handler(error)
+    app.register_blueprint(error)
 
     return app

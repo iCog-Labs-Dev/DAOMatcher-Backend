@@ -1,9 +1,9 @@
 from flask import Blueprint, jsonify
 
-errors = Blueprint("errors", __name__)
+error = Blueprint("errors", __name__)
 
 
-@errors.errorhandler(400)
+@error.errorhandler(400)
 def bad_request(error):
     return (
         jsonify(
@@ -13,7 +13,7 @@ def bad_request(error):
     )
 
 
-@errors.errorhandler(401)
+@error.errorhandler(401)
 def bad_request(error):
     return (
         jsonify(error="Unauthorized"),
