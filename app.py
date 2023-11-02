@@ -73,9 +73,6 @@ def create_app():
 
     @socketio.on("connect")
     def handle_connect():
-        # user_id = session.get("user_id")
-        # if user_id is None:
-        #     return app.login_manager.unauthorized()
         userId = generate_random_string()
         USERS[userId] = request.sid
         scoreUsers = ScoreUsers()
