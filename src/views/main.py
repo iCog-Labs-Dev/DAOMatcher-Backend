@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify, abort
 from flask_login import login_required
 import requests
 
-from src.ServerLogic import ScoreUsers
+from src.services.ServerLogic import ScoreUsers
 
 main = Blueprint("main", __name__)
 
