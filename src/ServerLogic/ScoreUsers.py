@@ -8,6 +8,7 @@ from src.ServerLogic import mastodon, linkedIn, llm_server, socketio
 class ScoreUsers:
     def __init__(self) -> None:
         self.cancel = False
+        self.user_session = None
 
     def __store_items(self, item, limit, user_heap):
         if len(user_heap) == limit:
@@ -75,13 +76,13 @@ class ScoreUsers:
 
     def scour(self, starting_users, query, user_limit, depth):
         user_heap = []
-        temp_users = []
 
         accounts = deque(starting_users)
 
         visited = set()
         count = 0
         self.cancel = False
+        print("User from scour: ", self.user_session)
 
         while (not self.cancel) and accounts and (count < depth):
             account = accounts.popleft()
@@ -127,7 +128,7 @@ class ScoreUsers:
                             visited.add(username)
             except Exception as e:
                 print(f"\033[91;1m{e} In scour.\033[0m\n")
-                socketio.emit(f"update", {"error": str(e)})
+                socketio.emit(f"update", {"error": str(e)}, room=self.user_session)
 
             if user:
                 try:
@@ -141,14 +142,16 @@ class ScoreUsers:
                         socketio.emit(
                             f"update",
                             {"progress": count, "curr_user": account},
+                            room=self.user_session,
                         )
+                        print("Emitting to: ", self.user_session)
                     else:
                         continue
 
                 except requests.exceptions.RequestException as e:
-                    socketio.emit(f"update", {"error": str(e)})
+                    socketio.emit(f"update", {"error": str(e)}, room=self.user_session)
                 except Exception as e:
-                    socketio.emit(f"update", {"error": str(e)})
+                    socketio.emit(f"update", {"error": str(e)}, room=self.user_session)
                     # raise Exception("Error encountered on storing the scores")
-
+        self.user_session = None
         return user_heap

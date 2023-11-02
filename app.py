@@ -1,8 +1,8 @@
 import os
-from flask import Flask, request, jsonify, abort
+from flask import Flask, request, jsonify, abort, session
 from src.ServerLogic.ScoreUsers import ScoreUsers
 
-from src.ServerLogic import FRONTEND_URL, socketio
+from src.ServerLogic import FRONTEND_URL, socketio, USERS, Sessions
 
 from flask_cors import CORS
 from flask_login import (
@@ -11,18 +11,16 @@ from flask_login import (
     login_user,
     logout_user,
     login_required,
-    current_user,
 )
 
 import requests
-import secrets
 import string
+import random
 
 
-def generate_random_string(length):
+def generate_random_string(length=8):
     characters = string.ascii_letters + string.digits
-    random_string = "".join(secrets.choice(characters) for _ in range(length))
-    return random_string
+    return "".join(random.choice(characters) for _ in range(length))
 
 
 def create_app():
@@ -33,8 +31,8 @@ def create_app():
     origins = [FRONTEND_URL if FRONTEND_URL else "http://localhost:5173"]
 
     CORS(app, supports_credentials=True, origins=origins)
-    socketio.init_app(app)
     login_manager = LoginManager(app)
+    socketio.init_app(app)
 
     class User(UserMixin):
         def __init__(self, user_id):
@@ -58,6 +56,7 @@ def create_app():
             if user_id == admin_id and user_pass == admin_pass:
                 user = User(user_id)
                 login_user(user)
+                session["user_id"] = user_id
                 return jsonify({"message": "Logged in successfully", "success": True})
             return (
                 jsonify({"message": "Email or password incorrect", "success": False}),
@@ -72,28 +71,34 @@ def create_app():
         logout_user()
         return jsonify({"message": "Logged out successfully", "success": True})
 
-    scoreUsers = ScoreUsers()
-
     @socketio.on("connect")
-    def handle_connect(request):
-        # print(request)
-        # if request:
-        #     email = request.cookies.get("email")
-        #     print(email)
-        #     user = User(email)
-        #     login_user(user)
-        print("User connected")
+    def handle_connect():
+        # user_id = session.get("user_id")
+        # if user_id is None:
+        #     return app.login_manager.unauthorized()
+        userId = generate_random_string()
+        USERS[userId] = request.sid
+        scoreUsers = ScoreUsers()
+        print("users: ", USERS)
+        Sessions[userId] = scoreUsers
+        print("User connected with userId: ", userId)
+        socketio.emit("set_cookie", userId, room=request.sid)
 
     @socketio.on("stop")
     # @login_required
-    def handle_cancel(data):
+    def handle_cancel(userId):
+        scoreUsers = Sessions.get(userId)
         scoreUsers.cancel = True
         print("Request Canceled: ", scoreUsers.cancel)
 
     @socketio.on("get_users")
-    # @login_required
     def handle_get_users(data):
         jsonRequest = data
+        userId = jsonRequest.get("userId")
+        CurrentUser = USERS.get(userId)
+        scoreUsers = Sessions.get(userId)
+        scoreUsers.user_session = CurrentUser
+        print("Set Current User: ", scoreUsers.user_session)
         print("Recieved data: ", data)
         if not all(
             key in jsonRequest for key in ("query", "user_list", "user_limit", "depth")
@@ -112,6 +117,7 @@ def create_app():
         user_list = jsonRequest["user_list"]
         user_limit = jsonRequest["user_limit"]
         depth = jsonRequest["depth"]
+
         if not all([query, user_list, user_limit]):
             socketio.emit(
                 "something_went_wrong",
@@ -125,8 +131,8 @@ def create_app():
         try:
             result = scoreUsers.scour(user_list, query, user_limit, depth)
             users = []
-            for user in result:
-                score, handle, userInfo = user
+            for r in result:
+                score, handle, userInfo = r
                 users.append(
                     {
                         "id": userInfo["id"],
@@ -139,7 +145,8 @@ def create_app():
                 )
             print(f"result: {users}")
             data = {"result": users}
-            socketio.emit("get_users", data)
+            socketio.emit("get_users", data, room=CurrentUser)
+            print("No results found: ", result)
             return
         except requests.exceptions.RequestException as e:
             response = e.response
@@ -157,12 +164,22 @@ def create_app():
                 )
             return
         except Exception as e:
+            print(e)
             socketio.emit("something_went_wrong", {"message": "Internal server error"})
             return
 
     @socketio.on("disconnect")
     def handle_disconnect():
         print("User disconnected")
+
+    @socketio.on("remove")
+    def handle_remove(userId):
+        try:
+            del USERS[userId]
+            del Sessions[userId]
+            print("User session removed")
+        except KeyError:
+            print("No user found")
 
     @app.errorhandler(400)
     def bad_request(error):
@@ -204,13 +221,13 @@ def create_app():
 
             if not all([query, user_list, user_limit]):
                 abort(400)
-
             try:
+                scoreUsers = ScoreUsers()
                 result = scoreUsers.scour(user_list, query, user_limit, depth)
                 users = []
                 print("Result: ", result)
-                for user in result:
-                    score, handle, userInfo = user
+                for r in result:
+                    score, handle, userInfo = r
                     users.append(
                         {
                             "id": userInfo["id"],

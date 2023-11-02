@@ -11,3 +11,5 @@ mastodon = Mastodon()
 FRONTEND_URL = os.environ.get("FRONTEND_URL")
 
 socketio = SocketIO(cors_allowed_origins=FRONTEND_URL if FRONTEND_URL else "*")
+Sessions = {}
+USERS = {}
