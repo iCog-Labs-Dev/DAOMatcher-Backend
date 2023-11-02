@@ -1,6 +1,6 @@
+import json
 import requests
 import urllib.parse
-import json
 from src.utils.scraping import (
     LINKEDIN_HEADERS as headers,
     LINKEDIN_PAYLOAD as payload,

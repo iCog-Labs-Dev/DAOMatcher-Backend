@@ -1,9 +1,9 @@
-from src.utils.llm import LLM_URL, LOCAL_LLM_URL
-from flask import Flask, request, jsonify, abort
+import together
+import requests
 from flask_cors import CORS
 from src.utils.llm.LLM import LLM
-import requests
-import together
+from src.utils.llm import LLM_URL, LOCAL_LLM_URL
+from flask import Flask, request, jsonify, abort
 
 
 class LLMServer:

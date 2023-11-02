@@ -1,9 +1,9 @@
-from collections import *
-from heapq import *
-from urllib.parse import urlparse
 import requests
-from src.utils.serverLogic import mastodon, linkedIn, llm_server
+from heapq import *
+from collections import *
+from urllib.parse import urlparse
 from src.extensions import socketio
+from src.utils.serverLogic import mastodon, linkedIn, llm_server
 
 
 class ScoreUsers:

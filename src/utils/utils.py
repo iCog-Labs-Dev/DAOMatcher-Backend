@@ -1,5 +1,5 @@
-from string import ascii_letters, digits
 from random import choice
+from string import ascii_letters, digits
 
 
 def generate_random_string(length=8):

@@ -1,6 +1,5 @@
 import os
 import together
-from dotenv import load_dotenv
 import google.generativeai as palm
 from langchain.llms import GooglePalm
 

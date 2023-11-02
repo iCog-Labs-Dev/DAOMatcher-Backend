@@ -1,9 +1,6 @@
 import os
-import requests
-
-from flask import Blueprint, request, jsonify, abort, session
+from flask import Blueprint, request, jsonify, session
 from src.views import User
-
 from flask_login import (
     login_user,
     logout_user,
