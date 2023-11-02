@@ -2,7 +2,6 @@ import os
 import requests
 
 from flask import Blueprint, request, jsonify, abort, session
-from src.ServerLogic.ScoreUsers import ScoreUsers
 from src.views import User
 
 from flask_login import (

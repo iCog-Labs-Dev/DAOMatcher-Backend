@@ -1,4 +1,3 @@
-import os
 import together
 from pydantic import Extra
 from langchain.llms.base import LLM

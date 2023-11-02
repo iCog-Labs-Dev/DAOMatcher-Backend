@@ -2,7 +2,8 @@ from collections import *
 from heapq import *
 from urllib.parse import urlparse
 import requests
-from src.services.ServerLogic import mastodon, linkedIn, llm_server, socketio
+from src.utils.serverLogic import mastodon, linkedIn, llm_server
+from src.extensions import socketio
 
 
 class ScoreUsers:

@@ -1,8 +1,15 @@
 import re
-from src.utils.llm.TogetherLLM import TogetherLLM
-from src.utils.llm.Prompt import *
+import textwrap
 from langchain import LLMChain
 from src.utils.llm import model
+
+from src.utils.llm import (
+    INSTRUCTION,
+    SYSTEM_PROMPT,
+    ACTIONS,
+    InterestLevels,
+)
+from langchain.prompts import PromptTemplate
 
 
 class LLM:
@@ -63,3 +70,33 @@ class LLM:
         except Exception as e:
             print(f"\033[91;1m{e}.\033[0m\n")
             return ""
+
+
+class Prompt:
+    def get_prompt_template(self, query=INSTRUCTION, system_prompt=SYSTEM_PROMPT):
+        template = system_prompt + query
+
+        prompt = PromptTemplate(
+            template=template,
+            input_variables=["query", "content", "actions", "intervals"]
+            if system_prompt == SYSTEM_PROMPT
+            else ["content"],
+        )
+        prompt = prompt.partial(actions=str(ACTIONS), intervals=str(InterestLevels))
+        return prompt
+
+    ## Helper function to format the response
+    def cut_off_text(text, prompt):
+        cutoff_phrase = prompt
+        index = text.find(cutoff_phrase)
+        if index != -1:
+            return text[:index]
+        else:
+            return text
+
+    def remove_substring(string, substring):
+        return string.replace(substring, "")
+
+    def parse_text(text):
+        wrapped_text = textwrap.fill(text, width=100)
+        return wrapped_text
