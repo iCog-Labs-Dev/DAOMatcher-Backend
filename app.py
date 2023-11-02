@@ -1,22 +1,8 @@
-import os
-from flask import Config, Flask, request, jsonify, abort, session
-from src.config import DevelopmentConfig
-from src.utils.serverLogic.ScoreUsers import ScoreUsers
+from flask import Flask
+from src.config import DevelopmentConfig, Config
 from src import prod_env
 from src.extensions import login_manager, socketio, cors
-from src.utils.serverLogic import FRONTEND_URL, USERS, Sessions
-from src.views import auth, main, error, socket_events
-
-from flask_login import (
-    login_user,
-    logout_user,
-    login_required,
-)
-
-import requests
-from src.utils.utils import generate_random_string
-
-from src.views import User
+from src.views import auth, main, error
 
 
 def create_app():
