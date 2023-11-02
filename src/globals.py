@@ -10,7 +10,7 @@ class User(UserMixin):
 
 
 FRONTEND_URL = os.environ.get("FRONTEND_URL")
-llm_server = create_llm_server()
+llm_app = create_llm_server()
 
 Sessions = {}
 USERS = {}

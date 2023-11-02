@@ -2,7 +2,7 @@ import requests
 from flask import request
 from src.extensions import socketio
 from src.globals import USERS, Sessions
-from src.utils.serverLogic import ScoreUsers
+from src.utils.serverLogic.ScoreUsers import ScoreUsers
 from src.utils.utils import generate_random_string
 
 
@@ -96,7 +96,7 @@ def handle_get_users(data):
             )
         return
     except Exception as e:
-        print(e)
+        print(f"\033[91;1m{e}.\033[0m\n")
         socketio.emit("something_went_wrong", {"message": "Internal server error"})
         return
 
@@ -114,3 +114,12 @@ def handle_remove(userId):
         print("User session removed")
     except KeyError:
         print("No user found")
+
+
+@socketio.on("error")
+def handle_error(error):
+    print(f"\033[91;1m{error}.\033[0m\n")
+    requesterId = request.sid
+    socketio.emit(
+        "something_went_wrong", {"message": str(error), "status": 500}, room=requesterId
+    )
