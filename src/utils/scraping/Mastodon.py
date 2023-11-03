@@ -53,6 +53,7 @@ class Mastodon:
         )
 
         try:
+            print(f"\033[92;1m{BASE_URL}/{id}/following\033[0m\n")
             response2 = requests.get(f"{BASE_URL}/{id}/following", timeout=TIMEOUT)
             response2.raise_for_status()
             print(f"\033[93;1mUser Followers found.\033[0m\n")
@@ -85,6 +86,7 @@ class Mastodon:
             server=searchServer if webfinger else server
         )
         try:
+            print(f"\033[92;1m{BASE_URL}/{id}/statuses?exclude_replies=true\033[0m\n")
             response = requests.get(
                 f"{BASE_URL}/{id}/statuses?exclude_replies=true", timeout=TIMEOUT
             )
