@@ -8,14 +8,7 @@ ENV PORT1=8000
 WORKDIR /app
 
 # Copy your Flask apps into the container
-COPY app.py /app
-COPY src/LLM/ /app/src/LLM/
-COPY src/Scraping/ /app/src/Scraping/
-COPY src/ServerLogic/ /app/src/ServerLogic/
-
-# Copy your Bash script into the container
-COPY setup.sh /app
-COPY requirements.txt /app
+COPY . .
 
 # Make the Bash script executable
 RUN chmod +x setup.sh
