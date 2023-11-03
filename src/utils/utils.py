@@ -18,8 +18,7 @@ def set_user_session(jsonRequest):
     scoreUsers = Sessions.get(userId)
 
     if not all([userId, CurrentUser, scoreUsers]):
-        print(userId, CurrentUser, scoreUsers)
-        print(f"\033[91;User session not found.\033[0m\n")
+        print(f"\033[91;1mUser session not found.\033[0m\n")
         return False, None
 
     scoreUsers.user_session = CurrentUser
@@ -37,10 +36,9 @@ def validate_data(jsonRequest):
     return all([query, user_list, user_limit, depth])
 
 
-def process_users(user_list, query, user_limit, depth, CurrentUser):
+def process_users(user_list, query, user_limit, depth, userId, CurrentUser):
     try:
-        scoreUsers = ScoreUsers()
-        print(CurrentUser)
+        scoreUsers = Sessions.get(userId)
         result = scoreUsers.scour(user_list, query, user_limit, depth)
         users = []
         for r in result:

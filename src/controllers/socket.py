@@ -23,21 +23,23 @@ def connect():
 
 def get_users(data):
     jsonRequest = data
+    print("Recieved Data: ", jsonRequest)
     sessionIsSet, CurrentUser = set_user_session(data)
     valid = validate_data(data)
     if (not sessionIsSet) or (not valid):
         socketio.emit(
             "something_went_wrong",
             {
-                "message": "Invalid request. Make sure you are sending a JSON object with keys 'query', 'user_list', 'depth' and 'user_limit' all set to acceptable values",
+                "message": "Invalid request, make sure you are logged in",
                 "status": 400,
             },
         )
         print("error emitted")
         return
-
+    print("CurrentUser: ", CurrentUser)
     query = jsonRequest.get("query")
     user_list = jsonRequest.get("user_list")
     user_limit = jsonRequest.get("user_limit")
     depth = jsonRequest.get("depth")
-    process_users(user_list, query, user_limit, depth, CurrentUser)
+    userId = jsonRequest.get("userId")
+    process_users(user_list, query, user_limit, depth, userId, CurrentUser)
