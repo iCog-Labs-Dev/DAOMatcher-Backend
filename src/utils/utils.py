@@ -20,7 +20,6 @@ def set_user_session(jsonRequest):
 
     scoreUsers.user_session = CurrentUser
     print(f"\033[92mSet Current User: {scoreUsers.user_session}\033[0m")
-    print(f"\033[94mRecieved data: {jsonRequest}\033[0m")
     return userId != None, CurrentUser
 
 
