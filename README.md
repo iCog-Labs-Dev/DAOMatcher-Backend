@@ -6,24 +6,40 @@
 - Makesure you have python venv installed
 - Makesure you have set `.env` in the same format given in the `.env.example`
 - Run the script `./setup` and that's it
-- If you are not mac or debian user, install `redis-server` and run the `./setup` script
 - Make a post request to http://localhost:5000 with the following format
 
 ```
 {
       "query":"Politics",
       "user_list":["@example@server", "{LinkedIn public identifier}"],
-      "user_limit":5
+      "user_limit":5,
+      "depth": 10
 }
 ```
 
-- Use the `@example@server` for Mastodon
-- linkedIn public identifier is the last part of the profile url for LinkedIn example:
+- Use the `@example@server.subserver` for Mastodon
+- LinkedIn public identifier is the last part of the profile url for LinkedIn example:
 
   > LinkedIn Profile url: `https://www.linkedin.com/in/yeabsesra-ic-4859b5287/`
   >
   > LinkedIn Public Identifier: `yeabsesra-ic-4859b5287`
 
-## SSE
+## WSS
 
-- You can either wait for the server to finish with the process or register SSE on your client at `http://localhost:5000/stream` to get live updates from the server
+- You can either wait for the server to finish with the process or connect to websocket on the `update` event from you client to get live updates from the server. To get updates from the `wss` web socket you must initiate the request using the `get_users` event on the websocket server in the first place.
+
+## Docker
+
+- You can also use Docker to setup everything locally and run the application.
+  **Docker build and tag**
+
+  ```
+  docker  build -t daomatcher:latest
+
+  ```
+
+  **Docker run**
+
+  ```
+   docker run -it daomatcher:latest
+  ```
