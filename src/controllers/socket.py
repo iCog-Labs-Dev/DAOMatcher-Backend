@@ -53,6 +53,7 @@ def get_users(data):
     user_limit = jsonRequest.get("user_limit")
     depth = jsonRequest.get("depth")
     userId = jsonRequest.get("userId")
+
     try:
         scoreUsers = Sessions.get(userId)
         result = scoreUsers.scour(user_list, query, user_limit, depth)
@@ -76,6 +77,7 @@ def get_users(data):
             return
         print(f"\003[91mNo results found: {result}\003[0m")
         return
+
     except requests.exceptions.RequestException as e:
         response = e.response
         if response != None:
@@ -94,6 +96,7 @@ def get_users(data):
                 room=CurrentUser,
             )
         return
+
     except Exception as e:
         print(f"\033[91;1m{e}.\033[0m\n")
         socketio.emit(
