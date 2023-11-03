@@ -13,7 +13,7 @@ def handle_connect():
 def handle_cancel(userId):
     scoreUsers = Sessions.get(userId)
     scoreUsers.cancel = True
-    print("Request Canceled: ", scoreUsers.cancel)
+    print(f"\033[94mRequest Canceled: {scoreUsers.cancel}\033[0m")
 
 
 @socketio.on("get_users")
@@ -23,7 +23,7 @@ def handle_get_users(data):
 
 @socketio.on("disconnect")
 def handle_disconnect():
-    print("User disconnected")
+    print("\033[94mUser disconnected\033[0m")
 
 
 @socketio.on("remove")
@@ -31,9 +31,9 @@ def handle_remove(userId):
     try:
         del USERS[userId]
         del Sessions[userId]
-        print("User session removed")
+        print("\033[94mUser session removed\033[0m")
     except KeyError:
-        print("No user found with: ", userId)
+        print(f"\033[94mNo user found with: {userId}\033[0m")
 
 
 @socketio.on("error")

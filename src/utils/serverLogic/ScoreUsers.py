@@ -145,7 +145,7 @@ class ScoreUsers:
                             {"progress": count, "curr_user": account},
                             room=self.user_session,
                         )
-                        print("Emitting to: ", self.user_session)
+                        print(f"\033[94mEmitting to: , {self.user_session}\033[0m")
                     else:
                         continue
 
