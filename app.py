@@ -7,7 +7,7 @@ from src.views import auth, main, error
 
 def create_app():
     app = Flask(__name__)
-
+    print(type(bool(prod_env)))
     app.config.from_object(Config if prod_env else DevelopmentConfig)
 
     cors.init_app(app)
