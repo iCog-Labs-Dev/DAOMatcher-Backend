@@ -3,7 +3,7 @@ from random import choice
 from src.extensions import socketio
 from src.globals import USERS, Sessions
 from string import ascii_letters, digits
-from src.utils.serverLogic import ScoreUsers
+from src.utils.serverLogic.ScoreUsers import ScoreUsers
 
 
 def generate_random_string(length=8):
@@ -16,6 +16,12 @@ def set_user_session(jsonRequest):
 
     CurrentUser = USERS.get(userId)
     scoreUsers = Sessions.get(userId)
+
+    if not all([userId, CurrentUser, scoreUsers]):
+        print(userId, CurrentUser, scoreUsers)
+        print(f"\033[91;User session not found.\033[0m\n")
+        return False, None
+
     scoreUsers.user_session = CurrentUser
     print("Set Current User: ", scoreUsers.user_session)
     print("Recieved data: ", jsonRequest)
@@ -28,14 +34,13 @@ def validate_data(jsonRequest):
     user_limit = jsonRequest.get("user_limit")
     depth = jsonRequest.get("depth")
 
-    return not all(
-        key in jsonRequest for key in ("query", "user_list", "user_limit", "depth")
-    ) and (not all([query, user_list, user_limit, depth]))
+    return all([query, user_list, user_limit, depth])
 
 
 def process_users(user_list, query, user_limit, depth, CurrentUser):
     try:
         scoreUsers = ScoreUsers()
+        print(CurrentUser)
         result = scoreUsers.scour(user_list, query, user_limit, depth)
         users = []
         for r in result:

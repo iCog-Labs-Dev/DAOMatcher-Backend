@@ -16,10 +16,10 @@ def load_user(user_id):
 
 @auth.route("/login", methods=["POST"])
 def handle_login():
-    login()
+    return login()
 
 
 @auth.route("/logout", methods=["POST"])
 @login_required
 def handle_logout():
-    logout()
+    return logout()

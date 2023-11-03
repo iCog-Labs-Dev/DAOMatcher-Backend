@@ -13,4 +13,4 @@ def wake_handler():
 @main.route("/get_users", methods=["POST", "HEAD", "GET"])
 @login_required
 def handle_get_users():
-    scoring_user()
+    return scoring_user()
