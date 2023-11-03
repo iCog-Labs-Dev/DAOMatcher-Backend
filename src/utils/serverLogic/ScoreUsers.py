@@ -83,7 +83,7 @@ class ScoreUsers:
         visited = set()
         count = 0
         self.cancel = False
-        print("User from scour: ", self.user_session)
+        print(f"\033[92mUser from scour: {self.user_session}\033[0m")
 
         while (not self.cancel) and accounts and (count < depth):
             account = accounts.popleft()
@@ -145,7 +145,7 @@ class ScoreUsers:
                             {"progress": count, "curr_user": account},
                             room=self.user_session,
                         )
-                        print(f"\033[94mEmitting to: , {self.user_session}\033[0m")
+                        print(f"\033[94mEmitting to: {self.user_session}\033[0m")
                     else:
                         continue
 

@@ -19,8 +19,8 @@ def set_user_session(jsonRequest):
         return False, None
 
     scoreUsers.user_session = CurrentUser
-    print("Set Current User: ", scoreUsers.user_session)
-    print("Recieved data: ", jsonRequest)
+    print(f"\033[92mSet Current User: {scoreUsers.user_session}\033[0m")
+    print(f"\033[94mRecieved data: {jsonRequest}\033[0m")
     return userId != None, CurrentUser
 
 

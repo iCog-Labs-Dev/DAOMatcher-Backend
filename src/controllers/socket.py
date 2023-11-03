@@ -34,7 +34,7 @@ def get_users(data):
                 "status": 401,
             },
         )
-        print(f"\003[91merror emitted\002[0m")
+        print(f"\033[91merror emitted\033[0m")
         return
     if not valid:
         socketio.emit(
@@ -44,10 +44,10 @@ def get_users(data):
                 "status": 400,
             },
         )
-        print(f"\003[91merror emitted\002[0m")
+        print(f"\033[91merror emitted\033[0m")
         return
 
-    print(f"\003[94mCurrentUser:  {CurrentUser}\003[0m")
+    print(f"\033[94mCurrentUser:  {CurrentUser}\033[0m")
     query = jsonRequest.get("query")
     user_list = jsonRequest.get("user_list")
     user_limit = jsonRequest.get("user_limit")
@@ -70,26 +70,26 @@ def get_users(data):
                     "image": userInfo["image"],
                 }
             )
-        print(f"\003[94mTotal results: {len(users)} \003[0m")
+        print(f"\033[94mTotal results: {len(users)} \033[0m")
         if users:
             data = {"result": users}
             socketio.emit("get_users", data, room=CurrentUser)
             return
-        print(f"\003[91mNo results found: {result}\003[0m")
+        print(f"\033[91mNo results found: {result}\033[0m")
         return
 
     except requests.exceptions.RequestException as e:
         response = e.response
         if response != None:
             error = e.response.json()["error"]
-            print(f"\003[91mError from RequestException: {error}\003[0m")
+            print(f"\033[91mError from RequestException: {error}\033[0m")
             socketio.emit(
                 "something_went_wrong",
                 {"message": str(error), "status": 502},
                 room=CurrentUser,
             )
         else:
-            print(f"\003[91mError from ResponseException but no error reported\003[0m")
+            print(f"\033[91mError from ResponseException but no error reported\033[0m")
             socketio.emit(
                 "something_went_wrong",
                 {"message": "The LLM server isn't responding", "status": 503},
