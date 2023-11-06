@@ -4,6 +4,7 @@ from src.extensions import socketio
 from src.globals import USERS, Sessions
 from src.utils.serverLogic.ScoreUsers import ScoreUsers
 from src.utils.utils import (
+    emitData,
     generate_random_string,
     set_user_session,
     validate_data,
