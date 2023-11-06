@@ -42,5 +42,8 @@ def handle_error(error):
     print(f"\033[91;1m{error}.\033[0m\n")
     requesterId = request.sid
     emitData(
-        "something_went_wrong", {"message": str(error), "status": 500}, room=requesterId
+        socketio,
+        "something_went_wrong",
+        {"message": str(error), "status": 500},
+        room=requesterId,
     )

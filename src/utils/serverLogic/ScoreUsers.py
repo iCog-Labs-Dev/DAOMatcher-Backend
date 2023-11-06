@@ -130,7 +130,7 @@ class ScoreUsers:
                             visited.add(username)
             except Exception as e:
                 print(f"\033[91;1m{e} In scour.\033[0m\n")
-                emitData(f"update", {"error": str(e)}, room=self.user_session)
+                emitData(socketio, f"update", {"error": str(e)}, room=self.user_session)
 
             if user:
                 try:
@@ -142,6 +142,7 @@ class ScoreUsers:
                         # print(count)
                         count += 1
                         emitData(
+                            socketio,
                             f"update",
                             {"progress": count, "curr_user": account},
                             room=self.user_session,
@@ -151,9 +152,13 @@ class ScoreUsers:
                         continue
 
                 except requests.exceptions.RequestException as e:
-                    emitData(f"update", {"error": str(e)}, room=self.user_session)
+                    emitData(
+                        socketio, f"update", {"error": str(e)}, room=self.user_session
+                    )
                 except Exception as e:
-                    emitData(f"update", {"error": str(e)}, room=self.user_session)
+                    emitData(
+                        socketio, f"update", {"error": str(e)}, room=self.user_session
+                    )
                     # raise Exception("Error encountered on storing the scores")
         self.user_session = None
         return user_heap

@@ -19,7 +19,7 @@ def connect():
 
     scoreUsers = ScoreUsers()
     Sessions[userId] = scoreUsers
-    emitData("set_cookie", userId, room=request.sid)
+    emitData(socketio, "set_cookie", userId, room=request.sid)
 
 
 def get_users(data):
@@ -33,6 +33,7 @@ def get_users(data):
     if not valid:
         if CurrentUser:
             emitData(
+                socketio,
                 "something_went_wrong",
                 {
                     "message": "Error data sending",
@@ -70,7 +71,7 @@ def get_users(data):
         if users:
             data = {"result": users}
             if CurrentUser:
-                emitData("get_users", data, room=CurrentUser)
+                emitData(socketio, "get_users", data, room=CurrentUser)
                 return
             else:
                 print(f"\033[91mNo session found: {result}\033[0m")
@@ -85,6 +86,7 @@ def get_users(data):
             error = e.response.json()["error"]
             print(f"\033[91mError from RequestException: {error}\033[0m")
             emitData(
+                socketio,
                 "something_went_wrong",
                 {"message": str(error), "status": 502},
                 room=CurrentUser,
@@ -92,6 +94,7 @@ def get_users(data):
         else:
             print(f"\033[91mError from ResponseException but no error reported\033[0m")
             emitData(
+                socketio,
                 "something_went_wrong",
                 {"message": "The LLM server isn't responding", "status": 503},
                 room=CurrentUser,
@@ -101,6 +104,7 @@ def get_users(data):
     except Exception as e:
         print(f"\033[91;1m{e}.\033[0m\n")
         emitData(
+            socketio,
             "something_went_wrong",
             {"message": "Internal server error"},
             room=CurrentUser,
