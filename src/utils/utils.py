@@ -30,3 +30,10 @@ def validate_data(jsonRequest):
     depth = jsonRequest.get("depth")
 
     return all([query, user_list, user_limit, depth])
+
+
+def emitData(socket, event, data=None, room=None):
+    if room is None:
+        print(f"\033[91;1mRoom is not set.\033[0m\n")
+        return
+    socket.emit(event, data=data, room=room)

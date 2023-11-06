@@ -2,6 +2,7 @@ from flask import request
 from src.extensions import socketio
 from src.globals import USERS, Sessions
 from src.controllers.socket import connect, get_users
+from src.utils.utils import emitData
 
 
 @socketio.on("connect")
@@ -40,6 +41,6 @@ def handle_remove(userId):
 def handle_error(error):
     print(f"\033[91;1m{error}.\033[0m\n")
     requesterId = request.sid
-    socketio.emit(
+    emitData(
         "something_went_wrong", {"message": str(error), "status": 500}, room=requesterId
     )

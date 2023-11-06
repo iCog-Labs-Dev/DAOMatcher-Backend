@@ -4,6 +4,7 @@ from collections import *
 from urllib.parse import urlparse
 from src.extensions import socketio
 from src.utils.serverLogic import mastodon, linkedIn, llm_server
+from src.utils.utils import emitData
 
 
 class ScoreUsers:
@@ -129,7 +130,7 @@ class ScoreUsers:
                             visited.add(username)
             except Exception as e:
                 print(f"\033[91;1m{e} In scour.\033[0m\n")
-                socketio.emit(f"update", {"error": str(e)}, room=self.user_session)
+                emitData(f"update", {"error": str(e)}, room=self.user_session)
 
             if user:
                 try:
@@ -140,7 +141,7 @@ class ScoreUsers:
                         )
                         # print(count)
                         count += 1
-                        socketio.emit(
+                        emitData(
                             f"update",
                             {"progress": count, "curr_user": account},
                             room=self.user_session,
@@ -150,9 +151,9 @@ class ScoreUsers:
                         continue
 
                 except requests.exceptions.RequestException as e:
-                    socketio.emit(f"update", {"error": str(e)}, room=self.user_session)
+                    emitData(f"update", {"error": str(e)}, room=self.user_session)
                 except Exception as e:
-                    socketio.emit(f"update", {"error": str(e)}, room=self.user_session)
+                    emitData(f"update", {"error": str(e)}, room=self.user_session)
                     # raise Exception("Error encountered on storing the scores")
         self.user_session = None
         return user_heap
