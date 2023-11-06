@@ -27,13 +27,6 @@ def get_users(data):
     sessionIsSet, CurrentUser = set_user_session(data)
     valid = validate_data(data)
     if not sessionIsSet:
-        socketio.emit(
-            "something_went_wrong",
-            {
-                "message": "Your session expired, relogin please",
-                "status": 401,
-            },
-        )
         print(f"\033[91merror emitted\033[0m")
         return
     if not valid:
@@ -43,6 +36,7 @@ def get_users(data):
                 "message": "Error data sending",
                 "status": 400,
             },
+            room=CurrentUser,
         )
         print(f"\033[91merror emitted\033[0m")
         return
