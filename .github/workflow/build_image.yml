@@ -3,12 +3,12 @@ name: Docker Prepare image
 on:
   push:
     branches:
-      - main
+      - deployment
   pull_request:
     types:
       - closed
     branches:
-      - main
+      - deployment
 
 env:
   DOCKER_USERNAME: ${{ secrets.DOCKER_DEV_USERNAME }}
