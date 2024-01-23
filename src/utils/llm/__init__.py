@@ -1,7 +1,7 @@
 import os
 import together
 import google.generativeai as palm
-from langchain.llms import GooglePalm
+from langchain_community.llms import GooglePalm
 
 TOGETHER_API_KEY = os.environ["TOGETHER_API_KEY"]
 together.api_key = TOGETHER_API_KEY

@@ -6,6 +6,7 @@ flask-login
 gevent
 gunicorn
 langchain
+langchain-community
 python-dotenv
 together
 flask-socketio
