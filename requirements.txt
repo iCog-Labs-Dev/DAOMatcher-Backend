@@ -5,8 +5,7 @@ Flask-SSE
 flask-login
 gevent
 gunicorn
-langchain
-langchain-community
+langchain==0.1.9
 python-dotenv
 together
 flask-socketio
