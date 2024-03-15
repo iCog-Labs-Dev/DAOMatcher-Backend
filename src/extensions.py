@@ -5,6 +5,6 @@ from src.globals import FRONTEND_URL
 
 origins = [FRONTEND_URL, "http://localhost:5173"]
 
-socketio = SocketIO(cors_allowed_origins=FRONTEND_URL if FRONTEND_URL else "*")
+socketio = SocketIO(cors_allowed_origins=origins)
 login_manager = LoginManager()
 cors = CORS(supports_credentials=True, origins=origins)
