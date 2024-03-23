@@ -1,4 +1,3 @@
-import together
 import requests
 from flask_cors import CORS
 from src.utils.llm.LLM import LLM
@@ -45,7 +44,7 @@ class LLMServer:
                         data = {"response": response}
 
                         return jsonify(data)
-                    except together.error.ResponseError:
+                    except Exception as e:
                         abort(503)
                 else:
                     abort(400)
