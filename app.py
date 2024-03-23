@@ -1,7 +1,7 @@
 from flask import Flask
 from src.config import DevelopmentConfig, Config
 from src import prod_env
-from src.extensions import login_manager, socketio, cors
+from src.extensions import login_manager, socketio, cors, db
 from src.views import auth, main, error
 
 
@@ -12,6 +12,7 @@ def create_app():
     cors.init_app(app)
     login_manager.init_app(app)
     socketio.init_app(app)
+    db.init_app(app)
 
     app.register_blueprint(main)
     app.register_blueprint(auth)
@@ -19,7 +20,7 @@ def create_app():
 
     return app
 
+
 if __name__ == "__main__":
     app = create_app()
     app.run(debug=True)
-    

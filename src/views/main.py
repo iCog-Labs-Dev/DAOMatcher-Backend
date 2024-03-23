@@ -7,7 +7,7 @@ main = Blueprint("main", __name__)
 
 @main.route("/", methods=["GET", "HEAD"])
 def wake_handler():
-    return jsonify({"message": "Wake up successfull"})
+    return jsonify({"message": "Wake up successful"})
 
 
 @main.route("/get_users", methods=["POST", "HEAD", "GET"])
