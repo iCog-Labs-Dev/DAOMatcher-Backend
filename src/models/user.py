@@ -9,12 +9,12 @@ class User(db.Model):
     display_name: Mapped[str] = mapped_column(
         String(length=50), unique=True, nullable=False
     )
-    verification_token: Mapped[str] = mapped_column(String)
-    password_reset_token: Mapped[str] = mapped_column(String)
-    password: Mapped[str] = mapped_column(String)
-    password_salt: Mapped[str] = mapped_column(String)
-    api_key: Mapped[str] = mapped_column(String)
+    verification_token: Mapped[str] = mapped_column(String(length=50))
+    password_reset_token: Mapped[str] = mapped_column(String(length=50))
+    password: Mapped[str] = mapped_column(String(length=50))
+    password_salt: Mapped[str] = mapped_column(String(length=50))
+    api_key: Mapped[str] = mapped_column(String(length=50))
 
-    app_settings = relationship("AppSettings", backref="user")
-    usage = relationship("Usage", backref="user")
-    search_result = relationship("SearchResult", backref="user")
+    # app_settings = relationship("AppSettings", backref="user")
+    # usage = relationship("Usage", backref="user")
+    # search_result = relationship("SearchResult", backref="user")
