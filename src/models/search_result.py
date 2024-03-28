@@ -1,3 +1,4 @@
+import uuid
 from __future__ import annotations
 from typing import TYPE_CHECKING, List
 from src.extensions import db
@@ -14,7 +15,9 @@ if TYPE_CHECKING:
 
 
 class SearchResult(db.Model):
-    id: Mapped[str] = mapped_column(String(length=50), primary_key=True)
+    id: Mapped[str] = mapped_column(
+        String(length=50), primary_key=True, default=lambda: uuid.uuid4().hex
+    )
     time_stamp: Mapped[DateTime] = mapped_column(DateTime, default=datetime)
     description: Mapped[str] = mapped_column(String(250))
     user_id: Mapped[str] = mapped_column(String(length=50), ForeignKey("user.id"))

@@ -1,5 +1,6 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
+import uuid
 from src.extensions import db
 from sqlalchemy import ForeignKey, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -9,7 +10,9 @@ if TYPE_CHECKING:
 
 
 class UserSetting(db.Model):
-    id: Mapped[str] = mapped_column(String(length=50), primary_key=True)
+    id: Mapped[str] = mapped_column(
+        String(length=50), primary_key=True, default=lambda: uuid.uuid4().hex
+    )
     default_user_count: Mapped[int] = mapped_column(Integer)
     default_depth_count: Mapped[int] = mapped_column(Integer)
     theme: Mapped[str] = mapped_column(String(length=10))

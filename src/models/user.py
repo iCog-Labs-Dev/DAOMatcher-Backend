@@ -1,4 +1,5 @@
 from typing import List, Optional, TYPE_CHECKING
+import uuid
 from src.extensions import db
 from sqlalchemy import ForeignKey, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -11,7 +12,9 @@ if TYPE_CHECKING:
 
 
 class User(db.Model):
-    id: Mapped[str] = mapped_column(String(length=50), primary_key=True)
+    id: Mapped[str] = mapped_column(
+        String(length=50), primary_key=True, default=lambda: uuid.uuid4().hex
+    )
     email: Mapped[str] = mapped_column(String(length=100), unique=True, nullable=False)
     display_name: Mapped[str] = mapped_column(
         String(length=50), unique=True, nullable=False
