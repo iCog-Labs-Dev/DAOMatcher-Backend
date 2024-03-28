@@ -1,7 +1,6 @@
 from enum import Enum as PEnum
 from sqlalchemy import ForeignKey, Column, Enum
 from src.extensions import db
-from src.models import SearchResult, Usernames
 
 
 class UsernameType(PEnum):
@@ -11,7 +10,7 @@ class UsernameType(PEnum):
 
 search_usernames = db.Table(
     "search_usernames",
-    Column("search_id", ForeignKey(SearchResult.id)),
-    Column("username_id", ForeignKey(Usernames.id)),
+    Column("search_id", ForeignKey("search_result.id"), primary_key=True),
+    Column("username_id", ForeignKey("username.id"), primary_key=True),
     Column("type", Enum(UsernameType)),
 )
