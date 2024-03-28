@@ -1,6 +1,9 @@
 #Environment files
 poetry.lock
 
+#Migration files
+migrations/
+
 #Vscode configuration
 .vscode
 __pycache__
