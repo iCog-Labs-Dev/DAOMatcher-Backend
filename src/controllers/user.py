@@ -1,9 +1,7 @@
 import requests
 from flask import request, jsonify, abort
-from src.models import User, UserUsage, SearchResult
+from src.models import User, UserUsage
 from src.extensions import db
-from src.models.search_usernames import UsernameType
-from src.models.username import Username
 
 
 def get_user_by_id(user_id: str):
