@@ -32,4 +32,12 @@ class User(db.Model):
     usage: Mapped[Optional["UserUsage"]] = relationship(back_populates="user")
     search_results: Mapped[List["SearchResult"]] = relationship(back_populates="user")
 
-    # search_results
+    def serialize(self):
+        return {
+            "id": self.id,
+            "email": self.email,
+            "display_name": self.display_name,
+            "setting": self.user_setting.serialize(),
+            "usage": self.usage.serialize(),
+            "api_key": self.api_key,
+        }

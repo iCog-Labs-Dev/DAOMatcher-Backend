@@ -17,3 +17,10 @@ class Username(db.Model):
     search_result: Mapped[List["SearchResult"]] = relationship(
         secondary=search_usernames, back_populates="username"
     )
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "username": self.username,
+            "type": self.type,
+        }

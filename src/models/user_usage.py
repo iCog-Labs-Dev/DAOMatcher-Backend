@@ -13,3 +13,10 @@ class UserUsage(db.Model):
     user_id: Mapped[str] = mapped_column(String(length=50), ForeignKey("user.id"))
 
     user: Mapped["User"] = relationship(back_populates="user_usage")
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "token_count": self.token_count,
+            "search_count": self.search_count,
+        }

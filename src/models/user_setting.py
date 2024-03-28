@@ -16,3 +16,11 @@ class UserSetting(db.Model):
     user_id: Mapped[str] = mapped_column(String(length=50), ForeignKey("user.id"))
 
     user: Mapped["User"] = relationship(back_populates="user_setting")
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "default_user_count": self.default_user_count,
+            "default_depth_count": self.default_depth_count,
+            "theme": self.theme,
+        }
