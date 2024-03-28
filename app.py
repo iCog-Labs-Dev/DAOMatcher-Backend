@@ -1,8 +1,9 @@
 from flask import Flask
 from src.config import DevelopmentConfig, Config
 from src import prod_env
-from src.extensions import login_manager, socketio, cors, db, alembic
+from src.extensions import login_manager, socketio, cors, db, migrate
 from src.views import auth, main, error
+from src.models import *
 
 
 def create_app():
@@ -13,6 +14,7 @@ def create_app():
     login_manager.init_app(app)
     socketio.init_app(app)
     db.init_app(app)
+    migrate.init_app(app, db)
 
     app.register_blueprint(main)
     app.register_blueprint(auth)
@@ -23,4 +25,6 @@ def create_app():
 
 if __name__ == "__main__":
     app = create_app()
-    app.run(debug=True)
+    with app.app_context():
+        db.create_all()
+    # app.run(debug=True)
