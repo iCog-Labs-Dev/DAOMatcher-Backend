@@ -10,7 +10,7 @@ class UsernameType(PEnum):
 
 
 search_usernames = db.Table(
-    "seed_usernames",
+    "search_usernames",
     Column("search_id", ForeignKey(SearchResult.id)),
     Column("username_id", ForeignKey(Usernames.id)),
     Column("type", Enum(UsernameType)),
