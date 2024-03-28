@@ -1,5 +1,6 @@
-import uuid
 from __future__ import annotations
+
+import uuid
 from typing import TYPE_CHECKING, List
 from src.extensions import db
 from sqlalchemy import ForeignKey, String, DateTime

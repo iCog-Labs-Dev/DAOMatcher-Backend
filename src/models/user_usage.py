@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 import uuid
 from src.extensions import db
 from sqlalchemy import ForeignKey, Integer, String
