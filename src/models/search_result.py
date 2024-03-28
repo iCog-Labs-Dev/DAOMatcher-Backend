@@ -9,6 +9,7 @@ from sqlalchemy import DateTime
 from src.models.search_usernames import search_usernames
 
 if TYPE_CHECKING:
+    from src.models.user import User
     from src.models.username import Username
 
 
@@ -16,7 +17,9 @@ class SearchResult(db.Model):
     id: Mapped[str] = mapped_column(String(length=50), primary_key=True)
     time_stamp: Mapped[DateTime] = mapped_column(DateTime, default=datetime)
     description: Mapped[str] = mapped_column(String(250))
+    user_id: Mapped[str] = mapped_column(String(length=50), ForeignKey("user.id"))
 
     usernames: Mapped[List["Username"]] = relationship(
         secondary=search_usernames, back_populates="search_result"
     )
+    user: Mapped["User"] = relationship(back_populates="search_result")
