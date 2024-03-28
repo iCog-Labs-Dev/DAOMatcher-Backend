@@ -14,6 +14,6 @@ class Username(db.Model):
     username: Mapped[str] = mapped_column(String(length=100), nullable=False)
     type: Mapped[str] = mapped_column(String(length=10), nullable=False)
 
-    search_result: Mapped[List[SearchResult]] = relationship(
+    search_result: Mapped[List["SearchResult"]] = relationship(
         secondary=search_usernames, back_populates="username"
     )

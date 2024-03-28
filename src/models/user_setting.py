@@ -15,4 +15,4 @@ class UserSetting(db.Model):
     theme: Mapped[str] = mapped_column(String(length=10))
     user_id: Mapped[str] = mapped_column(String(length=50), ForeignKey("user.id"))
 
-    user: Mapped[User] = relationship(back_populates="user_setting")
+    user: Mapped["User"] = relationship(back_populates="user_setting")

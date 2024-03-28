@@ -17,6 +17,6 @@ class SearchResult(db.Model):
     time_stamp: Mapped[DateTime] = mapped_column(DateTime, default=datetime)
     description: Mapped[str] = mapped_column(String(250))
 
-    usernames: Mapped[List[Username]] = relationship(
+    usernames: Mapped[List["Username"]] = relationship(
         secondary=search_usernames, back_populates="search_result"
     )
