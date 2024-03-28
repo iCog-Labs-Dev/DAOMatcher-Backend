@@ -2,7 +2,7 @@ from flask import Flask
 from src.config import DevelopmentConfig, Config
 from src import prod_env
 from src.extensions import login_manager, socketio, cors, db, migrate
-from src.views import auth, main, error
+from src.views import auth, main, error, user, search
 from src.models import *
 
 
@@ -19,6 +19,8 @@ def create_app():
     app.register_blueprint(main)
     app.register_blueprint(auth)
     app.register_blueprint(error)
+    app.register_blueprint(user)
+    app.register_blueprint(search)
 
     return app
 
