@@ -9,4 +9,3 @@ class UserUsage(db.Model):
     search_count: Mapped[int] = mapped_column(Integer, nullable=False)
 
     user_id: Mapped[str] = mapped_column(String(length=50), ForeignKey("users.id"))
-    user = relationship("User", backref="usage")

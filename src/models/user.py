@@ -5,7 +5,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 class User(db.Model):
     id: Mapped[str] = mapped_column(String(length=50), primary_key=True)
-    email: Mapped[str] = mapped_column(String(length=255), unique=True, nullable=False)
+    email: Mapped[str] = mapped_column(String(length=100), unique=True, nullable=False)
     display_name: Mapped[str] = mapped_column(
         String(length=50), unique=True, nullable=False
     )
@@ -14,7 +14,3 @@ class User(db.Model):
     password: Mapped[str] = mapped_column(String(length=50))
     password_salt: Mapped[str] = mapped_column(String(length=50))
     api_key: Mapped[str] = mapped_column(String(length=50))
-
-    # app_settings = relationship("AppSettings", backref="user")
-    # usage = relationship("Usage", backref="user")
-    # search_result = relationship("SearchResult", backref="user")

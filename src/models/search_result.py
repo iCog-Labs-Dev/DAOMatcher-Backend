@@ -9,14 +9,5 @@ class SearchResult(db.Model):
     __tablename__ = "search_results"
 
     id: Mapped[str] = mapped_column(String(length=50), primary_key=True)
-    found_usernames_id: Mapped[str] = mapped_column(
-        String(length=50), ForeignKey("found_usernames.id")
-    )
-    seed_usernames_id: Mapped[str] = mapped_column(
-        String(length=50), ForeignKey("seed_usernames.id")
-    )
     time_stamp: Mapped[DateTime] = mapped_column(DateTime, default=datetime)
-    description: Mapped[str] = mapped_column(String)
-
-    found_usernames = relationship("FoundUsernames", backref="search_result")
-    seed_usernames = relationship("SeedUsernames", backref="search_result")
+    description: Mapped[str] = mapped_column(String(250))
