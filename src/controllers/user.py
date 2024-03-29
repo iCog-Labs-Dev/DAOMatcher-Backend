@@ -35,7 +35,6 @@ def update_user(user_id: str):
 
         user.display_name = updatedUser.get("display_name", user.display_name)
         user.api_key = updatedUser.get("api_key", user.api_key)
-        user.email = updatedUser.get("email", user.email)
 
         db.session.commit()
         return jsonify(user.serialize())
