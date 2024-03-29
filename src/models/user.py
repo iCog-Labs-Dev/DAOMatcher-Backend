@@ -19,8 +19,8 @@ class User(db.Model):
     display_name: Mapped[str] = mapped_column(String(length=50), unique=True)
     verification_token: Mapped[str] = mapped_column(String(length=50), nullable=True)
     password_reset_token: Mapped[str] = mapped_column(String(length=50), nullable=True)
-    password: Mapped[str] = mapped_column(String(length=50))
-    password_salt: Mapped[str] = mapped_column(String(length=50))
+    password: Mapped[str] = mapped_column(String(length=100))
+    password_salt: Mapped[str] = mapped_column(String(length=100))
     api_key: Mapped[str] = mapped_column(String(length=50), nullable=True)
     user_setting_id: Mapped[Optional[str]] = mapped_column(
         String(length=50), ForeignKey("user_setting.id"), nullable=True
