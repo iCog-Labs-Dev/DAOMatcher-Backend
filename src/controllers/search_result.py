@@ -1,8 +1,11 @@
 from flask import request, jsonify, abort
 from src.models import User, SearchResult
 from src.extensions import db
-from src.models.search_usernames import UsernameType
-from src.models.username import Username
+
+# from src.models.search_usernames import UsernameType
+
+# from src.models.username import Username
+from src.models.search_result import Username, UsernameType
 
 
 def add_search_result(user_id):

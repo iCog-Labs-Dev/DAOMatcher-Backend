@@ -14,7 +14,6 @@ class UserUsage(db.Model):
     )
     token_count: Mapped[int] = mapped_column(Integer, nullable=False)
     search_count: Mapped[int] = mapped_column(Integer, nullable=False)
-    user_id: Mapped[str] = mapped_column(String(length=50), ForeignKey("user.id"))
 
     user: Mapped["User"] = relationship(back_populates="user_usage")
 

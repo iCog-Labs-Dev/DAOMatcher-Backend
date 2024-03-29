@@ -15,25 +15,23 @@ class User(db.Model):
     id: Mapped[str] = mapped_column(
         String(length=50), primary_key=True, default=lambda: uuid.uuid4().hex
     )
-    email: Mapped[str] = mapped_column(String(length=100), unique=True, nullable=False)
-    display_name: Mapped[str] = mapped_column(
-        String(length=50), unique=True, nullable=False
-    )
-    verification_token: Mapped[str] = mapped_column(String(length=50))
-    password_reset_token: Mapped[str] = mapped_column(String(length=50))
-    password: Mapped[str] = mapped_column(String(length=50))
-    password_salt: Mapped[str] = mapped_column(String(length=50))
-    api_key: Mapped[str] = mapped_column(String(length=50))
+    email: Mapped[str] = mapped_column(String(length=100), unique=True)
+    display_name: Mapped[str] = mapped_column(String(length=50), unique=True)
+    verification_token: Mapped[str] = mapped_column(String(length=50), nullable=True)
+    password_reset_token: Mapped[str] = mapped_column(String(length=50), nullable=True)
+    password: Mapped[str] = mapped_column(String(length=50), nullable=True)
+    password_salt: Mapped[str] = mapped_column(String(length=50), nullable=True)
+    api_key: Mapped[str] = mapped_column(String(length=50), nullable=True)
     user_setting_id: Mapped[Optional[str]] = mapped_column(
-        String(length=50), ForeignKey("user_setting.id")
+        String(length=50), ForeignKey("user_setting.id"), nullable=True
     )
     usage_id: Mapped[Optional[str]] = mapped_column(
-        String(length=50), ForeignKey("user_usage.id")
+        String(length=50), ForeignKey("user_usage.id"), nullable=True
     )
 
     user_setting: Mapped[Optional["UserSetting"]] = relationship(back_populates="user")
-    usage: Mapped[Optional["UserUsage"]] = relationship(back_populates="user")
-    search_results: Mapped[List["SearchResult"]] = relationship(back_populates="user")
+    user_usage: Mapped[Optional["UserUsage"]] = relationship(back_populates="user")
+    search_result: Mapped[List["SearchResult"]] = relationship(back_populates="user")
 
     def serialize(self):
         return {

@@ -1,4 +1,3 @@
-import requests
 from flask import request, jsonify, abort
 from src.models import User, UserUsage
 from src.extensions import db
@@ -23,6 +22,7 @@ def add_user():
         db.session.commit()
         return jsonify(user.serialize())
     except Exception as e:
+        print(e)
         abort(500, str(e))
 
 

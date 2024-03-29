@@ -17,7 +17,6 @@ class UserSetting(db.Model):
     default_user_count: Mapped[int] = mapped_column(Integer)
     default_depth_count: Mapped[int] = mapped_column(Integer)
     theme: Mapped[str] = mapped_column(String(length=10))
-    user_id: Mapped[str] = mapped_column(String(length=50), ForeignKey("user.id"))
 
     user: Mapped["User"] = relationship(back_populates="user_setting")
 
