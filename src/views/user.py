@@ -11,7 +11,7 @@ user = Blueprint("user", __name__)
 
 
 @user.route("/user/<string:user_id>", methods=["GET", "PUT"])
-def get_by_id(user_id):
+def get(user_id):
 
     if request.method == "GET":
         user = get_user_by_id(user_id)
