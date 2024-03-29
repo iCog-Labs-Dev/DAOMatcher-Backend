@@ -1,3 +1,4 @@
+import bcrypt
 from flask import request, jsonify, abort
 from src.models import User, UserUsage
 from src.extensions import db
@@ -20,6 +21,13 @@ def add_user():
         )
         usage: UserUsage = UserUsage()
         user.user_usage = usage
+
+        password = new_user.get("password").encode("utf-8")
+        salt = bcrypt.gensalt()
+        hashed_password = bcrypt.hashpw(password, salt)
+
+        user.password = hashed_password
+        user.password_salt = salt
 
         db.session.add(user)
         db.session.commit()
