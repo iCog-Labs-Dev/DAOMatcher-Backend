@@ -8,9 +8,10 @@ class Config:
     SESSION_COOKIE_SECURE = True
     SESSION_COOKIE_SAMESITE = "None"
     SQLALCHEMY_DATABASE_URI = config("DATABASE_URL")
+    SECURITY_PASSWORD_SALT = config("SECURITY_PASSWORD_SALT")
 
     # Mail Settings
-    MAIL_DEFAULT_SENDER = "noreply@flask.com"
+    MAIL_DEFAULT_SENDER = config("MAIL_DEFAULT_SENDER")
     MAIL_SERVER = "smtp.ethereal.com"
     MAIL_PORT = 587
     MAIL_USE_TLS = False

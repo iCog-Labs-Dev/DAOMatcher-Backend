@@ -1,7 +1,9 @@
 import bcrypt
-from flask import request, jsonify, abort
+from flask import request, jsonify, abort, url_for
 from src.models import User, UserUsage
 from src.extensions import db
+from src.utils.email import send_email
+from src.utils.token import generate_token
 
 
 def get_user_by_id(user_id: str):
@@ -31,6 +33,12 @@ def add_user():
 
         db.session.add(user)
         db.session.commit()
+
+        token = generate_token(user.email)
+        confirm_url = url_for("accounts.confirm_email", token=token, _external=True)
+        subject = "Please confirm your email"
+        send_email(user.email, subject, confirm_url)
+
         return user.serialize()
     except Exception as e:
         print(e)
