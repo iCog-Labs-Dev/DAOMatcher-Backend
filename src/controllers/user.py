@@ -19,7 +19,7 @@ def add_user():
             email=new_user.get("email"),
         )
         usage: UserUsage = UserUsage()
-        user.usage_id = usage.id
+        user.user_usage = usage
 
         db.session.add(user)
         db.session.commit()

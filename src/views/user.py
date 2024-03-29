@@ -27,7 +27,7 @@ def create():
     return jsonify({"user": user})
 
 
-@user.route("/user/<string:user_id>/usage", methods=["PUT"])
-def update_usage(user_id):
-    updated_usage = update_user_usage(user_id)
+@user.route("/user/<string:user_id>/usage/<string:usage_id>", methods=["PUT"])
+def update_usage(user_id, usage_id):
+    updated_usage = update_user_usage(usage_id)
     return updated_usage
