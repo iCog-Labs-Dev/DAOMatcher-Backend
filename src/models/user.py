@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import List, Optional, TYPE_CHECKING
 import uuid
 from src.extensions import db
-from sqlalchemy import DateTime, ForeignKey, String
+from sqlalchemy import Boolean, DateTime, ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 
@@ -17,7 +17,7 @@ class User(db.Model):
         String(length=50), primary_key=True, default=lambda: uuid.uuid4().hex
     )
     email: Mapped[str] = mapped_column(String(length=100), unique=True)
-    verified_at: Mapped[datetime] = mapped_column(DateTime, nullable=True)
+    verified: Mapped[bool] = mapped_column(Boolean, default=False)
     display_name: Mapped[str] = mapped_column(String(length=50), unique=True)
     verification_token: Mapped[str] = mapped_column(String(length=50), nullable=True)
     password_reset_token: Mapped[str] = mapped_column(String(length=50), nullable=True)
