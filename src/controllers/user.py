@@ -13,14 +13,14 @@ def get_user_by_id(user_id: str):
 def add_user():
     try:
         new_user = request.json
-        user = User(
+        user: User = User(
             display_name=new_user.get("display_name"),
             api_key=new_user.get("api_key"),
             email=new_user.get("email"),
         )
         db.session.add(user)
         db.session.commit()
-        return jsonify(user.serialize())
+        return user.serialize()
     except Exception as e:
         print(e)
         abort(500, str(e))

@@ -7,10 +7,10 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 
 
-origins = [FRONTEND_URL, "http://localhost:5173"]
+origins = [FRONTEND_URL, "http://localhost:5173", "http://localhost:5000"]
 
-socketio = SocketIO(cors_allowed_origins=origins)
+socketio = SocketIO(cors_allowed_origins="*")
 login_manager = LoginManager()
-cors = CORS(supports_credentials=True, origins=origins)
+cors = CORS(supports_credentials=True, origins="*")
 db = SQLAlchemy(model_class=Base)
 migrate = Migrate()
