@@ -4,12 +4,7 @@ from flask import Blueprint, flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required, login_user, logout_user
 
 from src import bcrypt, db
-from src.accounts.models import User
-from src.accounts.token import confirm_token, generate_token
-from src.utils.decorators import logout_required
-from src.utils.email import send_email
 
-from .forms import LoginForm, RegisterForm
 
 accounts_bp = Blueprint("accounts", __name__)
 
