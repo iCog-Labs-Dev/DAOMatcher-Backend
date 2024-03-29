@@ -35,7 +35,7 @@ def add_user():
         db.session.commit()
 
         token = generate_token(user.email)
-        confirm_url = url_for("accounts.confirm_email", token=token, _external=True)
+        confirm_url = url_for("user.create", token=token, _external=True)
         subject = "Please confirm your email"
         send_email(user.email, subject, confirm_url)
 
