@@ -16,7 +16,7 @@ class UserUsage(db.Model):
     search_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
 
     user: Mapped["User"] = relationship(
-        back_populates="user_usage", cascade="all, delete-orphan"
+        back_populates="user_usage"
     )
 
     def serialize(self):
