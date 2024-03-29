@@ -18,7 +18,7 @@ class UserSetting(db.Model):
     default_depth_count: Mapped[int] = mapped_column(Integer)
     theme: Mapped[str] = mapped_column(String(length=10))
 
-    user: Mapped["User"] = relationship(back_populates="user_setting")
+    user: Mapped["User"] = relationship(back_populates="user_setting",cascade="all, delete-orphan")
 
     def serialize(self):
         return {

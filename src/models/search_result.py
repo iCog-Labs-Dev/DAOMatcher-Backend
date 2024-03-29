@@ -42,9 +42,7 @@ class SearchResult(db.Model):
     username: Mapped[List["Username"]] = relationship(
         secondary=search_usernames, back_populates="search_result"
     )
-    user: Mapped["User"] = relationship(
-        back_populates="search_result", cascade="all, delete-orphan", single_parent=True
-    )
+    user: Mapped["User"] = relationship(back_populates="search_result")
 
     def serialize(self):
         return {
