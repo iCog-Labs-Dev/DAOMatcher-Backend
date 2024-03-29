@@ -18,6 +18,6 @@ def send_email(to, subject, confirm_url):
         subject,
         recipients=[to],
         html=template,
-        sender=config("MAIL_DEFAULT_SENDER"),
+        sender=config("EMAIL_USER"),
     )
     mail.send(msg)
