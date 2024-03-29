@@ -23,3 +23,13 @@ def handle_login():
 @login_required
 def handle_logout():
     return logout()
+
+
+@auth.route("/confirm/<token>", methods=["GET"])
+def confirm_email(token):
+
+    return "Email confirmed"
+
+
+def confirm_email(token):
+    pass

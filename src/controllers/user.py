@@ -45,6 +45,13 @@ def add_user():
         abort(500, str(e))
 
 
+def confirm_email(token):
+    try:
+        pass
+    except:
+        pass
+
+
 def update_user(user_id: str):
     try:
         updatedUser = request.json
