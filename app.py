@@ -1,7 +1,7 @@
 from flask import Flask
 from src.config import DevelopmentConfig, Config
 from src import prod_env
-from src.extensions import login_manager, socketio, cors, db, migrate
+from src.extensions import login_manager, socketio, cors, db, migrate, mail
 from src.views import auth, main, error, user as userBP, search
 from src.models import *
 
@@ -15,6 +15,7 @@ def create_app():
     socketio.init_app(app)
     db.init_app(app)
     migrate.init_app(app, db)
+    mail.init_app(app)
 
     app.register_blueprint(main)
     app.register_blueprint(auth)

@@ -14,7 +14,6 @@ Flask-Login = "^0.6.3"
 gevent = "^24.2.1"
 gunicorn = "^21.2.0"
 langchain = "0.0.227"
-python-dotenv = "^1.0.1"
 Flask-SocketIO = "^5.3.6"
 gevent-websocket = "^0.10.1"
 google-generativeai = "^0.4.1"
@@ -23,6 +22,8 @@ flask-sqlalchemy = "^3.1.1"
 mysqlclient = "2.1.0"
 flask-migrate = "^4.0.7"
 bcrypt = "^4.1.2"
+python-decouple = "^3.8"
+flask-mail = "^0.9.1"
 
 
 [build-system]

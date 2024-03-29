@@ -1,10 +1,9 @@
-import os
-from dotenv import load_dotenv
 from sqlalchemy.orm import DeclarativeBase
+from decouple import Config
 
-load_dotenv()
+config = Config()
 
-prod_env = bool(os.environ.get("PROD_ENV"))
+prod_env = config("PROD_ENV", default=False)
 
 
 class Base(DeclarativeBase):
