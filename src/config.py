@@ -24,4 +24,3 @@ class Config:
 class DevelopmentConfig(Config):
     DEBUG = True
     TESTING = True
-    MAIL_DEBUG = True
