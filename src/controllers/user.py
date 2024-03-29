@@ -18,6 +18,9 @@ def add_user():
             api_key=new_user.get("api_key"),
             email=new_user.get("email"),
         )
+        usage: UserUsage = UserUsage()
+        user.usage_id = usage.id
+
         db.session.add(user)
         db.session.commit()
         return user.serialize()

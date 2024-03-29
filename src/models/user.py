@@ -26,7 +26,7 @@ class User(db.Model):
         String(length=50), ForeignKey("user_setting.id"), nullable=True
     )
     usage_id: Mapped[Optional[str]] = mapped_column(
-        String(length=50), ForeignKey("user_usage.id"), nullable=True
+        String(length=50), ForeignKey("user_usage.id")
     )
 
     user_setting: Mapped[Optional["UserSetting"]] = relationship(back_populates="user")

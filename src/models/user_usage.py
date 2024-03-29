@@ -12,8 +12,8 @@ class UserUsage(db.Model):
     id: Mapped[str] = mapped_column(
         String(length=50), primary_key=True, default=lambda: uuid.uuid4().hex
     )
-    token_count: Mapped[int] = mapped_column(Integer, nullable=False)
-    search_count: Mapped[int] = mapped_column(Integer, nullable=False)
+    token_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    search_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
 
     user: Mapped["User"] = relationship(back_populates="user_usage")
 
