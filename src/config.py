@@ -12,10 +12,10 @@ class Config:
 
     # Mail Settings
     MAIL_DEFAULT_SENDER = config("MAIL_DEFAULT_SENDER")
-    MAIL_SERVER = "smtp.ethereal.com"
+    MAIL_SERVER = "smtp.ethereal.email"
     MAIL_PORT = 587
-    MAIL_USE_TLS = False
-    MAIL_USE_SSL = True
+    MAIL_USE_TLS = True
+    MAIL_USE_SSL = False
     MAIL_DEBUG = False
     MAIL_USERNAME = config("EMAIL_USER")
     MAIL_PASSWORD = config("EMAIL_PASSWORD")
@@ -24,3 +24,4 @@ class Config:
 class DevelopmentConfig(Config):
     DEBUG = True
     TESTING = True
+    MAIL_DEBUG = True
