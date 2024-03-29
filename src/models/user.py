@@ -29,9 +29,9 @@ class User(db.Model):
         String(length=50), ForeignKey("user_usage.id")
     )
 
-    user_setting: Mapped[Optional["UserSetting"]] = relationship(back_populates="user")
-    user_usage: Mapped[Optional["UserUsage"]] = relationship(back_populates="user")
-    search_result: Mapped[List["SearchResult"]] = relationship(back_populates="user")
+    user_setting: Mapped[Optional["UserSetting"]] = relationship(back_populates="user", cascade="all, delete-orphan")
+    user_usage: Mapped[Optional["UserUsage"]] = relationship(back_populates="user", cascade="all, delete-orphan")
+    search_result: Mapped[List["SearchResult"]] = relationship(back_populates="user", cascade="all, delete-orphan")
 
     def serialize(self):
         return {
