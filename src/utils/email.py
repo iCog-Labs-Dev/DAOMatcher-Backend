@@ -1,6 +1,6 @@
 from flask_mail import Message
 
-from src import config
+from decouple import config
 from src.extensions import mail
 
 
