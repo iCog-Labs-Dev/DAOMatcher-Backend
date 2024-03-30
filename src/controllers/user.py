@@ -13,6 +13,13 @@ def get_user_by_id(user_id: str):
     return jsonify(user.serialize())
 
 
+def get_user_by_email(email: str):
+    user: User = db.one_or_404(
+        db.select(User).filter_by(email=email), description="User not found"
+    )
+    return user
+
+
 def add_user():
     try:
         new_user = request.json
