@@ -1,8 +1,5 @@
-from flask import Blueprint, url_for
-from src.controllers.auth import login, confirm_email
-from src.utils.email import send_email
+from src.controllers.auth import login, confirm_email, resend_token
 from src.utils.middlewares import token_required
-from src.utils.token import generate_token
 
 auth = Blueprint("auth", __name__)
 
@@ -21,4 +18,4 @@ def confirm(current_user: dict, token: str):
 @auth.route("/confirm/resend", methods=["GET"])
 @token_required
 def resend_confirmation(current_user: dict):
-    pass
+    resend_token(current_user)
