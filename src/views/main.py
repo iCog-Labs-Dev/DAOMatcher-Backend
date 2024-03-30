@@ -1,6 +1,7 @@
 from flask_login import login_required
-from src.controllers.main import scoring_user
 from flask import Blueprint, jsonify
+
+from src.controllers.main import scoring_user
 
 main = Blueprint("main", __name__)
 

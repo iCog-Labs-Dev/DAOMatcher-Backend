@@ -1,10 +1,9 @@
-from datetime import datetime
-from typing import List, Optional, TYPE_CHECKING
 import uuid
-from src.extensions import db
+from typing import List, Optional, TYPE_CHECKING
 from sqlalchemy import Boolean, DateTime, ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
+from src.extensions import db
 
 if TYPE_CHECKING:
     from src.models.user_usage import UserUsage

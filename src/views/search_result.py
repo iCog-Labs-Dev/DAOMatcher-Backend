@@ -1,5 +1,6 @@
-from src.controllers.search_result import *
 from flask import Blueprint
+
+from src.controllers.search_result import *
 
 search = Blueprint("search-result", __name__)
 

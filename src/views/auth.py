@@ -1,3 +1,5 @@
+from flask import Blueprint
+
 from src.controllers.auth import login, confirm_email, resend_token
 from src.utils.middlewares import token_required
 

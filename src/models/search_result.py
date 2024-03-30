@@ -1,21 +1,16 @@
 from __future__ import annotations
 
-from enum import Enum as PEnum
-from sqlalchemy import ForeignKey, Column, Enum, Table
 import uuid
-from typing import TYPE_CHECKING, List
-from src.extensions import db
-from sqlalchemy import ForeignKey, String, DateTime
-from sqlalchemy.orm import Mapped, mapped_column, relationship
 from datetime import datetime
-from sqlalchemy import DateTime
+from enum import Enum as PEnum
+from typing import TYPE_CHECKING, List
+from sqlalchemy import ForeignKey, Column, Enum, String, DateTime
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-# from src.models.search_usernames import search_usernames, UsernameType
+from src.extensions import db
 
 if TYPE_CHECKING:
     from src.models.user import User
-
-    # from src.models.username import Username
 
 
 class UsernameType(PEnum):

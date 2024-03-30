@@ -1,14 +1,12 @@
-import os
-import bcrypt
-from flask import jsonify, request, url_for
 import jwt
+import bcrypt
+
+from decouple import config
+from flask import jsonify, request
 
 from src.controllers.user import get_user_by_email
 from src.extensions import db
-from decouple import config
-
-from src.utils.email import send_email
-from src.utils.token import confirm_token, generate_and_send, generate_token
+from src.utils.token import confirm_token, generate_and_send
 
 
 def login():

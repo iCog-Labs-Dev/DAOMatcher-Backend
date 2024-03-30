@@ -1,11 +1,12 @@
 from flask_cors import CORS
 from flask_login import LoginManager
 from flask_socketio import SocketIO
-from src import Base
-from src.globals import FRONTEND_URL
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_mail import Mail
+
+from src import Base
+from src.globals import FRONTEND_URL
 
 
 origins = [FRONTEND_URL, "http://localhost:5173", "http://localhost:5000"]

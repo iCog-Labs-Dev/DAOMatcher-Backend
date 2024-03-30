@@ -1,8 +1,9 @@
 import bcrypt
-from flask import request, jsonify, abort
-from src.models import User, UserUsage
+from flask import request, jsonify
+
 from src.extensions import db
-from src.utils.token import confirm_token, generate_and_send
+from src.models import User, UserUsage
+from src.utils.token import generate_and_send
 
 
 def get_user_by_id(user_id: str):

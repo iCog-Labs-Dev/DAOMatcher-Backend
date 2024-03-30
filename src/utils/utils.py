@@ -1,6 +1,7 @@
 from random import choice
-from src.globals import USERS, Sessions
 from string import ascii_letters, digits
+
+from src.globals import USERS, Sessions
 
 
 def generate_random_string(length=8):

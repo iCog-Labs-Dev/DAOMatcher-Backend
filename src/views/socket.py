@@ -1,4 +1,5 @@
 from flask import request
+
 from src.extensions import socketio
 from src.globals import USERS, Sessions
 from src.controllers.socket import connect, get_users

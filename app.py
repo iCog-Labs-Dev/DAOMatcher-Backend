@@ -1,9 +1,10 @@
 from flask import Flask
-from src.config import DevelopmentConfig, Config
+
 from src import prod_env
-from src.extensions import login_manager, socketio, cors, db, migrate, mail
-from src.views import auth, main, error, user as userBP, search
 from src.models import *
+from src.config import DevelopmentConfig, Config
+from src.views import auth, main, error, user as userBP, search
+from src.extensions import login_manager, socketio, cors, db, migrate, mail
 
 
 def create_app():

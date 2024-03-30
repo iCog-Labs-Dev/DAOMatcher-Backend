@@ -1,5 +1,6 @@
 import requests
 from flask import request, jsonify, abort
+
 from src.utils.serverLogic import ScoreUsers
 
 

@@ -1,7 +1,8 @@
-from functools import wraps
 import jwt
 from flask import request
+from functools import wraps
 from flask import current_app
+
 from src.controllers.user import get_user_by_id
 
 

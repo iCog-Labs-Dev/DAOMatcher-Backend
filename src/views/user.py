@@ -1,3 +1,5 @@
+from flask import Blueprint, jsonify
+
 from src.controllers.user import (
     request,
     get_user_by_id,
@@ -5,7 +7,6 @@ from src.controllers.user import (
     add_user,
     update_user_usage,
 )
-from flask import Blueprint, jsonify
 
 user = Blueprint("user", __name__)
 

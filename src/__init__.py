@@ -1,6 +1,6 @@
 import os
-from sqlalchemy.orm import DeclarativeBase
 from decouple import Config
+from sqlalchemy.orm import DeclarativeBase
 
 config = Config(os.path.join(os.path.pardir, ".env"))
 

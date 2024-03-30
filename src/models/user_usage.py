@@ -1,10 +1,11 @@
 from __future__ import annotations
 
 import uuid
-from src.extensions import db
-from sqlalchemy import ForeignKey, Integer, String
+
+from sqlalchemy import Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
+from src.extensions import db
 from src.models.user import User
 
 

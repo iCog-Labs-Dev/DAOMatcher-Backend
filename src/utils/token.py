@@ -1,7 +1,6 @@
 from flask import url_for
-from itsdangerous import URLSafeTimedSerializer
-
 from decouple import config
+from itsdangerous import URLSafeTimedSerializer
 
 from src.utils.email import send_email
 
