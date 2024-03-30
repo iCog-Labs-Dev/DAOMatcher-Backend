@@ -1,13 +1,14 @@
 import os
 import bcrypt
-from flask import jsonify, request
+from flask import jsonify, request, url_for
 import jwt
 
 from src.controllers.user import get_user_by_email
 from src.extensions import db
 from decouple import config
 
-from src.utils.token import confirm_token
+from src.utils.email import send_email
+from src.utils.token import confirm_token, generate_and_send, generate_token
 
 
 def login():
@@ -136,3 +137,11 @@ def confirm_email(current_user: dict, token: str):
                 "status": 500,
             }
         )
+
+
+def resend_token(current_user: dict):
+    if current_user.get("verified", False):
+        return {"message": "Email already verified", "data": None, "error": None}, 200
+
+    generate_and_send(current_user.get("email"))
+    return {"message": "Confirmation email sent", "data": None, "error": None}, 200
