@@ -1,9 +1,8 @@
 import bcrypt
-from flask import request, jsonify, abort, url_for
+from flask import request, jsonify, abort
 from src.models import User, UserUsage
 from src.extensions import db
-from src.utils.email import send_email
-from src.utils.token import generate_token
+from src.utils.token import confirm_token, generate_and_send
 
 
 def get_user_by_id(user_id: str):
@@ -41,22 +40,68 @@ def add_user():
         db.session.add(user)
         db.session.commit()
 
-        token = generate_token(user.email)
-        confirm_url = url_for("user.create", token=token, _external=True)
-        subject = "Please confirm your email"
-        send_email(user.email, subject, confirm_url)
-
-        return user.serialize()
+        generate_and_send(user.email)
+        return jsonify(user.serialize())
     except Exception as e:
         print(e)
-        abort(500, str(e))
+        return jsonify(
+            {
+                "message": "Something went wrong",
+                "data": None,
+                "error": str(e),
+                "success": False,
+                "status": 500,
+            }
+        )
 
 
-def confirm_email(token):
+def confirm_email(current_user: dict, token: str):
     try:
-        pass
-    except:
-        pass
+        if current_user.get("verified", False):
+            return jsonify(
+                {
+                    "message": "Email already verified",
+                    "data": None,
+                    "error": None,
+                    "success": True,
+                }
+            )
+
+        email = confirm_token(token)
+        user = get_user_by_email(current_user.get("email"))
+
+        if user and user.email == email:
+            user.verified = True
+            db.session.add(user)
+            db.session.commit()
+            return jsonify(
+                {
+                    "message": "Email verified",
+                    "data": None,
+                    "error": None,
+                    "success": True,
+                }
+            )
+        else:
+            return jsonify(
+                {
+                    "message": "Invalid token",
+                    "data": None,
+                    "error": "Unauthorized",
+                    "success": False,
+                    "status": 401,
+                }
+            )
+    except Exception as e:
+        return jsonify(
+            {
+                "message": "Something went wrong",
+                "data": None,
+                "error": str(e),
+                "success": False,
+                "status": 500,
+            }
+        )
 
 
 def update_user(user_id: str):
@@ -73,7 +118,15 @@ def update_user(user_id: str):
         return jsonify(user.serialize())
 
     except Exception as e:
-        abort(500, str(e))
+        return jsonify(
+            {
+                "message": "Something went wrong",
+                "data": None,
+                "error": str(e),
+                "success": False,
+                "status": 500,
+            }
+        )
 
 
 def update_user_usage(usage_id):
@@ -89,4 +142,12 @@ def update_user_usage(usage_id):
         db.session.commit()
         return jsonify(usage.serialize())
     except Exception as e:
-        abort(500, str(e))
+        return jsonify(
+            {
+                "message": "Something went wrong",
+                "data": None,
+                "error": str(e),
+                "success": False,
+                "status": 500,
+            }
+        )

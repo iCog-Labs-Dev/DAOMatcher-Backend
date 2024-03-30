@@ -1,14 +1,9 @@
 import os
 import bcrypt
-from flask import request, jsonify, session
-from flask_login import (
-    login_user,
-    logout_user,
-)
+from flask import request
 import jwt
 
 from src.controllers.user import get_user_by_email
-from src.globals import User
 from decouple import config
 
 
@@ -67,11 +62,6 @@ def login():
             "data": None,
             "success": False,
         }, 500
-
-
-def logout():
-    logout_user()
-    return jsonify({"message": "Logged out successfully", "success": True})
 
 
 def validate_credentials(email: str, password: str):

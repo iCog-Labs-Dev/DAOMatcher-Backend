@@ -19,8 +19,6 @@ class User(db.Model):
     email: Mapped[str] = mapped_column(String(length=100), unique=True)
     verified: Mapped[bool] = mapped_column(Boolean, default=False)
     display_name: Mapped[str] = mapped_column(String(length=50), unique=True)
-    verification_token: Mapped[str] = mapped_column(String(length=50), nullable=True)
-    password_reset_token: Mapped[str] = mapped_column(String(length=50), nullable=True)
     password: Mapped[str] = mapped_column(String(length=100))
     password_salt: Mapped[str] = mapped_column(String(length=100))
     api_key: Mapped[str] = mapped_column(String(length=50), nullable=True)
@@ -42,6 +40,7 @@ class User(db.Model):
             "id": self.id,
             "email": self.email,
             "display_name": self.display_name,
+            "verified": self.verified,
             "setting": self.user_setting.serialize() if self.user_setting else None,
             "usage": self.user_usage.serialize() if self.user_usage else None,
             "api_key": self.api_key if self.api_key else None,

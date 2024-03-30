@@ -1,8 +1,8 @@
 from functools import wraps
 import jwt
-from flask import request, abort
+from flask import request
 from flask import current_app
-import models
+from src.controllers.user import get_user_by_id
 
 
 def token_required(f):
@@ -22,15 +22,13 @@ def token_required(f):
             data = jwt.decode(
                 token, current_app.config["SECRET_KEY"], algorithms=["HS256"]
             )
-            current_user = models.User().get_by_id(data["user_id"])
-            if current_user is None:
+            current_user = get_user_by_id(data.get("user_id"))
+            if not current_user:
                 return {
                     "message": "Invalid Authentication token!",
                     "data": None,
                     "error": "Unauthorized",
                 }, 401
-            if not current_user["active"]:
-                abort(403)
         except Exception as e:
             return {
                 "message": "Something went wrong",
