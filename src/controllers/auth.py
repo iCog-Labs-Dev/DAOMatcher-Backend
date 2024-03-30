@@ -1,10 +1,13 @@
 import os
 import bcrypt
-from flask import request
+from flask import jsonify, request
 import jwt
 
 from src.controllers.user import get_user_by_email
+from src.extensions import db
 from decouple import config
+
+from src.utils.token import confirm_token
 
 
 def login():
@@ -19,6 +22,7 @@ def login():
 
         is_validated, user = False, None
         error = None
+
         try:
             is_validated, user = validate_credentials(
                 data.get("email"), data.get("password")
@@ -31,6 +35,7 @@ def login():
                 dict(message="Invalid credentials", data=None, error=error),
                 401,
             )
+
         if user:
             try:
                 token = jwt.encode(
@@ -82,3 +87,52 @@ def validate_credentials(email: str, password: str):
     valid_credential = hashed_password_with_salt == hashed_password.encode("utf-8")
 
     return valid_credential, user
+
+
+def confirm_email(current_user: dict, token: str):
+    try:
+        if current_user.get("verified", False):
+            return jsonify(
+                {
+                    "message": "Email already verified",
+                    "data": None,
+                    "error": None,
+                    "success": True,
+                }
+            )
+
+        email = confirm_token(token)
+        user = get_user_by_email(current_user.get("email"))
+
+        if user and user.email == email:
+            user.verified = True
+            db.session.add(user)
+            db.session.commit()
+            return jsonify(
+                {
+                    "message": "Email verified",
+                    "data": None,
+                    "error": None,
+                    "success": True,
+                }
+            )
+        else:
+            return jsonify(
+                {
+                    "message": "Invalid token",
+                    "data": None,
+                    "error": "Unauthorized",
+                    "success": False,
+                    "status": 401,
+                }
+            )
+    except Exception as e:
+        return jsonify(
+            {
+                "message": "Something went wrong",
+                "data": None,
+                "error": str(e),
+                "success": False,
+                "status": 500,
+            }
+        )

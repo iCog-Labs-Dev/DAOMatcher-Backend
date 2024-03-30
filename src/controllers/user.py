@@ -55,55 +55,6 @@ def add_user():
         )
 
 
-def confirm_email(current_user: dict, token: str):
-    try:
-        if current_user.get("verified", False):
-            return jsonify(
-                {
-                    "message": "Email already verified",
-                    "data": None,
-                    "error": None,
-                    "success": True,
-                }
-            )
-
-        email = confirm_token(token)
-        user = get_user_by_email(current_user.get("email"))
-
-        if user and user.email == email:
-            user.verified = True
-            db.session.add(user)
-            db.session.commit()
-            return jsonify(
-                {
-                    "message": "Email verified",
-                    "data": None,
-                    "error": None,
-                    "success": True,
-                }
-            )
-        else:
-            return jsonify(
-                {
-                    "message": "Invalid token",
-                    "data": None,
-                    "error": "Unauthorized",
-                    "success": False,
-                    "status": 401,
-                }
-            )
-    except Exception as e:
-        return jsonify(
-            {
-                "message": "Something went wrong",
-                "data": None,
-                "error": str(e),
-                "success": False,
-                "status": 500,
-            }
-        )
-
-
 def update_user(user_id: str):
     try:
         updatedUser = request.json

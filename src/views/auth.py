@@ -1,11 +1,8 @@
 from flask import Blueprint, url_for
-from src.controllers.user import get_user_by_email
-from src.globals import User
-from src.controllers.auth import login
+from src.controllers.auth import login, confirm_email
 from src.utils.email import send_email
 from src.utils.middlewares import token_required
-from src.utils.token import confirm_token, generate_token
-from src.extensions import db
+from src.utils.token import generate_token
 
 auth = Blueprint("auth", __name__)
 
@@ -17,18 +14,8 @@ def handle_login():
 
 @auth.route("/confirm/<token>", methods=["GET"])
 @token_required
-def confirm_email(current_user: dict, token: str):
-    if current_user.is_confirmed:
-        return {"message": "Email already verified", "data": None, "error": None}, 200
-    email = confirm_token(token)
-    user = get_user_by_email(current_user.get("email"))
-    if user and user.email == email:
-        user.verified = True
-        db.session.add(user)
-        db.session.commit()
-        return {"message": "Email verified", "data": None, "error": None}, 200
-    else:
-        return {"message": "Invalid token", "data": None, "error": None}, 401
+def confirm(current_user: dict, token: str):
+    confirm_email(current_user, token)
 
 
 @auth.route("/confirm/resend", methods=["GET"])
