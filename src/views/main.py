@@ -2,7 +2,7 @@ from flask_login import login_required
 from flask import Blueprint, jsonify
 
 from src.controllers.main import scoring_user
-from src.utils.middlewares import token_required
+from src.utils.decorators import token_required
 
 main = Blueprint("main", __name__)
 
@@ -15,4 +15,5 @@ def wake_handler():
 @main.route("/api/search", methods=["POST", "HEAD", "GET"])
 @token_required
 def handle_get_users(current_user: dict):
-    return scoring_user()
+    user_id = current_user.get("id")
+    return scoring_user(user_id)
