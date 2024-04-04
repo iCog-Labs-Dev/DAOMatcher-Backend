@@ -1,3 +1,4 @@
+from MySQLdb._exceptions import IntegrityError
 import bcrypt
 from flask import request, jsonify
 
@@ -69,11 +70,11 @@ def add_user():
             }
         )
     except Exception as e:
-        print(e)
+        error_message = "Something went wrong"
         return (
             jsonify(
                 {
-                    "message": "Something went wrong",
+                    "message": error_message,
                     "data": None,
                     "error": str(e),
                     "success": False,
@@ -97,7 +98,7 @@ def update_user(user_id: str):
 
         return jsonify(
             {
-                "message": "User added Successfully",
+                "message": "User updated Successfully",
                 "data": user.serialize(),
                 "error": None,
                 "success": False,

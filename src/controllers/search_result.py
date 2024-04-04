@@ -124,9 +124,10 @@ def delete_search_result(result_id):
 def get_search_results(user_id):
     try:
         search_results: list[SearchResult] = db.get_or_404(
-            db.select(SearchResult).filter_by(user_id=user_id),
+            User,
+            user_id,
             description="No search results  found",
-        )
+        ).search_result
 
         return (
             jsonify(
