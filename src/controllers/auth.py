@@ -9,9 +9,9 @@ from src.extensions import db
 from src.utils.token import confirm_token, generate_and_send
 
 
-def login():
+def login(body: dict = None):
     try:
-        data = request.json
+        data = request.json if not body else body
         if not data:
             return (
                 jsonify(
@@ -49,18 +49,17 @@ def login():
             )
 
         if user:
-            user = get_user_by_email(user.get("email")).json.get("data")
 
             try:
                 token = jwt.encode(
-                    {"user_id": user["id"]},
+                    {"user_id": user.id},
                     config("SECRET_KEY"),
                     algorithm="HS256",
                 )
                 return jsonify(
                     {
                         "message": "Login successful",
-                        "data": {"user": user, "token": token},
+                        "data": {"user": user.serialize(), "token": token},
                         "error": None,
                         "success": True,
                     }
@@ -106,12 +105,12 @@ def validate_credentials(email: str, password: str):
     if not email or not password:
         raise Exception("Invalid email or password")
 
-    user = get_user_by_email(email, login=True).json.get("data")
+    user = get_user_by_email(email)
     if not user:
         raise Exception("User not found")
 
-    hashed_password = user.get("password")
-    salt = user.get("salt")
+    hashed_password = user.password
+    salt = user.password_salt
 
     hashed_password_with_salt = bcrypt.hashpw(
         password.encode("utf-8"), salt.encode("utf-8")

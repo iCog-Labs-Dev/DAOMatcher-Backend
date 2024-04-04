@@ -23,7 +23,7 @@ def token_required(f):
             data = jwt.decode(
                 token, current_app.config["SECRET_KEY"], algorithms=["HS256"]
             )
-            current_user = get_user_by_id(data.get("user_id"))
+            current_user = get_user_by_id(data.get("user_id")).json.get("data")
             if not current_user:
                 return {
                     "message": "Invalid Authentication token!",

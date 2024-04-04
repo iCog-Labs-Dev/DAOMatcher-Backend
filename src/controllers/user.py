@@ -22,19 +22,11 @@ def get_user_by_id(user_id: str):
     )
 
 
-def get_user_by_email(email: str, login: bool = False):
+def get_user_by_email(email: str):
     user: User = db.one_or_404(
         db.select(User).filter_by(email=email), description="User not found"
     )
-    return jsonify(
-        {
-            "message": "User Found",
-            "data": user.serialize() if not login else user.login_serialize(),
-            "error": None,
-            "success": False,
-            "success": True,
-        }
-    )
+    return user
 
 
 def add_user():
@@ -60,14 +52,17 @@ def add_user():
 
         generate_and_send(user.email)
 
-        return jsonify(
-            {
-                "message": "User added Successfully",
-                "data": user.serialize(),
-                "error": None,
-                "success": False,
-                "success": True,
-            }
+        return (
+            jsonify(
+                {
+                    "message": "User added Successfully",
+                    "data": user.serialize(),
+                    "token": "",
+                    "error": None,
+                    "success": True,
+                }
+            ),
+            201,
         )
     except Exception as e:
         error_message = "Something went wrong"

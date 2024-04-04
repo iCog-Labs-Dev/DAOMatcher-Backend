@@ -1,6 +1,8 @@
 from flask import Blueprint, jsonify
 
+from src.controllers.auth import login
 from src.controllers.user import (
+    get_user_by_email,
     request,
     get_user_by_id,
     update_user,
@@ -25,8 +27,13 @@ def get(user_id):
 
 @user.route(f"{base_url}", methods=["POST"])
 def create():
-    response = add_user()
-    return response
+    response, status = add_user()
+
+    if status == 201:
+        email = response.json.get("data").get("email")
+        response = login({"email": email, "password": request.json.get("password")})
+        return response
+    return response, status
 
 
 @user.route(f"{base_url}/<string:user_id>/usage/<string:usage_id>", methods=["PUT"])
