@@ -16,20 +16,20 @@ base_url = "/api/user"
 def get(user_id):
 
     if request.method == "GET":
-        user = get_user_by_id(user_id)
-        return user
+        response = get_user_by_id(user_id)
+        return response, response.get("status")
     elif request.method == "PUT":
-        user = update_user(user_id)
-        return user
+        response = update_user(user_id)
+        return response, response.get("status")
 
 
 @user.route(f"{base_url}", methods=["POST"])
 def create():
-    user = add_user()
-    return user
+    response = add_user()
+    return response, response.get("status")
 
 
 @user.route(f"{base_url}/<string:user_id>/usage/<string:usage_id>", methods=["PUT"])
 def update_usage(user_id, usage_id):
-    updated_usage = update_user_usage(usage_id)
-    return updated_usage
+    response = update_user_usage(usage_id)
+    return response, response.get("status")

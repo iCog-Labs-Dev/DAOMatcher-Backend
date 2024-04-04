@@ -37,7 +37,7 @@ def login():
                 {
                     "message": "Invalid credentials",
                     "data": None,
-                    "error": "Bad request",
+                    "error": error,
                     "status": 401,
                 }
             )
