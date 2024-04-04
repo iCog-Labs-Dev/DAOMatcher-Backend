@@ -30,32 +30,111 @@ def add_search_result(user_id):
 
         db.session.add(search_result)
         db.session.commit()
+
+        return jsonify(
+            {
+                "message": "Search result added Successfully",
+                "data": search_result.serialize(),
+                "error": None,
+                "success": False,
+                "status": 201,
+            }
+        )
     except Exception as e:
-        abort(500, str(e))
+        return jsonify(
+            {
+                "message": "Something went wrong",
+                "data": None,
+                "error": str(e),
+                "success": False,
+                "status": 500,
+            }
+        )
 
 
 def get_search_result(result_id):
-    search_result: SearchResult = db.one_or_404(
-        db.select(SearchResult).filter_by(id=result_id),
-        description="Search result not found",
-    )
+    try:
+        search_result: SearchResult = db.one_or_404(
+            db.select(SearchResult).filter_by(id=result_id),
+            description="Search result not found",
+        )
 
-    return jsonify(search_result.serialize())
+        return jsonify(
+            {
+                "message": "Search result Found",
+                "data": search_result.serialize(),
+                "error": None,
+                "success": False,
+                "status": 200,
+            }
+        )
+    except Exception as e:
+        return jsonify(
+            {
+                "message": "Something went wrong",
+                "data": None,
+                "error": str(e),
+                "success": False,
+                "status": 500,
+            }
+        )
 
 
 def delete_search_result(result_id):
-    search_result: SearchResult = db.one_or_404(
-        db.select(User).filter_by(id=result_id), description="Search result not found"
-    )
+    try:
+        search_result: SearchResult = db.one_or_404(
+            db.select(User).filter_by(id=result_id),
+            description="Search result not found",
+        )
 
-    db.session.delete(search_result)
-    db.session.commit()
-    return jsonify(message="Search result deleted")
+        db.session.delete(search_result)
+        db.session.commit()
+
+        return jsonify(
+            {
+                "message": "Search result deleted",
+                "data": None,
+                "error": None,
+                "success": False,
+                "status": 201,
+            }
+        )
+    except Exception as e:
+        return jsonify(
+            {
+                "message": "Something went wrong",
+                "data": None,
+                "error": str(e),
+                "success": False,
+                "status": 500,
+            }
+        )
 
 
 def get_search_results(user_id):
-    search_results: list[SearchResult] = db.get_or_404(
-        db.select(SearchResult).filter_by(user_id=user_id),
-        description="No search results  found",
-    )
-    return jsonify([result.serialize() for result in search_results])
+    try:
+        search_results: list[SearchResult] = db.get_or_404(
+            db.select(SearchResult).filter_by(user_id=user_id),
+            description="No search results  found",
+        )
+
+        return jsonify(
+            {
+                "message": "Search result deleted",
+                "data": [result.serialize() for result in search_results],
+                "error": None,
+                "success": False,
+                "status": 201,
+            }
+        )
+
+    except Exception as e:
+        return jsonify(
+            {
+                "message": "Something went wrong",
+                "data": None,
+                "error": str(e),
+                "success": False,
+                "status": 500,
+            }
+        )

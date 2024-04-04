@@ -10,14 +10,30 @@ def get_user_by_id(user_id: str):
     user: User = db.one_or_404(
         db.select(User).filter_by(id=user_id), description="User not found"
     )
-    return jsonify(user.serialize())
+    return jsonify(
+        {
+            "message": "User Found",
+            "data": user.serialize(),
+            "error": None,
+            "success": False,
+            "status": 200,
+        }
+    )
 
 
 def get_user_by_email(email: str):
     user: User = db.one_or_404(
         db.select(User).filter_by(email=email), description="User not found"
     )
-    return user
+    return jsonify(
+        {
+            "message": "User Found",
+            "data": user.serialize(),
+            "error": None,
+            "success": False,
+            "status": 200,
+        }
+    )
 
 
 def add_user():
@@ -42,7 +58,16 @@ def add_user():
         db.session.commit()
 
         generate_and_send(user.email)
-        return jsonify(user.serialize())
+
+        return jsonify(
+            {
+                "message": "User added Successfully",
+                "data": user.serialize(),
+                "error": None,
+                "success": False,
+                "status": 200,
+            }
+        )
     except Exception as e:
         print(e)
         return jsonify(
@@ -67,7 +92,16 @@ def update_user(user_id: str):
         user.api_key = updatedUser.get("api_key", user.api_key)
 
         db.session.commit()
-        return jsonify(user.serialize())
+
+        return jsonify(
+            {
+                "message": "User added Successfully",
+                "data": user.serialize(),
+                "error": None,
+                "success": False,
+                "status": 200,
+            }
+        )
 
     except Exception as e:
         return jsonify(
@@ -92,7 +126,16 @@ def update_user_usage(usage_id):
         usage.search_count = updatedUsage.get("search_count")
 
         db.session.commit()
-        return jsonify(usage.serialize())
+
+        return jsonify(
+            {
+                "message": "Usage updated Successfully",
+                "data": usage.serialize(),
+                "error": None,
+                "success": False,
+                "status": 200,
+            }
+        )
     except Exception as e:
         return jsonify(
             {

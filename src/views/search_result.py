@@ -3,7 +3,7 @@ from flask import Blueprint
 from src.controllers.search_result import *
 
 search = Blueprint("search-result", __name__)
-base_url = "api/user/<string:user_id>/search-result"
+base_url = "/api/user/<string:user_id>/search-result"
 
 
 @search.route(f"{base_url}", methods=["GET", "POST"])

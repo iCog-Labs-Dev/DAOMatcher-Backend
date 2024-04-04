@@ -26,7 +26,7 @@ def get(user_id):
 @user.route(f"{base_url}", methods=["POST"])
 def create():
     user = add_user()
-    return jsonify({"user": user})
+    return user
 
 
 @user.route(f"{base_url}/<string:user_id>/usage/<string:usage_id>", methods=["PUT"])
