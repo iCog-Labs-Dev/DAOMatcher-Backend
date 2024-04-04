@@ -1,4 +1,6 @@
 from flask import request, jsonify, abort
+from requests import HTTPError
+from werkzeug.exceptions import NotFound
 
 from src.extensions import db
 from src.models import User, SearchResult
@@ -140,7 +142,6 @@ def get_search_results(user_id):
             ),
             201,
         )
-
     except Exception as e:
         return (
             jsonify(
