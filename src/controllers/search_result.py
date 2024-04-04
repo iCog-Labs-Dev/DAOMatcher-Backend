@@ -31,24 +31,28 @@ def add_search_result(user_id):
         db.session.add(search_result)
         db.session.commit()
 
-        return jsonify(
-            {
-                "message": "Search result added Successfully",
-                "data": search_result.serialize(),
-                "error": None,
-                "success": False,
-                "status": 201,
-            }
+        return (
+            jsonify(
+                {
+                    "message": "Search result added Successfully",
+                    "data": search_result.serialize(),
+                    "error": None,
+                    "success": True,
+                }
+            ),
+            201,
         )
     except Exception as e:
-        return jsonify(
-            {
-                "message": "Something went wrong",
-                "data": None,
-                "error": str(e),
-                "success": False,
-                "status": 500,
-            }
+        return (
+            jsonify(
+                {
+                    "message": "Something went wrong",
+                    "data": None,
+                    "error": str(e),
+                    "success": False,
+                }
+            ),
+            500,
         )
 
 
@@ -65,18 +69,20 @@ def get_search_result(result_id):
                 "data": search_result.serialize(),
                 "error": None,
                 "success": False,
-                "status": 200,
+                "success": True,
             }
         )
     except Exception as e:
-        return jsonify(
-            {
-                "message": "Something went wrong",
-                "data": None,
-                "error": str(e),
-                "success": False,
-                "status": 500,
-            }
+        return (
+            jsonify(
+                {
+                    "message": "Something went wrong",
+                    "data": None,
+                    "error": str(e),
+                    "success": False,
+                }
+            ),
+            500,
         )
 
 
@@ -90,24 +96,28 @@ def delete_search_result(result_id):
         db.session.delete(search_result)
         db.session.commit()
 
-        return jsonify(
-            {
-                "message": "Search result deleted",
-                "data": None,
-                "error": None,
-                "success": False,
-                "status": 201,
-            }
+        return (
+            jsonify(
+                {
+                    "message": "Search result deleted",
+                    "data": None,
+                    "error": None,
+                    "success": True,
+                }
+            ),
+            201,
         )
     except Exception as e:
-        return jsonify(
-            {
-                "message": "Something went wrong",
-                "data": None,
-                "error": str(e),
-                "success": False,
-                "status": 500,
-            }
+        return (
+            jsonify(
+                {
+                    "message": "Something went wrong",
+                    "data": None,
+                    "error": str(e),
+                    "success": False,
+                }
+            ),
+            500,
         )
 
 
@@ -118,23 +128,27 @@ def get_search_results(user_id):
             description="No search results  found",
         )
 
-        return jsonify(
-            {
-                "message": "Search result deleted",
-                "data": [result.serialize() for result in search_results],
-                "error": None,
-                "success": False,
-                "status": 201,
-            }
+        return (
+            jsonify(
+                {
+                    "message": "Search result deleted",
+                    "data": [result.serialize() for result in search_results],
+                    "error": None,
+                    "success": True,
+                }
+            ),
+            201,
         )
 
     except Exception as e:
-        return jsonify(
-            {
-                "message": "Something went wrong",
-                "data": None,
-                "error": str(e),
-                "success": False,
-                "status": 500,
-            }
+        return (
+            jsonify(
+                {
+                    "message": "Something went wrong",
+                    "data": None,
+                    "error": str(e),
+                    "success": False,
+                },
+            ),
+            500,
         )

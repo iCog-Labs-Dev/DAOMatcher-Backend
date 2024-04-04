@@ -13,13 +13,16 @@ def login():
     try:
         data = request.json
         if not data:
-            return jsonify(
-                {
-                    "message": "Please provide user details",
-                    "data": None,
-                    "error": "Bad request",
-                    "status": 400,
-                }
+            return (
+                jsonify(
+                    {
+                        "message": "Please provide user details",
+                        "data": None,
+                        "error": "Bad request",
+                        "success": False,
+                    }
+                ),
+                400,
             )
 
         is_validated, user = False, None
@@ -33,13 +36,16 @@ def login():
             error = str(e)
 
         if not is_validated:
-            return jsonify(
-                {
-                    "message": "Invalid credentials",
-                    "data": None,
-                    "error": error,
-                    "status": 401,
-                }
+            return (
+                jsonify(
+                    {
+                        "message": "Invalid credentials",
+                        "data": None,
+                        "error": error,
+                        "success": False,
+                    }
+                ),
+                401,
             )
 
         if user:
@@ -54,34 +60,43 @@ def login():
                         "message": "Login successful",
                         "data": {"user": user, "token": token},
                         "error": None,
-                        "status": 200,
+                        "success": True,
                     }
                 )
             except Exception as e:
-                return jsonify(
-                    {
-                        "message": "Something went wrong",
-                        "data": None,
-                        "error": str(e),
-                        "status": 500,
-                    }
+                return (
+                    jsonify(
+                        {
+                            "message": "Something went wrong",
+                            "data": None,
+                            "error": str(e),
+                            "success": False,
+                        }
+                    ),
+                    500,
                 )
-        return jsonify(
-            {
-                "message": "Unauthorized",
-                "data": None,
-                "error": "Error fetching auth token!, invalid email or password",
-                "status": 401,
-            }
+        return (
+            jsonify(
+                {
+                    "message": "Unauthorized",
+                    "data": None,
+                    "error": "Error fetching auth token!, invalid email or password",
+                    "success": False,
+                }
+            ),
+            401,
         )
     except Exception as e:
-        return jsonify(
-            {
-                "message": "Something went wrong!",
-                "error": str(e),
-                "data": None,
-                "status": 500,
-            }
+        return (
+            jsonify(
+                {
+                    "message": "Something went wrong!",
+                    "error": str(e),
+                    "data": None,
+                    "success": False,
+                }
+            ),
+            500,
         )
 
 
@@ -108,13 +123,16 @@ def validate_credentials(email: str, password: str):
 def confirm_email(current_user: dict, token: str):
     try:
         if current_user.get("verified", False):
-            return jsonify(
-                {
-                    "message": "Email already verified",
-                    "data": None,
-                    "error": None,
-                    "status": 400,
-                }
+            return (
+                jsonify(
+                    {
+                        "message": "Email already verified",
+                        "data": None,
+                        "error": None,
+                        "success": False,
+                    }
+                ),
+                400,
             )
 
         email = confirm_token(token)
@@ -129,38 +147,47 @@ def confirm_email(current_user: dict, token: str):
                     "message": "Email verified",
                     "data": None,
                     "error": None,
-                    "status": 200,
+                    "success": True,
                 }
             )
         else:
-            return jsonify(
-                {
-                    "message": "Invalid token",
-                    "data": None,
-                    "error": "Unauthorized",
-                    "status": 401,
-                }
+            return (
+                jsonify(
+                    {
+                        "message": "Invalid token",
+                        "data": None,
+                        "error": "Unauthorized",
+                        "success": False,
+                    }
+                ),
+                401,
             )
     except Exception as e:
-        return jsonify(
-            {
-                "message": "Something went wrong",
-                "data": None,
-                "error": str(e),
-                "status": 500,
-            }
+        return (
+            jsonify(
+                {
+                    "message": "Something went wrong",
+                    "data": None,
+                    "error": str(e),
+                    "success": False,
+                }
+            ),
+            500,
         )
 
 
 def resend_token(current_user: dict):
     if current_user.get("verified", False):
-        return jsonify(
-            {
-                "message": "Email already verified",
-                "data": None,
-                "error": None,
-                "status": 400,
-            }
+        return (
+            jsonify(
+                {
+                    "message": "Email already verified",
+                    "data": None,
+                    "error": None,
+                    "success": False,
+                }
+            ),
+            400,
         )
 
     generate_and_send(current_user.get("email"))
@@ -169,6 +196,6 @@ def resend_token(current_user: dict):
             "message": "Confirmation email sent",
             "data": None,
             "error": None,
-            "status": 200,
+            "success": True,
         }
     )

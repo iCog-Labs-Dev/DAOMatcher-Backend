@@ -16,7 +16,7 @@ def get_user_by_id(user_id: str):
             "data": user.serialize(),
             "error": None,
             "success": False,
-            "status": 200,
+            "success": True,
         }
     )
 
@@ -31,7 +31,7 @@ def get_user_by_email(email: str):
             "data": user.serialize(),
             "error": None,
             "success": False,
-            "status": 200,
+            "success": True,
         }
     )
 
@@ -65,19 +65,21 @@ def add_user():
                 "data": user.serialize(),
                 "error": None,
                 "success": False,
-                "status": 200,
+                "success": True,
             }
         )
     except Exception as e:
         print(e)
-        return jsonify(
-            {
-                "message": "Something went wrong",
-                "data": None,
-                "error": str(e),
-                "success": False,
-                "status": 500,
-            }
+        return (
+            jsonify(
+                {
+                    "message": "Something went wrong",
+                    "data": None,
+                    "error": str(e),
+                    "success": False,
+                }
+            ),
+            500,
         )
 
 
@@ -99,19 +101,21 @@ def update_user(user_id: str):
                 "data": user.serialize(),
                 "error": None,
                 "success": False,
-                "status": 200,
+                "success": True,
             }
         )
 
     except Exception as e:
-        return jsonify(
-            {
-                "message": "Something went wrong",
-                "data": None,
-                "error": str(e),
-                "success": False,
-                "status": 500,
-            }
+        return (
+            jsonify(
+                {
+                    "message": "Something went wrong",
+                    "data": None,
+                    "error": str(e),
+                    "success": False,
+                }
+            ),
+            500,
         )
 
 
@@ -133,16 +137,18 @@ def update_user_usage(usage_id):
                 "data": usage.serialize(),
                 "error": None,
                 "success": False,
-                "status": 200,
+                "success": True,
             }
         )
     except Exception as e:
-        return jsonify(
-            {
-                "message": "Something went wrong",
-                "data": None,
-                "error": str(e),
-                "success": False,
-                "status": 500,
-            }
+        return (
+            jsonify(
+                {
+                    "message": "Something went wrong",
+                    "data": None,
+                    "error": str(e),
+                    "success": False,
+                }
+            ),
+            500,
         )
