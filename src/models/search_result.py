@@ -44,14 +44,14 @@ class SearchResult(db.Model):
             "id": self.id,
             "time_stamp": self.time_stamp,
             "description": self.description,
-            "usernames": self.usernames.serialize(),
+            "usernames": [item.serialize() for item in self.username],
         }
 
     def __get_usernames_by_type(self, username_type: UsernameType):
         return [
             username.serialize()
             for username in self.usernames
-            if username.type == username_type
+            if username.type == username_type.value
         ]
 
     def get_seed_usernames(self):
@@ -65,10 +65,8 @@ class Username(db.Model):
     id = mapped_column(
         String(length=50), primary_key=True, default=lambda: uuid.uuid4().hex
     )
-    username: Mapped[str] = mapped_column(
-        String(length=100), nullable=False, unique=True
-    )
-    type: Mapped[str] = mapped_column(String(length=10), nullable=False)
+    username: Mapped[str] = mapped_column(String(length=100), nullable=False)
+    type: Mapped[str] = mapped_column(String(length=20), nullable=False)
 
     search_result: Mapped[List["SearchResult"]] = relationship(
         secondary=search_usernames, back_populates="username"

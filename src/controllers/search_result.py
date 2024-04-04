@@ -12,13 +12,13 @@ def add_search_result(user_id):
 
         found_usernames_str: list[str] = data.get("found_usernames")
         found_usernames: list[Username] = [
-            Username(username=username, type=UsernameType.FOUND)
+            Username(username=username, type=UsernameType.FOUND.value)
             for username in found_usernames_str
         ]
 
         seed_usernames_str = data.get("seed_usernames")
         seed_usernames: list[Username] = [
-            Username(username=username, type=UsernameType.SEED)
+            Username(username=username, type=UsernameType.SEED.value)
             for username in seed_usernames_str
         ]
 
