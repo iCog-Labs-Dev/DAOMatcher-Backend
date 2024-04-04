@@ -2,6 +2,7 @@ import requests
 
 from flask import request
 
+from src.controllers.search_result import add_search_result
 from src.extensions import socketio
 from src.globals import USERS, Sessions
 from src.utils.serverLogic.ScoreUsers import ScoreUsers
@@ -73,6 +74,8 @@ def get_users(user_id: str, data):
             data = {"result": users}
             if current_user:
                 emitData(socketio, "get_users", data, room=current_user)
+                search_result = {"found_usernames": users, "seed_usernames": user_list}
+                add_search_result(user_id, search_result)
                 return
             else:
                 print(f"\033[91mNo session found: {result}\033[0m")

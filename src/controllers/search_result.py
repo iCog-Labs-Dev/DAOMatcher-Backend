@@ -9,9 +9,9 @@ from sqlalchemy import desc
 from src.models.search_result import Username, UsernameType
 
 
-def add_search_result(user_id):
+def add_search_result(user_id: str, data: dict = None):
     try:
-        data = request.json
+        data = request.json if not data else data
 
         found_usernames_str: list[str] = data.get("found_usernames")
         found_usernames: list[Username] = [
