@@ -3,11 +3,13 @@ from flask import request
 from src.extensions import socketio
 from src.globals import USERS, Sessions
 from src.controllers.socket import connect, get_users
+from src.utils.middlewares import token_required
 from src.utils.utils import emitData
 
 
 @socketio.on("connect")
-def handle_connect():
+@token_required
+def handle_connect(current_user: dict):
     connect()
 
 
@@ -19,7 +21,8 @@ def handle_cancel(userId):
 
 
 @socketio.on("search")
-def handle_get_users(data):
+@token_required
+def handle_get_users(current_user: dict, data):
     get_users(data)
 
 

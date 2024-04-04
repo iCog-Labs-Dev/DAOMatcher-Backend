@@ -9,7 +9,7 @@ base_url = "/api/user/<string:user_id>/search-result"
 
 @search.route(f"{base_url}", methods=["GET", "POST"])
 @token_required
-def search_results(user_id):
+def search_results(current_user: dict, user_id: str):
     page = request.args.get("page")
     size = request.args.get("size")
 
@@ -25,7 +25,8 @@ def search_results(user_id):
 
 
 @search.route(f"{base_url}/<string:id>", methods=["GET", "DELETE"])
-def search_result(user_id, id):
+@token_required
+def search_result(current_user: dict, user_id: str, id: str):
     if request.method == "GET":
         response = get_search_result(id)
         return response
