@@ -8,8 +8,14 @@ base_url = "/api/user/<string:user_id>/search-result"
 
 @search.route(f"{base_url}", methods=["GET", "POST"])
 def search_results(user_id):
+    page = request.args.get("page")
+    size = request.args.get("size")
+
+    page = int(page) if page else 1
+    size = int(size) if size else 10
+
     if request.method == "GET":
-        response = get_search_results(user_id)
+        response = get_search_results(user_id, page, size)
         return response
     elif request.method == "POST":
         response = add_search_result(user_id)

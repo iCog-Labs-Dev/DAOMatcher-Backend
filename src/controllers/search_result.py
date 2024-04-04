@@ -4,6 +4,7 @@ from werkzeug.exceptions import NotFound
 
 from src.extensions import db
 from src.models import User, SearchResult
+from sqlalchemy import desc
 
 from src.models.search_result import Username, UsernameType
 
@@ -123,13 +124,18 @@ def delete_search_result(result_id):
         )
 
 
-def get_search_results(user_id):
+def get_search_results(user_id, page=1, size=10):
+    start = (page - 1) * size
+    end = start + size
+
     try:
-        search_results: list[SearchResult] = db.get_or_404(
-            User,
-            user_id,
-            description="No search results  found",
-        ).search_result
+        search_results: list[SearchResult] = (
+            db.session.query(SearchResult)
+            .filter_by(user_id=user_id)
+            .order_by(desc(SearchResult.time_stamp))
+            .slice(start, end)
+            .all()
+        )
 
         return (
             jsonify(
