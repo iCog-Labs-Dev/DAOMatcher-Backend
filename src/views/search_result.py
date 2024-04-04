@@ -16,7 +16,7 @@ def search_results(user_id):
         return response
 
 
-@search.route(f"{base_url}/<string:id>", methods=["GET"])
+@search.route(f"{base_url}/<string:id>", methods=["GET", "DELETE"])
 def search_result(user_id, id):
     if request.method == "GET":
         response = get_search_result(id)

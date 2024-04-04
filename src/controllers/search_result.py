@@ -89,7 +89,7 @@ def get_search_result(result_id):
 def delete_search_result(result_id):
     try:
         search_result: SearchResult = db.one_or_404(
-            db.select(User).filter_by(id=result_id),
+            db.select(SearchResult).filter_by(id=result_id),
             description="Search result not found",
         )
 
