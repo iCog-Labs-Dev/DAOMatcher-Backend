@@ -18,7 +18,7 @@ def handle_cancel(userId):
     print(f"\033[94mRequest Canceled: {scoreUsers.cancel}\033[0m")
 
 
-@socketio.on("get_users")
+@socketio.on("search")
 def handle_get_users(data):
     get_users(data)
 

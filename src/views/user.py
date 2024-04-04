@@ -9,9 +9,10 @@ from src.controllers.user import (
 )
 
 user = Blueprint("user", __name__)
+base_url = "/api/user"
 
 
-@user.route("/user/<string:user_id>", methods=["GET", "PUT"])
+@user.route(f"{base_url}/<string:user_id>", methods=["GET", "PUT"])
 def get(user_id):
 
     if request.method == "GET":
@@ -22,13 +23,13 @@ def get(user_id):
         return user
 
 
-@user.route("/user", methods=["POST"])
+@user.route(f"{base_url}", methods=["POST"])
 def create():
     user = add_user()
     return jsonify({"user": user})
 
 
-@user.route("/user/<string:user_id>/usage/<string:usage_id>", methods=["PUT"])
+@user.route(f"{base_url}/<string:user_id>/usage/<string:usage_id>", methods=["PUT"])
 def update_usage(user_id, usage_id):
     updated_usage = update_user_usage(usage_id)
     return updated_usage

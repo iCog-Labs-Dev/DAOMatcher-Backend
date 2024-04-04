@@ -11,7 +11,7 @@ def wake_handler():
     return jsonify({"message": "Wake up successful"})
 
 
-@main.route("/get_users", methods=["POST", "HEAD", "GET"])
+@main.route("/api/search", methods=["POST", "HEAD", "GET"])
 @login_required
 def handle_get_users():
     return scoring_user()
