@@ -17,19 +17,19 @@ def get(user_id):
 
     if request.method == "GET":
         response = get_user_by_id(user_id)
-        return response, response.json.get("status")
+        return response
     elif request.method == "PUT":
         response = update_user(user_id)
-        return response, response.json.get("status")
+        return response
 
 
 @user.route(f"{base_url}", methods=["POST"])
 def create():
     response = add_user()
-    return response, response.json.get("status")
+    return response
 
 
 @user.route(f"{base_url}/<string:user_id>/usage/<string:usage_id>", methods=["PUT"])
 def update_usage(user_id, usage_id):
     response = update_user_usage(usage_id)
-    return response, response.json.get("status")
+    return response

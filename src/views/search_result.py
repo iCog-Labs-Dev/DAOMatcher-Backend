@@ -10,17 +10,17 @@ base_url = "/api/user/<string:user_id>/search-result"
 def search_results(user_id):
     if request.method == "GET":
         response = get_search_results(user_id)
-        return response, response.json.get("status")
+        return response
     elif request.method == "POST":
         response = add_search_result(user_id)
-        return response, response.json.get("status")
+        return response
 
 
 @search.route(f"{base_url}/<string:id>", methods=["GET"])
 def search_result(user_id, id):
     if request.method == "GET":
         response = get_search_result(id)
-        return response, response.json.get("status")
+        return response
     elif request.method == "DELETE":
         response = delete_search_result(id)
-        return response, response.json.get("status")
+        return response
