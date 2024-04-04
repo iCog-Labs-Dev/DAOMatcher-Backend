@@ -1,7 +1,7 @@
 from flask import Blueprint
 
 from src.controllers.search_result import *
-from src.utils.middlewares import token_required
+from src.utils.decorators import authorize, token_required
 
 search = Blueprint("search-result", __name__)
 base_url = "/api/user/<string:user_id>/search-result"
@@ -9,6 +9,7 @@ base_url = "/api/user/<string:user_id>/search-result"
 
 @search.route(f"{base_url}", methods=["GET", "POST"])
 @token_required
+@authorize
 def search_results(current_user: dict, user_id: str):
     page = request.args.get("page")
     size = request.args.get("size")
@@ -26,6 +27,7 @@ def search_results(current_user: dict, user_id: str):
 
 @search.route(f"{base_url}/<string:id>", methods=["GET", "DELETE"])
 @token_required
+@authorize
 def search_result(current_user: dict, user_id: str, id: str):
     if request.method == "GET":
         response = get_search_result(id)

@@ -8,7 +8,7 @@ from src.controllers.user import (
     add_user,
     update_user_usage,
 )
-from src.utils.middlewares import token_required
+from src.utils.decorators import authorize, token_required
 
 user = Blueprint("user", __name__)
 base_url = "/api/user"
@@ -16,6 +16,7 @@ base_url = "/api/user"
 
 @user.route(f"{base_url}/<string:user_id>", methods=["GET", "PUT"])
 @token_required
+@authorize
 def get(current_user: dict, user_id):
 
     if request.method == "GET":
@@ -28,6 +29,7 @@ def get(current_user: dict, user_id):
 
 @user.route(f"{base_url}", methods=["POST"])
 @token_required
+@authorize
 def create(current_user: dict):
     response, status = add_user()
 
@@ -40,6 +42,7 @@ def create(current_user: dict):
 
 @user.route(f"{base_url}/<string:user_id>/usage/<string:usage_id>", methods=["PUT"])
 @token_required
+@authorize
 def update_usage(current_user: dict, user_id: str, usage_id: str):
     response = update_user_usage(usage_id)
     return response
