@@ -30,7 +30,7 @@ class SearchResult(db.Model):
     id: Mapped[str] = mapped_column(
         String(length=50), primary_key=True, default=lambda: uuid.uuid4().hex
     )
-    time_stamp: Mapped[DateTime] = mapped_column(DateTime, default=datetime)
+    time_stamp: Mapped[DateTime] = mapped_column(DateTime, default=datetime.now())
     description: Mapped[str] = mapped_column(String(250))
     user_id: Mapped[str] = mapped_column(String(length=50), ForeignKey("user.id"))
 

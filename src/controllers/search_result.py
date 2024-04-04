@@ -24,8 +24,8 @@ def add_search_result(user_id):
 
         search_result = SearchResult()
         search_result.description = data.get("description")
-        search_result.usernames.extend(found_usernames)
-        search_result.usernames.extend(seed_usernames)
+        search_result.username.extend(found_usernames)
+        search_result.username.extend(seed_usernames)
         search_result.user_id = user_id
 
         db.session.add(search_result)
