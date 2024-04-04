@@ -22,14 +22,14 @@ def get_user_by_id(user_id: str):
     )
 
 
-def get_user_by_email(email: str):
+def get_user_by_email(email: str, login: bool = False):
     user: User = db.one_or_404(
         db.select(User).filter_by(email=email), description="User not found"
     )
     return jsonify(
         {
             "message": "User Found",
-            "data": user.serialize(),
+            "data": user.serialize() if not login else user.login_serialize(),
             "error": None,
             "success": False,
             "success": True,

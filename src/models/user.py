@@ -44,3 +44,16 @@ class User(db.Model):
             "usage": self.user_usage.serialize() if self.user_usage else None,
             "api_key": self.api_key if self.api_key else None,
         }
+
+    def login_serialize(self):
+        return {
+            "id": self.id,
+            "email": self.email,
+            "display_name": self.display_name,
+            "verified": self.verified,
+            "setting": self.user_setting.serialize() if self.user_setting else None,
+            "usage": self.user_usage.serialize() if self.user_usage else None,
+            "api_key": self.api_key if self.api_key else None,
+            "password": self.password,
+            "salt": self.password_salt,
+        }

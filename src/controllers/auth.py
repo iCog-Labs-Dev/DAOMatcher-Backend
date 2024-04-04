@@ -49,9 +49,11 @@ def login():
             )
 
         if user:
+            user = get_user_by_email(user.get("email")).json.get("data")
+
             try:
                 token = jwt.encode(
-                    {"user_id": user["_id"]},
+                    {"user_id": user["id"]},
                     config("SECRET_KEY"),
                     algorithm="HS256",
                 )
@@ -104,12 +106,12 @@ def validate_credentials(email: str, password: str):
     if not email or not password:
         raise Exception("Invalid email or password")
 
-    user = get_user_by_email(email)
+    user = get_user_by_email(email, login=True).json.get("data")
     if not user:
         raise Exception("User not found")
 
-    hashed_password = user.password
-    salt = user.salt
+    hashed_password = user.get("password")
+    salt = user.get("salt")
 
     hashed_password_with_salt = bcrypt.hashpw(
         password.encode("utf-8"), salt.encode("utf-8")

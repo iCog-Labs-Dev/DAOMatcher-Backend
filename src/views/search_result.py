@@ -1,12 +1,14 @@
 from flask import Blueprint
 
 from src.controllers.search_result import *
+from src.utils.middlewares import token_required
 
 search = Blueprint("search-result", __name__)
 base_url = "/api/user/<string:user_id>/search-result"
 
 
 @search.route(f"{base_url}", methods=["GET", "POST"])
+@token_required
 def search_results(user_id):
     page = request.args.get("page")
     size = request.args.get("size")
