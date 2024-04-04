@@ -1,7 +1,7 @@
 import requests
 from flask import request, jsonify, abort
 
-from src.utils.serverLogic import ScoreUsers
+from src.utils.serverLogic.ScoreUsers import ScoreUsers
 
 
 def scoring_user():
