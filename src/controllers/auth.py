@@ -1,4 +1,4 @@
-from jwt import ExpiredSignatureError, InvalidTokenError
+from datetime import datetime, timezone, timedelta
 import jwt
 import bcrypt
 
@@ -55,7 +55,13 @@ def login(body: dict = None):
 
             try:
                 access_token = jwt.encode(
-                    {"user_id": user.id},
+                    {
+                        "user_id": user.id,
+                        "exp": datetime.now(timezone.utc)
+                        + timedelta(
+                            seconds=int(config("ACCESS_TOKEN_EXPIRY_IN_SECONDS"))
+                        ),
+                    },
                     config("SECRET_KEY"),
                     algorithm="HS256",
                     expires_in=config("ACCESS_TOKEN_EXPIRY_IN_SECONDS"),

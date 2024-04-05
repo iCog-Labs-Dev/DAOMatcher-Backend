@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime, timezone, timedelta
 from decouple import config
 from random import choice
 from string import ascii_letters, digits
@@ -17,9 +17,9 @@ def generate_random_string(length=8):
 def generate_refresh_token(user: User):
     payload = {
         "sub": user.id,
-        "iat": datetime.utcnow(),
-        "exp": datetime.utcnow()
-        + datetime.timedelta(days=config("REFRESH_TOKEN_EXPIRY_IN_DAYS")),
+        "iat": datetime.now(timezone.utc),
+        "exp": datetime.now(timezone.utc)
+        + timedelta(days=config("REFRESH_TOKEN_EXPIRY_IN_DAYS")),
     }
     return jwt.encode(payload, config("SECRET_KEY"), algorithm="HS256")
 
