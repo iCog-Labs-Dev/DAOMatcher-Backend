@@ -1,17 +1,31 @@
 from flask import request
+import jwt
 
 from src.extensions import socketio
 from src.globals import USERS, Sessions
 from src.controllers.socket import connect, get_users
 from src.utils.decorators import token_required
-from src.utils.utils import emitData
+from src.utils.utils import emitData, get_user_from_token
 
 
 @socketio.on("connect")
-@token_required
-def handle_connect(current_user: dict):
-    user_id = current_user.get("id", None)
-    connect(user_id)
+def handle_connect(token: str):
+    try:
+        current_user = get_user_from_token(token)
+        user_id = current_user.get("id", None)
+        connect(user_id)
+    except jwt.ExpiredSignatureError:
+        emitData(
+            socketio,
+            "something_went_wrong",
+            {
+                "message": "Token has expired",
+                "status": 401,
+                "error": "Unauthorized",
+                "success": False,
+            },
+            room=request.sid,
+        )
 
 
 @socketio.on("stop")
@@ -22,9 +36,7 @@ def handle_cancel(userId):
 
 
 @socketio.on("search")
-@token_required
-def handle_get_users(current_user: dict, data):
-    user_id = current_user.get("id", None)
+def handle_get_users(user_id: str, data):
     get_users(user_id, data)
 
 

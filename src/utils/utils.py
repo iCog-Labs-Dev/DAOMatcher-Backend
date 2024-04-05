@@ -5,6 +5,7 @@ from string import ascii_letters, digits
 
 import jwt
 
+from src.controllers.user import get_user_by_id
 from src.globals import USERS, Sessions
 from src.models.user import User
 
@@ -51,3 +52,9 @@ def emitData(socket, event, data=None, room=None):
         print(f"\033[91;1mRoom is not set.\033[0m\n")
         return
     socket.emit(event, data=data, room=room)
+
+
+def get_user_from_token(token):
+    data = jwt.decode(token, config("SECRET_KEY"), algorithms=["HS256"])
+    current_user = get_user_by_id(data.get("user_id")).json.get("data")
+    return current_user
