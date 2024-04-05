@@ -28,7 +28,7 @@ def get(current_user: dict, user_id):
 
 
 @user.route(f"{base_url}", methods=["POST"])
-def create(current_user: dict):
+def create():
     response, status = add_user()
 
     if status == 201:
