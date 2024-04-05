@@ -83,6 +83,8 @@ def login(body: dict = None):
                     "refresh_token", refresh_token, secure=True, httponly=True
                 )
 
+                return response
+
             except Exception as e:
                 return (
                     jsonify(
