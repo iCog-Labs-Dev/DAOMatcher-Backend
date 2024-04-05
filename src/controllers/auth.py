@@ -58,6 +58,7 @@ def login(body: dict = None):
                     {"user_id": user.id},
                     config("SECRET_KEY"),
                     algorithm="HS256",
+                    expires_in=config("ACCESS_TOKEN_EXPIRY_IN_SECONDS"),
                 )
 
                 refresh_token = generate_refresh_token(user)

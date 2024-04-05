@@ -6,6 +6,7 @@ from string import ascii_letters, digits
 import jwt
 
 from src.globals import USERS, Sessions
+from src.models.user import User
 
 
 def generate_random_string(length=8):
@@ -18,9 +19,7 @@ def generate_refresh_token(user: User):
         "sub": user.id,
         "iat": datetime.utcnow(),
         "exp": datetime.utcnow()
-        + datetime.timedelta(
-            days=1
-        ),  # Refresh tokens typically have a longer expiration time
+        + datetime.timedelta(days=config("REFRESH_TOKEN_EXPIRY_IN_DAYS")),
     }
     return jwt.encode(payload, config("SECRET_KEY"), algorithm="HS256")
 

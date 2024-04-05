@@ -20,6 +20,10 @@ class Config:
     MAIL_USERNAME = config("EMAIL_USER")
     MAIL_PASSWORD = config("EMAIL_PASSWORD")
 
+    # JWT Settings
+    ACCESS_TOKEN_EXPIRY_IN_SECONDS = config("ACCESS_TOKEN_EXPIRY_IN_SECONDS")
+    REFRESH_TOKEN_EXPIRY_IN_DAYS = config("REFRESH_TOKEN_EXPIRY_IN_DAYS")
+
 
 class DevelopmentConfig(Config):
     DEBUG = True
