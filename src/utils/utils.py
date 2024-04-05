@@ -1,5 +1,9 @@
+import datetime
+from decouple import config
 from random import choice
 from string import ascii_letters, digits
+
+import jwt
 
 from src.globals import USERS, Sessions
 
@@ -7,6 +11,18 @@ from src.globals import USERS, Sessions
 def generate_random_string(length=8):
     characters = ascii_letters + digits
     return "".join(choice(characters) for _ in range(length))
+
+
+def generate_refresh_token(user: User):
+    payload = {
+        "sub": user.id,
+        "iat": datetime.utcnow(),
+        "exp": datetime.utcnow()
+        + datetime.timedelta(
+            days=1
+        ),  # Refresh tokens typically have a longer expiration time
+    }
+    return jwt.encode(payload, config("SECRET_KEY"), algorithm="HS256")
 
 
 def set_user_session(user_id: str, jsonRequest):

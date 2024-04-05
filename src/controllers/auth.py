@@ -1,12 +1,15 @@
+from jwt import ExpiredSignatureError, InvalidTokenError
 import jwt
 import bcrypt
 
 from decouple import config
-from flask import jsonify, request
+from flask import jsonify, make_response, request
 
 from src.controllers.user import get_user_by_email
 from src.extensions import db
+from src.models.user import User
 from src.utils.token import confirm_token, generate_and_send
+from src.utils.utils import generate_refresh_token
 
 
 def login(body: dict = None):
@@ -51,19 +54,29 @@ def login(body: dict = None):
         if user:
 
             try:
-                token = jwt.encode(
+                access_token = jwt.encode(
                     {"user_id": user.id},
                     config("SECRET_KEY"),
                     algorithm="HS256",
                 )
-                return jsonify(
-                    {
-                        "message": "Login successful",
-                        "data": {"user": user.serialize(), "token": token},
-                        "error": None,
-                        "success": True,
-                    }
+
+                refresh_token = generate_refresh_token(user)
+                response = make_response(
+                    jsonify(
+                        {
+                            "message": "Login successful",
+                            "data": {"user": user.serialize(), "token": access_token},
+                            "error": None,
+                            "success": True,
+                        },
+                        200,
+                    )
                 )
+
+                response.set_cookie(
+                    "refresh_token", refresh_token, secure=True, httponly=True
+                )
+
             except Exception as e:
                 return (
                     jsonify(
@@ -199,4 +212,82 @@ def resend_token(current_user: dict):
             "error": None,
             "success": True,
         }
+    )
+
+
+def refresh_token():
+    refresh_token = request.cookies.get("refresh_token")
+
+    if not refresh_token:
+        return (
+            jsonify(
+                {
+                    "message": "Refresh token not found",
+                    "data": None,
+                    "error": None,
+                    "success": False,
+                }
+            ),
+            401,
+        )
+
+    try:
+        payload = jwt.decode(refresh_token, config("SECRET_KEY"), algorithms=["HS256"])
+        user_id = payload["sub"]
+    except jwt.ExpiredSignatureError:
+        return (
+            jsonify(
+                {
+                    "message": "Refresh token expired",
+                    "data": None,
+                    "error": None,
+                    "success": False,
+                }
+            ),
+            401,
+        )
+    except jwt.InvalidTokenError:
+        return (
+            jsonify(
+                {
+                    "message": "Invalid token",
+                    "data": None,
+                    "error": None,
+                    "success": False,
+                }
+            ),
+            401,
+        )
+
+    user = db.session.query(User).filter_by(id=user_id).first()
+
+    if not user:
+        return (
+            jsonify(
+                {
+                    "message": "User not found",
+                    "data": None,
+                    "error": None,
+                    "success": False,
+                }
+            ),
+            404,
+        )
+
+    access_token = jwt.encode(
+        {"user_id": user.id},
+        config("SECRET_KEY"),
+        algorithm="HS256",
+    )
+
+    return (
+        jsonify(
+            {
+                "message": "Refresh token not found",
+                "data": {"token": access_token},
+                "error": None,
+                "success": True,
+            }
+        ),
+        200,
     )
