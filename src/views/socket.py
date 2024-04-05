@@ -29,8 +29,8 @@ def handle_connect(token: str):
 
 
 @socketio.on("stop")
-def handle_cancel(userId):
-    scoreUsers = Sessions.get(userId)
+def handle_cancel(user_id):
+    scoreUsers = Sessions.get(user_id)
     scoreUsers.cancel = True
     print(f"\033[94mRequest Canceled: {scoreUsers.cancel}\033[0m")
 
@@ -46,13 +46,13 @@ def handle_disconnect():
 
 
 @socketio.on("remove")
-def handle_remove(userId):
+def handle_remove(user_id):
     try:
-        del USERS[userId]
-        del Sessions[userId]
+        del USERS[user_id]
+        del Sessions[user_id]
         print("\033[94mUser session removed\033[0m")
     except KeyError:
-        print(f"\033[94mNo user found with: {userId}\033[0m")
+        print(f"\033[94mNo user found with: {user_id}\033[0m")
 
 
 @socketio.on("error")
