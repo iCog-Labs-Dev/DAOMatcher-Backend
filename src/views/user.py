@@ -28,8 +28,6 @@ def get(current_user: dict, user_id):
 
 
 @user.route(f"{base_url}", methods=["POST"])
-@token_required
-@authorize
 def create(current_user: dict):
     response, status = add_user()
 
