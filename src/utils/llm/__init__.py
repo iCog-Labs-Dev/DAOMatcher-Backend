@@ -1,10 +1,12 @@
-import os
+from decouple import config
+from dotenv import load_dotenv
 import google.generativeai as palm
 from langchain.llms import GooglePalm
 
-API_KEY = os.environ.get("PALM_API_KEY")
+load_dotenv()
+API_KEY = config("PALM_API_KEY")
 
-LOCAL_LLM_PORT = os.environ.get("LLM_PORT")
+LOCAL_LLM_PORT = config("LLM_PORT")
 LOCAL_LLM_URL = f"http://127.0.0.1:{LOCAL_LLM_PORT}"
 LLM_URL = None
 
