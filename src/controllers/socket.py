@@ -1,5 +1,8 @@
 import requests
+
 from flask import request
+
+from src.controllers.search_result import add_search_result
 from src.extensions import socketio
 from src.globals import USERS, Sessions
 from src.utils.serverLogic.ScoreUsers import ScoreUsers
@@ -11,27 +14,27 @@ from src.utils.utils import (
 )
 
 
-def connect():
-    userId = generate_random_string()
-    USERS[userId] = request.sid
+def connect(user_id: str):
+    # user_id = generate_random_string()
+    USERS[user_id] = request.sid
     # print("users: ", USERS)
-    # print("User connected with userId: ", userId)
+    # print("User connected with user_id: ", user_id)
 
     scoreUsers = ScoreUsers()
-    Sessions[userId] = scoreUsers
-    emitData(socketio, "set_cookie", userId, room=request.sid)
+    Sessions[user_id] = scoreUsers
+    emitData(socketio, "set_cookie", user_id, room=request.sid)
 
 
-def get_users(data):
+def get_users(user_id: str, data):
     jsonRequest = data
-    print(f"\033[94mRecieved Data: {jsonRequest}\033[0m")
-    sessionIsSet, CurrentUser = set_user_session(data)
+    print(f"\033[94mReceived Data: {jsonRequest}\033[0m")
+    sessionIsSet, current_user = set_user_session(user_id, data)
     valid = validate_data(data)
     if not sessionIsSet:
-        print(f"\033[91merror emitted\033[0m")
+        print(f"\033[91mError emitted\033[0m")
         return
     if not valid:
-        if CurrentUser:
+        if current_user:
             emitData(
                 socketio,
                 "something_went_wrong",
@@ -39,20 +42,19 @@ def get_users(data):
                     "message": "Error data sending",
                     "status": 400,
                 },
-                room=CurrentUser,
+                room=current_user,
             )
-        print(f"\033[91merror emitted\033[0m")
+        print(f"\033[91mError emitted\033[0m")
         return
 
-    print(f"\033[94mCurrentUser:  {CurrentUser}\033[0m")
+    print(f"\033[94mCurrent_user:  {current_user}\033[0m")
     query = jsonRequest.get("query")
     user_list = jsonRequest.get("user_list")
     user_limit = jsonRequest.get("user_limit")
     depth = jsonRequest.get("depth")
-    userId = jsonRequest.get("userId")
 
     try:
-        scoreUsers = Sessions.get(userId)
+        scoreUsers = Sessions.get(user_id)
         result = scoreUsers.scour(user_list, query, user_limit, depth)
         users = []
         for r in result:
@@ -70,8 +72,10 @@ def get_users(data):
         print(f"\033[94mTotal results: {len(users)} \033[0m")
         if users:
             data = {"result": users}
-            if CurrentUser:
-                emitData(socketio, "get_users", data, room=CurrentUser)
+            if current_user:
+                emitData(socketio, "get_users", data, room=current_user)
+                search_result = {"found_usernames": users, "seed_usernames": user_list}
+                add_search_result(user_id, search_result)
                 return
             else:
                 print(f"\033[91mNo session found: {result}\033[0m")
@@ -89,7 +93,7 @@ def get_users(data):
                 socketio,
                 "something_went_wrong",
                 {"message": str(error), "status": 502},
-                room=CurrentUser,
+                room=current_user,
             )
         else:
             print(f"\033[91mError from ResponseException but no error reported\033[0m")
@@ -97,7 +101,7 @@ def get_users(data):
                 socketio,
                 "something_went_wrong",
                 {"message": "The LLM server isn't responding", "status": 503},
-                room=CurrentUser,
+                room=current_user,
             )
         return
 
@@ -107,6 +111,6 @@ def get_users(data):
             socketio,
             "something_went_wrong",
             {"message": "Internal server error"},
-            room=CurrentUser,
+            room=current_user,
         )
         return

@@ -1,9 +1,11 @@
 import requests
 from flask import request, jsonify, abort
-from src.utils.serverLogic import ScoreUsers
+
+from src.controllers.search_result import add_search_result
+from src.utils.serverLogic.ScoreUsers import ScoreUsers
 
 
-def scoring_user():
+def scoring_user(user_id: str):
     print(request.json)
     if request.method == "POST":
         jsonRequest = request.json
@@ -35,6 +37,8 @@ def scoring_user():
                     }
                 )
             print(f"result: {users}")
+            search_result = {"found_usernames": users, "seed_usernames": user_list}
+            add_search_result(user_id, search_result)
             data = {"result": users}
             return jsonify(data)
         except requests.exceptions.RequestException as e:
