@@ -19,7 +19,7 @@ def generate_refresh_token(user: User):
         "sub": user.id,
         "iat": datetime.now(timezone.utc),
         "exp": datetime.now(timezone.utc)
-        + timedelta(days=config("REFRESH_TOKEN_EXPIRY_IN_DAYS")),
+        + timedelta(days=int(config("REFRESH_TOKEN_EXPIRY_IN_DAYS"))),
     }
     return jwt.encode(payload, config("SECRET_KEY"), algorithm="HS256")
 
