@@ -20,7 +20,7 @@ trap cleanup SIGINT
 echo "Setting up environment"
 
 echo "Installing Poetry"
-pipx install poetry
+pip install poetry
 
 echo "Installing requirements..."
 poetry install
@@ -33,7 +33,6 @@ gunicorn -k geventwebsocket.gunicorn.workers.GeventWebSocketWorker 'src.globals:
 # python3 -m src.LLM.LLMServer &
 llm_pid=$!
 
-source Backend/bin/activate
 echo "Starting App server on port 8000"
 gunicorn -k geventwebsocket.gunicorn.workers.GeventWebSocketWorker 'app:create_app()' --timeout 180 --bind 0.0.0.0:8000 &
 app_pid=$!

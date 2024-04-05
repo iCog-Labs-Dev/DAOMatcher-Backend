@@ -1,7 +1,7 @@
 from flask import Blueprint
 
 from src.controllers.auth import login, confirm_email, resend_token
-from src.utils.middlewares import token_required
+from src.utils.decorators import token_required
 
 auth = Blueprint("auth", __name__)
 base_url = "/api/auth"

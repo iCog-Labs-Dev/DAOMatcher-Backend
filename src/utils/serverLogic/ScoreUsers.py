@@ -89,7 +89,7 @@ class ScoreUsers:
         while (not self.cancel) and accounts and (count < depth):
             account = accounts.popleft()
 
-            # Orgnanized logging for debugging purposes
+            # Organized logging for debugging purposes
             print(
                 "\033[93;1m{:<15} {:<25} {:<8} {:<10}\033[0m".format(
                     "Processing: ", account, " From: ", len(account)
@@ -101,7 +101,7 @@ class ScoreUsers:
                 ):  # If it contains @ it is mastodon otherwise it is LinkedIn URL
                     _, acc, server = account.split("@")
                     content, user = self.__get_mastodon_user(acc, server)
-                    # If there is no user found, no point in excuting the rest of the code
+                    # If there is no user found, no point in executing the rest of the code
                     if not user:
                         continue
 
@@ -118,7 +118,7 @@ class ScoreUsers:
                 else:
                     content, user = self.__get_linkedIn_user(account)
 
-                    # If there is no user found, no point in excuting the rest of the code
+                    # If there is no user found, no point in executing the rest of the code
                     if not user:
                         continue
 
