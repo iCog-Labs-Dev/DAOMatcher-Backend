@@ -17,7 +17,7 @@ class User(db.Model):
     )
     email: Mapped[str] = mapped_column(String(length=100), unique=True)
     verified: Mapped[bool] = mapped_column(Boolean, default=False)
-    display_name: Mapped[str] = mapped_column(String(length=50), unique=True)
+    display_name: Mapped[str] = mapped_column(String(length=50))
     password: Mapped[str] = mapped_column(String(length=100))
     password_salt: Mapped[str] = mapped_column(String(length=100))
     api_key: Mapped[str] = mapped_column(String(length=50), nullable=True)
