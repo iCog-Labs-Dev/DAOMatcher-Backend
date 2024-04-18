@@ -13,6 +13,11 @@ def token_required(f):
         if "Authorization" in request.headers:
             token = request.headers["Authorization"].split(" ")[1]
 
+        elif (
+            request.scheme in ["ws", "wss"] and "token" in request.args
+        ):  # check if token is in query parameters for WebSocket requests
+            token = request.args.get("token", None)
+
         if not token:
             return {
                 "message": "Authentication Token is missing!",
