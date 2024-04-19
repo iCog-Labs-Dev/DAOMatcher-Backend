@@ -79,7 +79,7 @@ def get_users(user_id: str, data):
         if users:
             data = {"result": users}
             if current_user:
-                emitData(socketio, "get_users", data, room=current_user)
+                emitData(socketio, "search", data, room=current_user)
                 search_result = {"found_usernames": users, "seed_usernames": user_list}
                 add_search_result(user_id, search_result)
                 return
