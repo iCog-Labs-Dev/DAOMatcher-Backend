@@ -9,17 +9,20 @@ def generate_random_string(length=8):
     return "".join(choice(characters) for _ in range(length))
 
 
-def set_user_session(user_id: str, jsonRequest):
-    user_session = USERS[user_id]
+def set_user_session(user_id: str):
+    print("user_id: ", user_id)
+    user_session = USERS.get(user_id)
     scoreUsers = Sessions.get(user_id)
 
-    if not all([user_id, scoreUsers]):
+    print("user_sessions: ", user_session, "scoreUser: ", scoreUsers)
+
+    if not all([user_session, scoreUsers]):
         print(f"\033[91;1mUser session not found.\033[0m\n")
         return False, None
 
     scoreUsers.user_session = user_session
     print(f"\033[92mSet Current User: {scoreUsers.user_session}\033[0m")
-    return user_session != None
+    return user_session != None, user_session
 
 
 def validate_data(jsonRequest):

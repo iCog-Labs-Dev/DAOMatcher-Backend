@@ -17,8 +17,8 @@ from src.utils.utils import (
 def connect(user_id: str):
     # user_id = generate_random_string()
     USERS[user_id] = request.sid
-    # print("users: ", USERS)
-    # print("User connected with user_id: ", user_id)
+    print("users: ", USERS)
+    print("User connected with user_id: ", user_id)
 
     scoreUsers = ScoreUsers()
     Sessions[user_id] = scoreUsers
@@ -28,10 +28,16 @@ def connect(user_id: str):
 def get_users(user_id: str, data):
     jsonRequest = data
     print(f"\033[94mReceived Data: {jsonRequest}\033[0m")
-    sessionIsSet, current_user = set_user_session(user_id, data)
+    sessionIsSet, current_user = set_user_session(user_id)
     valid = validate_data(data)
     if not sessionIsSet:
         print(f"\033[91mError emitted\033[0m")
+        emitData(
+            socketio,
+            "something_went_wrong",
+            {"message": "User session not found", "status": 404},
+            room=request.sid,
+        )
         return
     if not valid:
         if current_user:

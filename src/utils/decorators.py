@@ -10,13 +10,14 @@ def token_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
         token = None
+        # print("In token required decorator")
+        # print("args", request.args["token"])
+
         if "Authorization" in request.headers:
             token = request.headers["Authorization"].split(" ")[1]
 
-        elif (
-            request.scheme in ["ws", "wss"] and "token" in request.args
-        ):  # check if token is in query parameters for WebSocket requests
-            token = request.args.get("token", None)
+        elif "token" in request.args:
+            token = request.args["token"]
 
         if not token:
             return {

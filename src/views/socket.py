@@ -10,6 +10,7 @@ from src.utils.utils import emitData
 @socketio.on("connect")
 @token_required
 def handle_connect(current_user: dict):
+    print("\033[94mConnected to socket io\033[0m")
     user_id = current_user.get("id", None)
     connect(user_id)
 
@@ -22,9 +23,8 @@ def handle_cancel(userId):
 
 
 @socketio.on("search")
-@token_required
-def handle_get_users(current_user: dict, data):
-    user_id = current_user.get("id", None)
+def handle_get_users(data):
+    user_id = data.get("userId", None)
     get_users(user_id, data)
 
 
