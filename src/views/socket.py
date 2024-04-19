@@ -18,8 +18,9 @@ def handle_connect(current_user: dict):
 @socketio.on("stop")
 def handle_cancel(userId):
     scoreUsers = Sessions.get(userId)
-    scoreUsers.cancel = True
-    print(f"\033[94mRequest Canceled: {scoreUsers.cancel}\033[0m")
+    if scoreUsers:
+        scoreUsers.cancel = True
+        print(f"\033[94mRequest Canceled: {scoreUsers.cancel}\033[0m")
 
 
 @socketio.on("search")
