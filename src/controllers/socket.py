@@ -78,20 +78,27 @@ def get_users(user_id: str, data):
         print(f"\033[94mTotal results: {len(users)} \033[0m")
         if users:
             data = {"result": users}
+            search_result = {"found_usernames": users, "seed_usernames": user_list}
+            response, status = add_search_result(user_id, search_result)
+
+            # Error should be reported before sending the final result since the frontend will close the connection once the final result is sent
+            if not response.json.get("success"):
+                emitData(
+                    socketio,
+                    "update",
+                    {"message": "Error is being sent"},
+                    room=current_user,
+                )
+                emitData(
+                    socketio,
+                    "something_went_wrong",
+                    {"message": response.json.get("message"), "status": status},
+                    room=current_user,
+                )
+                print(f"\033[91mError emitted\033[0m")
+
             if current_user:
                 emitData(socketio, "search", data, room=current_user)
-                search_result = {"found_usernames": users, "seed_usernames": user_list}
-                response, status = add_search_result(user_id, search_result)
-
-                if not response.json.get("success"):
-                    print("Error emitted on adding search result")
-                    emitData(
-                        socketio,
-                        "something_went_wrong",
-                        {"message": response.json.get("message"), "status": status},
-                        room=current_user,
-                    )
-
                 return
             else:
                 print(f"\033[91mNo session found: {result}\033[0m")
