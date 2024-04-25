@@ -51,16 +51,8 @@ def token_required(f):
 def authorize(f):
     @wraps(f)
     def decorated(current_user: dict, *args, **kwargs):
-        token = request.headers.get("Authorization")
-        if not token:
-            return {"message": "Token is missing!"}, 401
-
-        try:
-            data = jwt.decode(token, current_app.config("SECRET_KEY"))
-        except:
-            return {"message": "Token is invalid!"}, 401
-
-        if "user_id" in kwargs and kwargs["user_id"] != current_user.id:
+        print("current_user: ", current_user)
+        if "user_id" in kwargs and kwargs["user_id"] != current_user.get("id"):
             return {"message": "Unauthorized access"}, 401
 
         return f(current_user, *args, **kwargs)
