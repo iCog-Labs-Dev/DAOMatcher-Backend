@@ -6,30 +6,54 @@ from src.extensions import db
 from src.models import User, SearchResult
 from sqlalchemy import desc
 
-from src.models.search_result import Username, UsernameType
+from src.models.search_result import UserResult, UsernameType
 
 
 def add_search_result(user_id: str, data: dict = None):
-    print("Adding search result")
+    print("Adding data: ", data)
     try:
+        required_key = ["found_usernames", "seed_usernames", "description"]
+        if not all(key in data for key in required_key):
+            return (
+                jsonify(
+                    {
+                        "message": "Make sure the data has all 'found_usernames', 'seed_usernames' and 'description' keys",
+                        "data": None,
+                        "error": "Bad request",
+                        "success": False,
+                    }
+                ),
+                400,
+            )
+
         data = request.json if not data else data
 
-        found_usernames_str: list[str] = data.get("found_usernames")
-        found_usernames: list[Username] = [
-            Username(username=username, type=UsernameType.FOUND.value)
-            for username in found_usernames_str
+        found_users: list[str] = data.get("found_users")
+        found_user_results: list[UserResult] = [
+            UserResult(
+                username=user.get("username"),
+                type=UsernameType.FOUND.value,
+                score=user.get("score"),
+                handle=user.get("handle"),
+                social_media=user.get("social_media"),
+                image_url=user.get("image_url"),
+            )
+            for user in found_users
         ]
 
-        seed_usernames_str = data.get("seed_usernames")
-        seed_usernames: list[Username] = [
-            Username(username=username, type=UsernameType.SEED.value)
-            for username in seed_usernames_str
+        seed_users = data.get("seed_users")
+        seed_user_results: list[UserResult] = [
+            UserResult(
+                username=user.get("username"),
+                type=UsernameType.FOUND.value,
+            )
+            for user in seed_users
         ]
 
         search_result = SearchResult()
         search_result.description = data.get("description")
-        search_result.username.extend(found_usernames)
-        search_result.username.extend(seed_usernames)
+        search_result.user_result.extend(found_user_results)
+        search_result.user_result.extend(seed_user_results)
         search_result.user_id = user_id
 
         db.session.add(search_result)

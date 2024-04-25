@@ -78,7 +78,11 @@ def get_users(user_id: str, data):
         print(f"\033[94mTotal results: {len(users)} \033[0m")
         if users:
             data = {"result": users}
-            search_result = {"found_usernames": users, "seed_usernames": user_list}
+            search_result = {
+                "found_usernames": users,
+                "seed_usernames": user_list,
+                "description": query,
+            }
             response, status = add_search_result(user_id, search_result)
 
             # Error should be reported before sending the final result since the frontend will close the connection once the final result is sent
