@@ -81,7 +81,17 @@ def get_users(user_id: str, data):
             if current_user:
                 emitData(socketio, "search", data, room=current_user)
                 search_result = {"found_usernames": users, "seed_usernames": user_list}
-                add_search_result(user_id, search_result)
+                response, status = add_search_result(user_id, search_result)
+
+                if not response.json.get("success"):
+                    print("Error emitted on adding search result")
+                    emitData(
+                        socketio,
+                        "something_went_wrong",
+                        {"message": response.json.get("message"), "status": status},
+                        room=current_user,
+                    )
+
                 return
             else:
                 print(f"\033[91mNo session found: {result}\033[0m")

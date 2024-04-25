@@ -34,6 +34,7 @@ def add_search_result(user_id: str, data: dict = None):
 
         db.session.add(search_result)
         db.session.commit()
+        print("Finished adding search results")
 
         return (
             jsonify(
@@ -47,6 +48,7 @@ def add_search_result(user_id: str, data: dict = None):
             201,
         )
     except Exception as e:
+        print("Error while adding search result: ", e)
         return (
             jsonify(
                 {
