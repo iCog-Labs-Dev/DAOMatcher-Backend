@@ -85,8 +85,8 @@ def get_users(user_id: str, data):
             if not response.json.get("success"):
                 emitData(
                     socketio,
-                    "something_went_wrong",
-                    {"message": response.json.get("message"), "status": status},
+                    "search_error",
+                    {"message": "Couldn't save search history", "status": status},
                     room=current_user,
                 )
                 print(f"\033[91mError emitted\033[0m")
