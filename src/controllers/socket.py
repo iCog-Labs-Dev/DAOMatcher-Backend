@@ -85,12 +85,6 @@ def get_users(user_id: str, data):
             if not response.json.get("success"):
                 emitData(
                     socketio,
-                    "update",
-                    {"message": "Error is being sent"},
-                    room=current_user,
-                )
-                emitData(
-                    socketio,
                     "something_went_wrong",
                     {"message": response.json.get("message"), "status": status},
                     room=current_user,
