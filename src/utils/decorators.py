@@ -51,7 +51,6 @@ def token_required(f):
 def authorize(f):
     @wraps(f)
     def decorated(current_user: dict, *args, **kwargs):
-        print("current_user: ", current_user)
         if "user_id" in kwargs and kwargs["user_id"] != current_user.get("id"):
             return {"message": "Unauthorized access"}, 401
 

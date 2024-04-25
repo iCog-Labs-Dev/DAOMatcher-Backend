@@ -10,6 +10,7 @@ from src.models.search_result import Username, UsernameType
 
 
 def add_search_result(user_id: str, data: dict = None):
+    print("Adding search result")
     try:
         data = request.json if not data else data
 
@@ -140,7 +141,7 @@ def get_search_results(user_id, page=1, size=10):
         return (
             jsonify(
                 {
-                    "message": "Search result deleted",
+                    "message": "Search result found",
                     "data": [result.serialize() for result in search_results],
                     "error": None,
                     "success": True,
