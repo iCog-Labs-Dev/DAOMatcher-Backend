@@ -12,12 +12,12 @@ from src.models.search_result import UserResult, UsernameType
 def add_search_result(user_id: str, data: dict = None):
     print("Adding data: ", data)
     try:
-        required_key = ["found_usernames", "seed_usernames", "description"]
+        required_key = ["found_users", "seed_users", "description"]
         if not all(key in data for key in required_key):
             return (
                 jsonify(
                     {
-                        "message": "Make sure the data has all 'found_usernames', 'seed_usernames' and 'description' keys",
+                        "message": "Make sure the data has all 'found_users', 'seed_users' and 'description' keys",
                         "data": None,
                         "error": "Bad request",
                         "success": False,
