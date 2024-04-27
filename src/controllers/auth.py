@@ -75,7 +75,6 @@ def login(body: dict = None):
                             "error": None,
                             "success": True,
                         },
-                        200,
                     )
                 )
 
