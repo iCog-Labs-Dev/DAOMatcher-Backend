@@ -20,12 +20,12 @@ def generate_refresh_token(user: User):
         "sub": user.id,
         "iat": datetime.now(timezone.utc),
         "exp": datetime.now(timezone.utc)
-        + timedelta(days=int(config("REFRESH_TOKEN_EXPIRY_IN_DAYS"))),
+        + timedelta(days=float(config("REFRESH_TOKEN_EXPIRY_IN_DAYS"))),
     }
     return jwt.encode(payload, config("SECRET_KEY"), algorithm="HS256")
 
 
-def set_user_session(user_id: str, jsonRequest):
+def set_user_session(user_id: str):
     user_session = USERS[user_id]
     scoreUsers = Sessions.get(user_id)
 
