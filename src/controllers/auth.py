@@ -288,14 +288,11 @@ def refresh_token():
         algorithm="HS256",
     )
 
-    return (
-        jsonify(
-            {
-                "message": "Refresh token not found",
-                "data": {"token": access_token},
-                "error": None,
-                "success": True,
-            }
-        ),
-        200,
+    return jsonify(
+        {
+            "message": "Refresh token not found",
+            "data": {"token": access_token},
+            "error": None,
+            "success": True,
+        }
     )
