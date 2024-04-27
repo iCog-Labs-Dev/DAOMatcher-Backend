@@ -26,7 +26,7 @@ def generate_refresh_token(user: User):
 
 
 def set_user_session(user_id: str):
-    user_session = USERS[user_id]
+    user_session = USERS.get(user_id)
     scoreUsers = Sessions.get(user_id)
 
     print("user_sessions: ", user_session, "scoreUser: ", scoreUsers)
