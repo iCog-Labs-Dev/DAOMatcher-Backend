@@ -48,6 +48,7 @@ class ScoreUsers:
                 "name": profile["display_name"],
                 "username": profile["username"],
                 "image": profile["avatar"],
+                "social_media": "mastodon",
             }
             # print(content)
             return content, user
@@ -71,7 +72,14 @@ class ScoreUsers:
             saleNavId = linkedIn.getSaleNavId(profile["salesNavLink"])
             username = linkedIn.getUsername(profile["link"])
 
-            user = {"id": saleNavId, "name": profile["name"], "username": username}
+            # TODO: Make sure to check whether the image's url is correct or not when you get the api key
+            user = {
+                "id": saleNavId,
+                "name": profile["name"],
+                "username": username,
+                "image": profile["imageUrl"],
+                "social_media": "linkedIn",
+            }
 
             return content, user
         return None, None

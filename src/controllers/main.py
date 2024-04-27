@@ -34,10 +34,15 @@ def scoring_user(user_id: str):
                         "score": score,
                         "handle": handle,
                         "image": userInfo["image"],
+                        "social_media": userInfo["social"],
                     }
                 )
             print(f"result: {users}")
-            search_result = {"found_usernames": users, "seed_usernames": user_list}
+            search_result = {
+                "found_users": users,
+                "seed_users": user_list,
+                "description": query,
+            }
             add_search_result(user_id, search_result)
             data = {"result": users}
             return jsonify(data)

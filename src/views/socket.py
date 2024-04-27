@@ -9,34 +9,24 @@ from src.utils.utils import emitData, get_user_from_token
 
 
 @socketio.on("connect")
-def handle_connect(token: str):
-    try:
-        current_user = get_user_from_token(token)
-        user_id = current_user.get("id", None)
-        connect(user_id)
-    except jwt.ExpiredSignatureError:
-        emitData(
-            socketio,
-            "something_went_wrong",
-            {
-                "message": "Token has expired",
-                "status": 401,
-                "error": "Unauthorized",
-                "success": False,
-            },
-            room=request.sid,
-        )
+@token_required
+def handle_connect(current_user: dict):
+    print("\033[94mConnected to socket io\033[0m")
+    user_id = current_user.get("id", None)
+    connect(user_id)
 
 
 @socketio.on("stop")
-def handle_cancel(user_id):
-    scoreUsers = Sessions.get(user_id)
-    scoreUsers.cancel = True
-    print(f"\033[94mRequest Canceled: {scoreUsers.cancel}\033[0m")
+def handle_cancel(userId):
+    scoreUsers = Sessions.get(userId)
+    if scoreUsers:
+        scoreUsers.cancel = True
+        print(f"\033[94mRequest Canceled: {scoreUsers.cancel}\033[0m")
 
 
 @socketio.on("search")
-def handle_get_users(user_id: str, data):
+def handle_get_users(data):
+    user_id = data.get("userId", None)
     get_users(user_id, data)
 
 

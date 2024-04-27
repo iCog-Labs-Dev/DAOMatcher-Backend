@@ -27,17 +27,6 @@ def get(current_user: dict, user_id):
         return response
 
 
-@user.route(f"{base_url}", methods=["POST"])
-def create():
-    response, status = add_user()
-
-    if status == 201:
-        email = response.json.get("data").get("email")
-        response = login({"email": email, "password": request.json.get("password")})
-        return response
-    return response, status
-
-
 @user.route(f"{base_url}/<string:user_id>/usage/<string:usage_id>", methods=["PUT"])
 @token_required
 @authorize
