@@ -42,6 +42,7 @@ def get_users(user_id: str, data):
             },
             room=request.sid,
         )
+        disconnect()  # Disconnect the user after sending the result
         return
     if not valid:
         if current_user:
@@ -118,6 +119,7 @@ def get_users(user_id: str, data):
             {"message": "No search results found due to network error", "status": 500},
             room=current_user,
         )
+        disconnect()  # Disconnect the user after sending the result
         return
 
     except requests.exceptions.RequestException as e:
@@ -131,6 +133,7 @@ def get_users(user_id: str, data):
                 {"message": str(error), "status": 502},
                 room=current_user,
             )
+            disconnect()  # Disconnect the user after sending the result
         else:
             print(f"\033[91mError from ResponseException but no error reported\033[0m")
             emitData(
@@ -139,6 +142,7 @@ def get_users(user_id: str, data):
                 {"message": "The LLM server isn't responding", "status": 503},
                 room=current_user,
             )
+            disconnect()  # Disconnect the user after sending the result
         return
 
     except Exception as e:
@@ -149,4 +153,5 @@ def get_users(user_id: str, data):
             {"message": "Internal server error"},
             room=current_user,
         )
+        disconnect()  # Disconnect the user after sending the result
         return
