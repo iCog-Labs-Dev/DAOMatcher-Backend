@@ -21,8 +21,8 @@ def create():
 
 @auth.route(f"{base_url}/login", methods=["POST"])
 def handle_login():
-    response, status = login()
-    return response, status
+    response = login()
+    return response
 
 
 @auth.route(f"{base_url}/confirm/<token>", methods=["GET"])
