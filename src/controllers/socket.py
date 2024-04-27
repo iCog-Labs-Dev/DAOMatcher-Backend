@@ -1,6 +1,7 @@
 import requests
 
 from flask import request
+from flask_socketio import disconnect
 
 from src.controllers.search_result import add_search_result
 from src.extensions import socketio
@@ -102,6 +103,8 @@ def get_users(user_id: str, data):
 
             if current_user:
                 emitData(socketio, "search", data, room=current_user)
+                disconnect()  # Disconnect the user after sending the result
+                print("Disconnecting the user after sending the result")
                 return
             else:
                 print(f"\033[91mNo session found: {result}\033[0m")
