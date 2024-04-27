@@ -35,7 +35,10 @@ def get_users(user_id: str, data):
         emitData(
             socketio,
             "something_went_wrong",
-            {"message": "User session not found", "status": 404},
+            {
+                "message": "User session not found. Please refresh the page",
+                "status": 404,
+            },
             room=request.sid,
         )
         return
@@ -73,20 +76,22 @@ def get_users(user_id: str, data):
                     "score": score,
                     "handle": handle,
                     "image": userInfo["image"],
+                    "social_media": userInfo["social_media"],
                 }
             )
         print(f"\033[94mTotal results: {len(users)} \033[0m")
         if users:
             data = {"result": users}
             search_result = {
-                "found_usernames": users,
-                "seed_usernames": user_list,
+                "found_users": users,
+                "seed_users": user_list,
                 "description": query,
             }
             response, status = add_search_result(user_id, search_result)
 
             # Error should be reported before sending the final result since the frontend will close the connection once the final result is sent
             if not response.json.get("success"):
+                print("response: ", response.json, " status: ", status)
                 emitData(
                     socketio,
                     "search_error",
@@ -103,6 +108,13 @@ def get_users(user_id: str, data):
                 return
 
         print(f"\033[91mNo results found: {result}\033[0m")
+
+        emitData(
+            socketio,
+            "search_error",
+            {"message": "No search results found due to network error", "status": 500},
+            room=current_user,
+        )
         return
 
     except requests.exceptions.RequestException as e:

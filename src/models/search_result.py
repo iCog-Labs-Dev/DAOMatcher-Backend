@@ -73,10 +73,10 @@ class UserResult(db.Model):
     )
     username: Mapped[str] = mapped_column(String(length=256), nullable=False)
     type: Mapped[str] = mapped_column(String(length=20), nullable=False)
-    score: Mapped[int] = mapped_column(Integer)
-    handle: Mapped[str] = mapped_column(String(length=256))
-    social_media: Mapped[str] = mapped_column(String(length=256))
-    image_url: Mapped[str] = mapped_column(String(length=256))
+    score: Mapped[int] = mapped_column(Integer, nullable=True)
+    handle: Mapped[str] = mapped_column(String(length=256), nullable=True)
+    social_media: Mapped[str] = mapped_column(String(length=256), nullable=True)
+    image_url: Mapped[str] = mapped_column(String(length=256), nullable=True)
 
     search_result: Mapped[List["SearchResult"]] = relationship(
         secondary=search_usernames, back_populates="user_result"
@@ -86,7 +86,7 @@ class UserResult(db.Model):
         return {
             "id": self.id,
             "username": self.username,
-            "type": self.ype,
+            "type": self.type,
             "score": self.score,
             "handle": self.handle,
             "social_media": self.social_media,

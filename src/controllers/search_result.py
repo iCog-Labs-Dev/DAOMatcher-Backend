@@ -10,7 +10,7 @@ from src.models.search_result import UserResult, UsernameType
 
 
 def add_search_result(user_id: str, data: dict = None):
-    print("Adding data: ", data)
+    print("Adding data: ", data.get("found_users"))
     try:
         required_key = ["found_users", "seed_users", "description"]
         if not all(key in data for key in required_key):
@@ -36,7 +36,7 @@ def add_search_result(user_id: str, data: dict = None):
                 score=user.get("score"),
                 handle=user.get("handle"),
                 social_media=user.get("social_media"),
-                image_url=user.get("image_url"),
+                image_url=user.get("image"),
             )
             for user in found_users
         ]
@@ -44,10 +44,10 @@ def add_search_result(user_id: str, data: dict = None):
         seed_users = data.get("seed_users")
         seed_user_results: list[UserResult] = [
             UserResult(
-                username=user.get("username"),
+                username=username,
                 type=UsernameType.FOUND.value,
             )
-            for user in seed_users
+            for username in seed_users
         ]
 
         search_result = SearchResult()
