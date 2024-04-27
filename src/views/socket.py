@@ -1,10 +1,11 @@
 from flask import request
+import jwt
 
 from src.extensions import socketio
 from src.globals import USERS, Sessions
 from src.controllers.socket import connect, get_users
 from src.utils.decorators import token_required
-from src.utils.utils import emitData
+from src.utils.utils import emitData, get_user_from_token
 
 
 @socketio.on("connect")
@@ -35,13 +36,13 @@ def handle_disconnect():
 
 
 @socketio.on("remove")
-def handle_remove(userId):
+def handle_remove(user_id):
     try:
-        del USERS[userId]
-        del Sessions[userId]
+        del USERS[user_id]
+        del Sessions[user_id]
         print("\033[94mUser session removed\033[0m")
     except KeyError:
-        print(f"\033[94mNo user found with: {userId}\033[0m")
+        print(f"\033[94mNo user found with: {user_id}\033[0m")
 
 
 @socketio.on("error")

@@ -1,6 +1,6 @@
 from flask import Blueprint
 
-from src.controllers.auth import login, confirm_email, resend_token
+from src.controllers.auth import login, confirm_email, refresh_token, resend_token
 from src.utils.decorators import token_required
 from src.controllers.user import add_user, request
 
@@ -36,4 +36,10 @@ def confirm(current_user: dict, token: str):
 @token_required
 def resend_confirmation(current_user: dict):
     response = resend_token(current_user)
+    return response
+
+
+@auth.route(f"{base_url}/refresh", methods=["GET"])
+def refresh():
+    response = refresh_token()
     return response
