@@ -1,15 +1,20 @@
+from datetime import datetime, timezone
+from flask_socketio import disconnect
 import jwt
 from flask import request
 from functools import wraps
 from flask import current_app
+import socketio
 
 from src.controllers.user import get_user_by_id
+from src.utils.utils import emitData
 
 
 def token_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
         token = None
+        socket = False
         # print("In token required decorator")
         # print("args", request.args["token"])
 
@@ -18,6 +23,7 @@ def token_required(f):
 
         elif "token" in request.args:
             token = request.args["token"]
+            socket = True
 
         if not token:
             return {
@@ -29,13 +35,19 @@ def token_required(f):
             data = jwt.decode(
                 token, current_app.config["SECRET_KEY"], algorithms=["HS256"]
             )
+            timestamp = data.get("exp")
+            invalidTokenErrorResponse = {
+                "message": "Invalid Authentication token!",
+                "data": None,
+                "error": "Unauthorized",
+            }
+            if not timestamp or datetime.now(timezone.utc) > datetime.fromtimestamp(
+                timestamp, timezone.utc
+            ):
+                return invalidTokenErrorResponse, 401
             current_user = get_user_by_id(data.get("user_id")).json.get("data")
             if not current_user:
-                return {
-                    "message": "Invalid Authentication token!",
-                    "data": None,
-                    "error": "Unauthorized",
-                }, 401
+                return invalidTokenErrorResponse, 401
         except Exception as e:
             return {
                 "message": "Something went wrong",

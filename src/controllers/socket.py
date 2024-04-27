@@ -35,9 +35,9 @@ def get_users(user_id: str, data):
         print(f"\033[91mError emitted\033[0m")
         emitData(
             socketio,
-            "something_went_wrong",
+            "refresh_token",
             {
-                "message": "User session not found. Please refresh the page",
+                "message": "User session not found. Please refresh the token",
                 "status": 404,
             },
             room=request.sid,
