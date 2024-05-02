@@ -289,7 +289,7 @@ def refresh_token():
 
     return jsonify(
         {
-            "message": "Refresh token not found",
+            "message": "Token refreshed",
             "data": {"token": access_token},
             "error": None,
             "success": True,
