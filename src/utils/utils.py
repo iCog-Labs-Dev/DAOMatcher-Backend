@@ -15,9 +15,21 @@ def generate_random_string(length=8):
     return "".join(choice(characters) for _ in range(length))
 
 
-def generate_refresh_token(user: User):
+def generate_access_token(userId: str):
+    return jwt.encode(
+        {
+            "user_id": userId,
+            "exp": datetime.now(timezone.utc)
+            + timedelta(seconds=int(config("ACCESS_TOKEN_EXPIRY_IN_SECONDS"))),
+        },
+        config("SECRET_KEY"),
+        algorithm="HS256",
+    )
+
+
+def generate_refresh_token(userId: str):
     payload = {
-        "sub": user.id,
+        "sub": userId,
         "iat": datetime.now(timezone.utc),
         "exp": datetime.now(timezone.utc)
         + timedelta(days=float(config("REFRESH_TOKEN_EXPIRY_IN_DAYS"))),

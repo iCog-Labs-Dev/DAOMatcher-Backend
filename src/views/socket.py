@@ -37,6 +37,7 @@ def handle_disconnect():
 
 @socketio.on("remove")
 def handle_remove(user_id):
+    print("Removing user")
     try:
         del USERS[user_id]
         del Sessions[user_id]

@@ -32,17 +32,7 @@ def get_users(user_id: str, data):
     sessionIsSet, current_user = set_user_session(user_id)
     valid = validate_data(data)
     if not sessionIsSet:
-        print(f"\033[91mError emitted\033[0m")
-        emitData(
-            socketio,
-            "refresh_token",
-            {
-                "message": "User session not found. Please refresh the token",
-                "status": 404,
-            },
-            room=request.sid,
-        )
-        disconnect()  # Disconnect the user after sending the result
+        print(f"\033[91mSession not set\033[0m")
         return
     if not valid:
         if current_user:

@@ -4,7 +4,7 @@ import jwt
 from flask import request
 from functools import wraps
 from flask import current_app
-import socketio
+from src.extensions import socketio
 
 from src.controllers.user import get_user_by_id
 from src.utils.utils import emitData
@@ -15,8 +15,8 @@ def token_required(f):
     def decorated(*args, **kwargs):
         token = None
         socket = False
-        # print("In token required decorator")
-        # print("args", request.args["token"])
+        print("In token required decorator")
+        print("args", request.args["token"])
 
         if "Authorization" in request.headers:
             token = request.headers["Authorization"].split(" ")[1]
@@ -44,16 +44,39 @@ def token_required(f):
             if not timestamp or datetime.now(timezone.utc) > datetime.fromtimestamp(
                 timestamp, timezone.utc
             ):
+                if socket:
+                    emitData(
+                        socketio,
+                        "refresh_token",
+                        invalidTokenErrorResponse,
+                        room=request.sid,
+                    )
                 return invalidTokenErrorResponse, 401
             current_user = get_user_by_id(data.get("user_id")).json.get("data")
             if not current_user:
+                if socket:
+                    emitData(
+                        socketio,
+                        "refresh_token",
+                        invalidTokenErrorResponse,
+                        room=request.sid,
+                    )
                 return invalidTokenErrorResponse, 401
+
         except Exception as e:
-            return {
+            exceptionOccurredMessage = {
                 "message": "Something went wrong",
                 "data": None,
                 "error": str(e),
-            }, 500
+            }
+            if socket:
+                emitData(
+                    socketio,
+                    "refresh_token",
+                    exceptionOccurredMessage,
+                    room=request.sid,
+                )
+            return exceptionOccurredMessage, 500
 
         return f(current_user, *args, **kwargs)
 
