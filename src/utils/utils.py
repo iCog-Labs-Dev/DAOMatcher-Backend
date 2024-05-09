@@ -41,7 +41,18 @@ def set_user_session(user_id: str):
     user_session = USERS.get(user_id)
     scoreUsers = Sessions.get(user_id)
 
-    print("user_sessions: ", user_session, "scoreUser: ", scoreUsers)
+    print(
+        "user_id: ",
+        user_id,
+        "\tuser_sessions: ",
+        user_session,
+        "\tscoreUser: ",
+        scoreUsers,
+    )
+    print("==========================================================")
+    print("USERS: ", USERS)
+    print("Sessions: ", Sessions)
+    print("==========================================================")
 
     if not all([user_session, scoreUsers]):
         print(f"\033[91;1mUser session not found.\033[0m\n")

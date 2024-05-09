@@ -27,12 +27,24 @@ def connect(user_id: str):
 
 
 def get_users(user_id: str, data):
+    if user_id == None:
+        print(f"\033[91mUser id not found\033[0m")
+        emitData(
+            socketio,
+            "something_went_wrong",
+            {"message": "User id not found", "status": 400},
+            room=request.sid,
+        )
+        return
     jsonRequest = data
     print(f"\033[94mReceived Data: {jsonRequest}\033[0m")
     sessionIsSet, current_user = set_user_session(user_id)
     valid = validate_data(data)
     if not sessionIsSet:
         print(f"\033[91mSession not set\033[0m")
+        emitData(
+            socketio, "resend_search", {"message": "Session not set"}, room=request.sid
+        )
         return
     if not valid:
         if current_user:
