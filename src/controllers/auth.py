@@ -9,7 +9,7 @@ from src.controllers.user import get_user_by_email
 from src.extensions import db
 from src.models.user import User
 from src.utils.token import confirm_token, generate_and_send
-from src.utils.utils import generate_refresh_token
+from src.utils.utils import generate_access_token, generate_refresh_token
 
 
 def login(body: dict = None):
@@ -54,19 +54,10 @@ def login(body: dict = None):
         if user:
 
             try:
-                access_token = jwt.encode(
-                    {
-                        "user_id": user.id,
-                        "exp": datetime.now(timezone.utc)
-                        + timedelta(
-                            seconds=int(config("ACCESS_TOKEN_EXPIRY_IN_SECONDS"))
-                        ),
-                    },
-                    config("SECRET_KEY"),
-                    algorithm="HS256",
-                )
+                access_token = generate_access_token(user.id)
+                print("Token on login   ", access_token)
 
-                refresh_token = generate_refresh_token(user)
+                refresh_token = generate_refresh_token(user.id)
                 response = make_response(
                     jsonify(
                         {
@@ -75,7 +66,6 @@ def login(body: dict = None):
                             "error": None,
                             "success": True,
                         },
-                        200,
                     )
                 )
 
@@ -282,20 +272,15 @@ def refresh_token():
             404,
         )
 
-    access_token = jwt.encode(
-        {"user_id": user.id},
-        config("SECRET_KEY"),
-        algorithm="HS256",
-    )
+    access_token = generate_access_token(user.id)
 
-    return (
-        jsonify(
-            {
-                "message": "Refresh token not found",
-                "data": {"token": access_token},
-                "error": None,
-                "success": True,
-            }
-        ),
-        200,
+    print("Token on refresh ", access_token)
+
+    return jsonify(
+        {
+            "message": "Token refreshed",
+            "data": {"token": access_token},
+            "error": None,
+            "success": True,
+        }
     )
