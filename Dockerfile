@@ -26,7 +26,7 @@ WORKDIR /app
 COPY pyproject.toml /app/
 
 # Installing packages
-RUN poetry install --no-interaction --no-ansi
+RUN poetry install
 
 # Copy other files to the working directory
 COPY . .
