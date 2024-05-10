@@ -1,15 +1,12 @@
 # Use the official Python image as the base image
 FROM python:3.11
 
+#Installing system dependecies
+RUN apt-get update && apt-get install -y python3-pip # Install prerequisite packages (adjust based on your system)
+RUN pip install poetry
+
 # Set environment variables
-ENV PORT1=8000
-ENV PYTHONFAULTHANDLER=1 \
-    PYTHONUNBUFFERED=1 \
-    PYTHONHASHSEED=random \
-    PIP_NO_CACHE_DIR=off \
-    PIP_DISABLE_PIP_VERSION_CHECK=on \
-    PIP_DEFAULT_TIMEOUT=100 \
-    POETRY_NO_INTERACTION=1 \
+ENV PORT1=8000 \
     POETRY_VIRTUALENVS_CREATE=false \
     POETRY_CACHE_DIR='/var/cache/pypoetry' \
     POETRY_HOME='/usr/local' \
