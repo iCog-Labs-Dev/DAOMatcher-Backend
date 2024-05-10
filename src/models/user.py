@@ -13,7 +13,7 @@ if TYPE_CHECKING:
 
 class User(db.Model):
     id: Mapped[str] = mapped_column(
-        String(length=50), primary_key=True, default=lambda: uuid.uuid4().hex
+        String(length=60), primary_key=True, default=lambda: uuid.uuid4().hex
     )
     email: Mapped[str] = mapped_column(String(length=100), unique=True)
     verified: Mapped[bool] = mapped_column(Boolean, default=False)
