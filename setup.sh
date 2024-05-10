@@ -19,14 +19,14 @@ cleanup() {
 trap cleanup SIGINT
 echo "Setting up environment"
 
-# echo "Installing Poetry"
-# pip install poetry
+echo "Installing Poetry"
+pip install poetry
 
-# echo "Installing requirements..."
-# poetry install
+echo "Installing requirements..."
+poetry install
 
-# echo "Activating environment"
-# poetry shell
+echo "Activating environment"
+poetry shell
 
 echo "Migrating database to latest version"
 flask db merge heads -m "merge heads"
