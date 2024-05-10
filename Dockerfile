@@ -22,7 +22,6 @@ ENV PORT1=8000
 
 # Create a working directory
 WORKDIR /app
-COPY poetry.lock pyproject.toml /app/
 
 # Installing packages
 RUN poetry install --no-interaction --no-ansi
