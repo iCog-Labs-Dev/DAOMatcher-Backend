@@ -29,7 +29,7 @@ echo "Setting up environment"
 # poetry shell
 
 echo "Migrating database to latest version"
-flask db stamp head
+# flask db stamp head
 flask db migrate
 flask db upgrade
 
