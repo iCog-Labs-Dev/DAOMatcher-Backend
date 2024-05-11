@@ -6,7 +6,7 @@ from functools import wraps
 from flask import current_app
 from src.extensions import socketio
 
-from src.controllers.user import get_user_by_id
+from src.controllers.user import get_user_by_id_response
 from src.utils.utils import emitData
 
 
@@ -52,7 +52,7 @@ def token_required(f):
                         room=request.sid,
                     )
                 return invalidTokenErrorResponse, 401
-            current_user = get_user_by_id(data.get("user_id")).json.get("data")
+            current_user = get_user_by_id_response(data.get("user_id")).json.get("data")
             if not current_user:
                 if socket:
                     emitData(
