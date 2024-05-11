@@ -120,14 +120,13 @@ def validate_credentials(email: str, password: str):
     if not user:
         raise Exception("User not found")
 
-    hashed_password = user.password
-    salt = user.password_salt
+    hashed_password = user.password.encode("utf-8")
+    salt = user.password_salt.encode("utf-8")
+    password = password.encode("utf-8")
 
-    hashed_password_with_salt = bcrypt.hashpw(
-        password.encode("utf-8"), salt.encode("utf-8")
-    )
+    hashed_password_with_salt = bcrypt.hashpw(password, salt)
 
-    valid_credential = hashed_password_with_salt == hashed_password.encode("utf-8")
+    valid_credential = hashed_password_with_salt == hashed_password
 
     return valid_credential, user
 

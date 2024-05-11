@@ -15,7 +15,9 @@ def create():
 
     if status == 201:
         email = response.json.get("data").get("email")
-        response = login({"email": email, "password": request.json.get("password")})
+        response, status = login(
+            {"email": email, "password": request.json.get("password")}
+        )
         data = response.json
         data.update(
             {
