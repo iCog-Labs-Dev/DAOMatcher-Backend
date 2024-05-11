@@ -16,7 +16,7 @@ def token_required(f):
         token = None
         socket = False
         print("In token required decorator")
-        print("args", request.args["token"])
+        print("args", request.args.get("token"))
 
         if "Authorization" in request.headers:
             token = request.headers["Authorization"].split(" ")[1]

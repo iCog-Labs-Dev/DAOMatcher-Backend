@@ -44,8 +44,8 @@ def add_user():
         salt = bcrypt.gensalt()
         hashed_password = bcrypt.hashpw(password, salt)
 
-        user.password = hashed_password
-        user.password_salt = salt
+        user.password = hashed_password.decode("utf-8")
+        user.password_salt = salt.decode("utf-8")
 
         db.session.add(user)
         db.session.commit()

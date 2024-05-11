@@ -167,7 +167,11 @@ def get_search_results(user_id, page=1, size=10):
         return (
             jsonify(
                 {
-                    "message": "Search result found",
+                    "message": (
+                        "Search result found"
+                        if len(search_results) > 0
+                        else "No search results found"
+                    ),
                     "data": [result.serialize() for result in search_results],
                     "error": None,
                     "success": True,

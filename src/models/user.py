@@ -18,8 +18,8 @@ class User(db.Model):
     email: Mapped[str] = mapped_column(String(length=100), unique=True)
     verified: Mapped[bool] = mapped_column(Boolean, default=False)
     display_name: Mapped[str] = mapped_column(String(length=50))
-    password: Mapped[str] = mapped_column(String(length=100))
-    password_salt: Mapped[str] = mapped_column(String(length=100))
+    password: Mapped[str] = mapped_column(String(length=200))
+    password_salt: Mapped[str] = mapped_column(String(length=200))
     api_key: Mapped[str] = mapped_column(String(length=50), nullable=True)
     user_setting_id: Mapped[Optional[str]] = mapped_column(
         String(length=50), ForeignKey("user_setting.id"), nullable=True
