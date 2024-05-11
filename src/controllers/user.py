@@ -1,16 +1,15 @@
-from MySQLdb._exceptions import IntegrityError
 import bcrypt
 from flask import request, jsonify
 
+from sqlalchemy.exc import DatabaseError, IntegrityError
 from src.extensions import db
 from src.models import User, UserUsage
 from src.utils.token import generate_and_send
+from typing import Union
 
 
-def get_user_by_id(user_id: str):
-    user: User = db.one_or_404(
-        db.select(User).filter_by(id=user_id), description="User not found"
-    )
+def get_user_by_id_response(user_id: str):
+    user: User = get_user_by_id(user_id)
     return jsonify(
         {
             "message": "User Found",
@@ -22,21 +21,41 @@ def get_user_by_id(user_id: str):
     )
 
 
-def get_user_by_email(email: str):
-    user: User = db.one_or_404(
-        db.select(User).filter_by(email=email), description="User not found"
-    )
+def get_user_by_id(user_id: str) -> Union[User, None]:
+    user: User = User.query.filter_by(id=user_id).first()
+    return user
+
+
+def get_user_by_email(email: str) -> Union[User, None]:
+    user: User = User.query.filter_by(email=email).first()
     return user
 
 
 def add_user():
     try:
         new_user = request.json
+
+        found_user = get_user_by_email(new_user.get("email"))
+        if found_user is not None:
+            return (
+                jsonify(
+                    {
+                        "message": "User with email already exists",
+                        "data": None,
+                        "token": "",
+                        "error": "Duplicate user error",
+                        "success": False,
+                    }
+                ),
+                409,
+            )
+
         user: User = User(
             display_name=new_user.get("display_name"),
             api_key=new_user.get("api_key"),
             email=new_user.get("email"),
         )
+
         usage: UserUsage = UserUsage()
         user.user_usage = usage
 
@@ -64,6 +83,34 @@ def add_user():
             ),
             201,
         )
+
+    except IntegrityError as e:
+        error_message = "Invalid data provided"
+        return (
+            jsonify(
+                {
+                    "message": error_message,
+                    "data": None,
+                    "error": str(e),
+                    "success": False,
+                }
+            ),
+            400,
+        )
+    except DatabaseError as e:
+        error_message = "Something went wrong while adding data"
+        return (
+            jsonify(
+                {
+                    "message": error_message,
+                    "data": None,
+                    "error": str(e),
+                    "success": False,
+                }
+            ),
+            500,
+        )
+
     except Exception as e:
         error_message = "Something went wrong"
         return (
