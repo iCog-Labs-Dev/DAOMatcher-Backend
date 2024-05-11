@@ -73,7 +73,7 @@ def login(body: dict = None):
                     "refresh_token", refresh_token, secure=True, httponly=True
                 )
 
-                return response
+                return response, 200
 
             except Exception as e:
                 return (
