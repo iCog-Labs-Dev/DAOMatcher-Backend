@@ -6,6 +6,7 @@ from src.extensions import socketio
 from src.utils.serverLogic import (
     mastodon,
     linkedIn,
+    twitter,
     llm_server,
     LINKEDIN_PREFIX,
     TWITTER_PREFIX,
@@ -90,6 +91,31 @@ class ScoreUsers:
             return content, user
         return None, None
 
+    def __get_twitter_user(self, username):
+        profile = twitter.getTwitterProfile(username)
+
+        if profile:
+            content = []
+
+            if "description" in profile and profile["description"]:
+                content.append(profile["description"])
+
+            for p in twitter.getUserPosts(profile["id"], 10):
+                if "text" in p and p["text"]:
+                    content.append(p["text"])
+
+            content = "\n\n------------------\n".join(content)
+            user = {
+                "id": profile["id"],
+                "name": profile["name"],
+                "username": username,
+                "image": profile["profile_image_url"],
+                "social_media": "twitter",
+            }
+
+            return content, user
+        return None, None
+
     def scour(self, starting_users, query, user_limit, depth):
         user_heap = []
 
@@ -102,6 +128,7 @@ class ScoreUsers:
 
         while (not self.cancel) and accounts and (count < depth):
             account = accounts.popleft()
+            user = None
 
             # Organized logging for debugging purposes
             print(
@@ -144,18 +171,18 @@ class ScoreUsers:
                         username = LINKEDIN_PREFIX + username
                 elif (
                     TWITTER_PREFIX in account
-                ):  # If the username input contains a "li+" it is from linkedIn. This is a prefix used to identify which is which.
+                ):  # If the username input contains a "tw+" it is from twitter. This is a prefix used to identify which is which.
                     # It is going to be set from frontend for the starting users and here in the backend for the new users found
                     _, account = account.split(TWITTER_PREFIX)
-                    content, user = self.__get_linkedIn_user(account)
+                    content, user = self.__get_twitter_user(account)
 
                     # If there is no user found, no point in executing the rest of the code
                     if not user:
                         continue
 
-                    # Get followers for linkedIn
-                    for follower in linkedIn.getConnections(account, 1000):
-                        username = follower["publicIdentifier"]
+                    # Get followers for twitter
+                    for follower in twitter.getFollowers(account, 1000):
+                        username = follower["username"]
                         username = TWITTER_PREFIX + username
 
                 if username and username not in visited:
