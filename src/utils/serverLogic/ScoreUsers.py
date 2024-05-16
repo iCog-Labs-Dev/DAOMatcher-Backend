@@ -3,7 +3,13 @@ from heapq import *
 from collections import *
 from urllib.parse import urlparse
 from src.extensions import socketio
-from src.utils.serverLogic import mastodon, linkedIn, llm_server
+from src.utils.serverLogic import (
+    mastodon,
+    linkedIn,
+    llm_server,
+    LINKEDIN_PREFIX,
+    TWITTER_PREFIX,
+)
 from src.utils.utils import emitData
 
 
@@ -104,6 +110,7 @@ class ScoreUsers:
                 )
             )
             try:
+                username = None
                 if (
                     "@" in account
                 ):  # If it contains @ it is mastodon otherwise it is LinkedIn URL
@@ -120,10 +127,11 @@ class ScoreUsers:
                             username = "@" + username
                         else:
                             username = "@" + username + "@" + server
-                        if username not in visited:
-                            accounts.append(username)
-                            visited.add(username)
-                else:
+                elif (
+                    LINKEDIN_PREFIX in account
+                ):  # If the username input contains a "li+" it is from linkedIn. This is a prefix used to identify which is which.
+                    # It is going to be set from frontend for the starting users and here in the backend for the new users found
+                    _, account = account.split(LINKEDIN_PREFIX)
                     content, user = self.__get_linkedIn_user(account)
 
                     # If there is no user found, no point in executing the rest of the code
@@ -133,9 +141,26 @@ class ScoreUsers:
                     # Get followers for linkedIn
                     for follower in linkedIn.getConnections(account, 1000):
                         username = follower["publicIdentifier"]
-                        if username not in visited:
-                            accounts.append(username)
-                            visited.add(username)
+                        username = LINKEDIN_PREFIX + username
+                elif (
+                    TWITTER_PREFIX in account
+                ):  # If the username input contains a "li+" it is from linkedIn. This is a prefix used to identify which is which.
+                    # It is going to be set from frontend for the starting users and here in the backend for the new users found
+                    _, account = account.split(TWITTER_PREFIX)
+                    content, user = self.__get_linkedIn_user(account)
+
+                    # If there is no user found, no point in executing the rest of the code
+                    if not user:
+                        continue
+
+                    # Get followers for linkedIn
+                    for follower in linkedIn.getConnections(account, 1000):
+                        username = follower["publicIdentifier"]
+                        username = TWITTER_PREFIX + username
+
+                if username and username not in visited:
+                    accounts.append(username)
+                    visited.add(username)
             except Exception as e:
                 print(f"\033[91;1m{e} In scour.\033[0m\n")
                 emitData(socketio, f"update", {"error": str(e)}, room=self.user_session)

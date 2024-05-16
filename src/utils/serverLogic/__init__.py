@@ -1,3 +1,4 @@
+from src.utils.scraping import LINKEDIN_PREFIX, TWITTER_PREFIX
 from src.utils.scraping.LinkedIn import LinkedIn
 from src.utils.scraping.Mastodon import Mastodon
 from src.utils.serverLogic.LLMServer import LLMServer

@@ -57,6 +57,7 @@ class Mastodon:
             response2 = requests.get(f"{BASE_URL}/{id}/following", timeout=TIMEOUT)
             response2.raise_for_status()
             print(f"\033[93;1mUser Followers found.\033[0m\n")
+            print(len(response2.json()))
             return response2.json()
 
         except requests.exceptions.Timeout as errt:
