@@ -30,7 +30,6 @@ class LLM:
             )
         )
         try:
-            # response = self.chain.run({"query": query, "content": content})
             response = self.chain.predict(query=query, content=content)
             print("\033[92;1m" + response + "\033[0m\n")
             response = self.extract_response(response)
