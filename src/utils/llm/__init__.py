@@ -57,5 +57,4 @@ model = ChatGoogleGenerativeAI(
     model="gemini-pro",
     google_api_key=GOOGLE_API_KEY,
     temperature=0.2,
-    convert_system_message_to_human=True,
 )
