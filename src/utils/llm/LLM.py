@@ -1,6 +1,6 @@
 import re
 import textwrap
-from langchain import LLMChain
+from langchain.chains import LLMChain
 from src.utils.llm import model
 
 from src.utils.llm import (
@@ -18,6 +18,7 @@ class LLM:
         self.temperature = temperature
         self.max_tokens = max_tokens
         self.prompt = Prompt().get_prompt_template()
+
         self.chain = LLMChain(prompt=self.prompt, llm=self.model)
 
     def generate(self, query, content):
@@ -29,7 +30,8 @@ class LLM:
             )
         )
         try:
-            response = self.chain.run({"query": query, "content": content})
+            # response = self.chain.run({"query": query, "content": content})
+            response = self.chain.predict(query=query, content=content)
             print("\033[92;1m" + response + "\033[0m\n")
             response = self.extract_response(response)
             # print(f"Prompt: {prompt.template}")  # For debugging only
@@ -78,9 +80,11 @@ class Prompt:
 
         prompt = PromptTemplate(
             template=template,
-            input_variables=["query", "content", "actions", "intervals"]
-            if system_prompt == SYSTEM_PROMPT
-            else ["content"],
+            input_variables=(
+                ["query", "content", "actions", "intervals"]
+                if system_prompt == SYSTEM_PROMPT
+                else ["content"]
+            ),
         )
         prompt = prompt.partial(actions=str(ACTIONS), intervals=str(InterestLevels))
         return prompt
