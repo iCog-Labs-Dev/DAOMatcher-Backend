@@ -1,10 +1,9 @@
 from decouple import config
 from dotenv import load_dotenv
-import google.generativeai as palm
-from langchain.llms import GooglePalm
+from langchain_google_genai import ChatGoogleGenerativeAI
 
 load_dotenv()
-API_KEY = config("PALM_API_KEY")
+GOOGLE_API_KEY = config("PALM_API_KEY")
 
 LOCAL_LLM_PORT = config("LLM_PORT")
 LOCAL_LLM_URL = f"http://127.0.0.1:{LOCAL_LLM_PORT}"
@@ -53,7 +52,10 @@ B_SYS, E_SYS = "<<SYS>>\n", "\n<</SYS>>\n\n"
 
 SYSTEM_PROMPT = DEFAULT_SYSTEM_PROMPT
 
-palm.configure(api_key=API_KEY)
-
 # Selecting the first and only text generation model available in palm
-model = GooglePalm(temperature=0.0, google_api_key=API_KEY)
+model = ChatGoogleGenerativeAI(
+    model="gemini-pro",
+    google_api_key=GOOGLE_API_KEY,
+    temperature=0.2,
+    convert_system_message_to_human=True,
+)
