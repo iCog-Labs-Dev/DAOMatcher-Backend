@@ -63,6 +63,20 @@ def token_required(f):
                     )
                 return invalidTokenErrorResponse, 401
 
+        except jwt.ExpiredSignatureError as e:
+            exceptionOccurredMessage = {
+                "message": "Unauthorized",
+                "data": None,
+                "error": "Access token has expired",
+            }
+            if socket:
+                emitData(
+                    socketio,
+                    "refresh_token",
+                    exceptionOccurredMessage,
+                    room=request.sid,
+                )
+            return exceptionOccurredMessage, 401
         except Exception as e:
             exceptionOccurredMessage = {
                 "message": "Something went wrong",
@@ -72,7 +86,7 @@ def token_required(f):
             if socket:
                 emitData(
                     socketio,
-                    "refresh_token",
+                    "something_went_wrong",
                     exceptionOccurredMessage,
                     room=request.sid,
                 )
