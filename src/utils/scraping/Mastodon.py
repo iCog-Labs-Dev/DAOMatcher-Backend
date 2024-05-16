@@ -5,7 +5,7 @@ from src.utils.scraping import MASTEDON_BASE_URL, TIMEOUT
 
 class Mastodon:
     def extractText(self, html):
-        soup = BeautifulSoup(html)
+        soup = BeautifulSoup(html, features="html.parser")
         return soup.getText()
 
     # These function specific to Mastodon Scraping

@@ -19,14 +19,19 @@ cleanup() {
 trap cleanup SIGINT
 echo "Setting up environment"
 
-echo "Installing Poetry"
-pip install poetry
+# echo "Installing Poetry"
+# pip install poetry
 
-echo "Installing requirements..."
-poetry install
+# echo "Installing requirements..."
+# poetry install
 
-echo "Activating environment"
-poetry shell
+# echo "Activating environment"
+# poetry shell
+
+echo "Migrating database to latest version"
+flask db stamp head
+flask db migrate
+flask db upgrade
 
 echo "Starting LLM server on port 5001"
 gunicorn -k geventwebsocket.gunicorn.workers.GeventWebSocketWorker 'src.globals:llm_app' --timeout 180 --bind 127.0.0.1:5001 &

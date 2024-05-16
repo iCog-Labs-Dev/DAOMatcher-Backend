@@ -15,27 +15,52 @@ def generate_random_string(length=8):
     return "".join(choice(characters) for _ in range(length))
 
 
-def generate_refresh_token(user: User):
+def generate_access_token(userId: str):
+    return jwt.encode(
+        {
+            "user_id": userId,
+            "exp": datetime.now(timezone.utc)
+            + timedelta(seconds=int(config("ACCESS_TOKEN_EXPIRY_IN_SECONDS"))),
+        },
+        config("SECRET_KEY"),
+        algorithm="HS256",
+    )
+
+
+def generate_refresh_token(userId: str):
     payload = {
-        "sub": user.id,
+        "sub": userId,
         "iat": datetime.now(timezone.utc),
         "exp": datetime.now(timezone.utc)
-        + timedelta(days=int(config("REFRESH_TOKEN_EXPIRY_IN_DAYS"))),
+        + timedelta(days=float(config("REFRESH_TOKEN_EXPIRY_IN_DAYS"))),
     }
     return jwt.encode(payload, config("SECRET_KEY"), algorithm="HS256")
 
 
-def set_user_session(user_id: str, jsonRequest):
-    user_session = USERS[user_id]
+def set_user_session(user_id: str):
+    user_session = USERS.get(user_id)
     scoreUsers = Sessions.get(user_id)
 
-    if not all([user_id, scoreUsers]):
+    print(
+        "user_id: ",
+        user_id,
+        "\tuser_sessions: ",
+        user_session,
+        "\tscoreUser: ",
+        scoreUsers,
+    )
+    print("==========================================================")
+    print("USERS: ", USERS)
+    print("Sessions: ", Sessions)
+    print("==========================================================")
+
+    if not all([user_session, scoreUsers]):
         print(f"\033[91;1mUser session not found.\033[0m\n")
         return False, None
 
     scoreUsers.user_session = user_session
     print(f"\033[92mSet Current User: {scoreUsers.user_session}\033[0m")
-    return user_session != None
+    return user_session != None, user_session
 
 
 def validate_data(jsonRequest):

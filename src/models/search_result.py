@@ -4,7 +4,7 @@ import uuid
 from datetime import datetime
 from enum import Enum as PEnum
 from typing import TYPE_CHECKING, List
-from sqlalchemy import ForeignKey, Column, Enum, String, DateTime
+from sqlalchemy import ForeignKey, Column, Enum, Integer, String, DateTime
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.extensions import db
@@ -18,10 +18,16 @@ class UsernameType(PEnum):
     FOUND = "found"
 
 
+class SocialMedia(PEnum):
+    TWITTER = "twitter"
+    MASTODON = "mastodon"
+    LINKEDIN = "linkedin"
+
+
 search_usernames = db.Table(
-    "search_usernames",
+    "search_user_results",
     Column("search_id", ForeignKey("search_result.id"), primary_key=True),
-    Column("username_id", ForeignKey("username.id"), primary_key=True),
+    Column("user_result_id", ForeignKey("user_result.id"), primary_key=True),
     Column("type", Enum(UsernameType)),
 )
 
@@ -34,7 +40,7 @@ class SearchResult(db.Model):
     description: Mapped[str] = mapped_column(String(250))
     user_id: Mapped[str] = mapped_column(String(length=50), ForeignKey("user.id"))
 
-    username: Mapped[List["Username"]] = relationship(
+    user_result: Mapped[List["UserResult"]] = relationship(
         secondary=search_usernames, back_populates="search_result"
     )
     user: Mapped["User"] = relationship(back_populates="search_result")
@@ -44,14 +50,14 @@ class SearchResult(db.Model):
             "id": self.id,
             "time_stamp": self.time_stamp,
             "description": self.description,
-            "usernames": [item.serialize() for item in self.username],
+            "user_results": [item.serialize() for item in self.user_result],
         }
 
-    def __get_usernames_by_type(self, username_type: UsernameType):
+    def __get_user_results_by_type(self, username_type: UsernameType):
         return [
-            username.serialize()
-            for username in self.usernames
-            if username.type == username_type.value
+            user.serialize()
+            for user in self.user_result
+            if user.type == username_type.value
         ]
 
     def get_seed_usernames(self):
@@ -61,15 +67,19 @@ class SearchResult(db.Model):
         return self.__get_usernames_by_type(UsernameType.FOUND)
 
 
-class Username(db.Model):
+class UserResult(db.Model):
     id = mapped_column(
         String(length=50), primary_key=True, default=lambda: uuid.uuid4().hex
     )
-    username: Mapped[str] = mapped_column(String(length=100), nullable=False)
+    username: Mapped[str] = mapped_column(String(length=256), nullable=False)
     type: Mapped[str] = mapped_column(String(length=20), nullable=False)
+    score: Mapped[int] = mapped_column(Integer, nullable=True)
+    handle: Mapped[str] = mapped_column(String(length=256), nullable=True)
+    social_media: Mapped[str] = mapped_column(String(length=256), nullable=True)
+    image_url: Mapped[str] = mapped_column(String(length=256), nullable=True)
 
     search_result: Mapped[List["SearchResult"]] = relationship(
-        secondary=search_usernames, back_populates="username"
+        secondary=search_usernames, back_populates="user_result"
     )
 
     def serialize(self):
@@ -77,4 +87,8 @@ class Username(db.Model):
             "id": self.id,
             "username": self.username,
             "type": self.type,
+            "score": self.score,
+            "handle": self.handle,
+            "social_media": self.social_media,
+            "image_url": self.image_url,
         }
