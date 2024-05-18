@@ -13,12 +13,9 @@ def wake_handler():
     return jsonify({"message": "Wake up successful"})
 
 
-# This code is no longer needed
-
-# @main.route("/api/search", methods=["POST", "HEAD", "GET"])
-# @token_required
-# def handle_get_users(current_user: dict):
-#     user_id = current_user.get("id")
-#     result = scoring_user(user_id)
-#     add_search_result(current_user.get("id"), result)
-#     return result
+@main.route("/api/search", methods=["POST", "HEAD", "GET"])
+@token_required
+def handle_get_users(current_user: dict):
+    user_id = current_user.get("id")
+    result = scoring_user(user_id)
+    return result

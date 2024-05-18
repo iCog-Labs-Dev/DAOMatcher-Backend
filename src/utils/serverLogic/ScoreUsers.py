@@ -3,7 +3,14 @@ from heapq import *
 from collections import *
 from urllib.parse import urlparse
 from src.extensions import socketio
-from src.utils.serverLogic import mastodon, linkedIn, llm_server
+from src.utils.serverLogic import (
+    mastodon,
+    linkedIn,
+    twitter,
+    llm_server,
+    LINKEDIN_PREFIX,
+    TWITTER_PREFIX,
+)
 from src.utils.utils import emitData
 
 
@@ -84,6 +91,31 @@ class ScoreUsers:
             return content, user
         return None, None
 
+    def __get_twitter_user(self, username):
+        profile = twitter.getTwitterProfile(username)
+
+        if profile:
+            content = []
+
+            if "description" in profile and profile["description"]:
+                content.append(profile["description"])
+
+            for p in twitter.getUserPosts(profile["id"], 10):
+                if "text" in p and p["text"]:
+                    content.append(p["text"])
+
+            content = "\n\n------------------\n".join(content)
+            user = {
+                "id": profile["id"],
+                "name": profile["name"],
+                "username": username,
+                "image": profile["profile_image_url"],
+                "social_media": "twitter",
+            }
+
+            return content, user
+        return None, None
+
     def scour(self, starting_users, query, user_limit, depth):
         user_heap = []
 
@@ -96,6 +128,7 @@ class ScoreUsers:
 
         while (not self.cancel) and accounts and (count < depth):
             account = accounts.popleft()
+            user = None
 
             # Organized logging for debugging purposes
             print(
@@ -104,6 +137,7 @@ class ScoreUsers:
                 )
             )
             try:
+                username = None
                 if (
                     "@" in account
                 ):  # If it contains @ it is mastodon otherwise it is LinkedIn URL
@@ -120,10 +154,15 @@ class ScoreUsers:
                             username = "@" + username
                         else:
                             username = "@" + username + "@" + server
-                        if username not in visited:
+
+                        if username and username not in visited:
                             accounts.append(username)
                             visited.add(username)
-                else:
+                elif (
+                    LINKEDIN_PREFIX in account
+                ):  # If the username input contains a "li+" it is from linkedIn. This is a prefix used to identify which is which.
+                    # It is going to be set from frontend for the starting users and here in the backend for the new users found
+                    _, account = account.split(LINKEDIN_PREFIX)
                     content, user = self.__get_linkedIn_user(account)
 
                     # If there is no user found, no point in executing the rest of the code
@@ -133,9 +172,31 @@ class ScoreUsers:
                     # Get followers for linkedIn
                     for follower in linkedIn.getConnections(account, 1000):
                         username = follower["publicIdentifier"]
-                        if username not in visited:
+                        username = LINKEDIN_PREFIX + username
+
+                        if username and username not in visited:
                             accounts.append(username)
                             visited.add(username)
+                elif (
+                    TWITTER_PREFIX in account
+                ):  # If the username input contains a "tw+" it is from twitter. This is a prefix used to identify which is which.
+                    # It is going to be set from frontend for the starting users and here in the backend for the new users found
+                    _, account = account.split(TWITTER_PREFIX)
+                    content, user = self.__get_twitter_user(account)
+
+                    # If there is no user found, no point in executing the rest of the code
+                    if not user:
+                        continue
+
+                    # Get followers for twitter
+                    for follower in twitter.getFollowers(account, 1000):
+                        username = follower["username"]
+                        username = TWITTER_PREFIX + username
+
+                        if username and username not in visited:
+                            accounts.append(username)
+                            visited.add(username)
+
             except Exception as e:
                 print(f"\033[91;1m{e} In scour.\033[0m\n")
                 emitData(socketio, f"update", {"error": str(e)}, room=self.user_session)

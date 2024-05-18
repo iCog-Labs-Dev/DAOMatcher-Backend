@@ -1,3 +1,4 @@
+from datetime import datetime
 from flask import request, jsonify, abort
 from requests import HTTPError
 from werkzeug.exceptions import NotFound
@@ -55,6 +56,7 @@ def add_search_result(user_id: str, data: dict = None):
         search_result.user_result.extend(found_user_results)
         search_result.user_result.extend(seed_user_results)
         search_result.user_id = user_id
+        search_result.time_stamp = datetime.now()
 
         db.session.add(search_result)
         db.session.commit()
