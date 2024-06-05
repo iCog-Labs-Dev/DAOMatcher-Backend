@@ -8,6 +8,7 @@ from flask import jsonify, make_response, request
 from src.controllers.user import get_user_by_email
 from src.extensions import db
 from src.models.user import User
+
 from src.utils.token import confirm_token, generate_and_send
 from src.utils.utils import generate_access_token, generate_refresh_token
 
@@ -115,7 +116,7 @@ def login(body: dict = None):
 def handle_google_signin(data):
     try:
         email = data.get("email")
-        display_name = data.get("display_name")
+        display_name = data.get("name")
 
         
 
@@ -135,7 +136,7 @@ def handle_google_signin(data):
         # Check if the user exists
         found_user = get_user_by_email(email)
         if found_user:
-            found_user.is_verified = True  # Mark user as verified
+            found_user.verified = True  # Mark user as verified
             db.session.commit()
             return login_user(found_user)
 
@@ -146,11 +147,9 @@ def handle_google_signin(data):
             api_key=None,
             password=None,  # No password since using Google for authentication
             password_salt=None,
-            is_verified=True,  # Mark new user as verified
+            verified=True,  # Mark new user as verified
         )
 
-        usage = UserUsage()
-        user.user_usage = usage
 
         db.session.add(user)
         db.session.commit()
