@@ -112,6 +112,101 @@ def login(body: dict = None):
         )
 
 
+def handle_google_signin(data):
+    try:
+        email = data.get("email")
+        display_name = data.get("display_name")
+
+        
+
+        if not email or not display_name:
+            return (
+                jsonify(
+                    {
+                        "message": "Email and name are required",
+                        "data": None,
+                        "error": "Bad request",
+                        "success": False,
+                    }
+                ),
+                400,
+            )
+
+        # Check if the user exists
+        found_user = get_user_by_email(email)
+        if found_user:
+            found_user.is_verified = True  # Mark user as verified
+            db.session.commit()
+            return login_user(found_user)
+
+        # Create a new user since it does not exist
+        user = User(
+            display_name=display_name,
+            email=email,
+            api_key=None,
+            password=None,  # No password since using Google for authentication
+            password_salt=None,
+            is_verified=True,  # Mark new user as verified
+        )
+
+        usage = UserUsage()
+        user.user_usage = usage
+
+        db.session.add(user)
+        db.session.commit()
+
+        return login_user(user)
+
+    except Exception as e:
+        return (
+            jsonify(
+                {
+                    "message": "Something went wrong!",
+                    "error": str(e),
+                    "data": None,
+                    "success": False,
+                }
+            ),
+            500,
+        )
+
+
+
+def login_user(user):
+    try:
+        access_token = generate_access_token(user.id)
+        refresh_token = generate_refresh_token(user.id)
+        response = make_response(
+            jsonify(
+                {
+                    "message": "Login successful",
+                    "data": {"user": user.serialize(), "token": access_token},
+                    "error": None,
+                    "success": True,
+                },
+            )
+        )
+
+        response.set_cookie(
+            "refresh_token", refresh_token, secure=True, httponly=True
+        )
+
+        return response, 200
+
+    except Exception as e:
+        return (
+            jsonify(
+                {
+                    "message": "Something went wrong",
+                    "data": None,
+                    "error": str(e),
+                    "success": False,
+                }
+            ),
+            500,
+        )
+
+
 def validate_credentials(email: str, password: str):
     if not email or not password:
         raise Exception("Invalid email or password")
