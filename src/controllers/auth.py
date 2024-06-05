@@ -138,7 +138,7 @@ def handle_google_signin(data):
         if found_user:
             found_user.verified = True  # Mark user as verified
             db.session.commit()
-            return login_user(found_user)
+            return login_with_google(found_user)
 
         # Create a new user since it does not exist
         user = User(
@@ -154,7 +154,7 @@ def handle_google_signin(data):
         db.session.add(user)
         db.session.commit()
 
-        return login_user(user)
+        return login_with_google(user)
 
     except Exception as e:
         return (
@@ -171,7 +171,7 @@ def handle_google_signin(data):
 
 
 
-def login_user(user):
+def login_with_google(user):
     try:
         access_token = generate_access_token(user.id)
         refresh_token = generate_refresh_token(user.id)
