@@ -32,6 +32,7 @@ def create():
 
 @auth.route(f"{base_url}/google-signin", methods=["POST"])
 def google_signin():
+    print(request.json)
     response, status = handle_google_signin(request.json)
     return response, status
 
