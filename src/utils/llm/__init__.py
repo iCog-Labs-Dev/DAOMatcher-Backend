@@ -1,9 +1,14 @@
+# import os
+
 from decouple import config
 from dotenv import load_dotenv
 from langchain_google_genai import ChatGoogleGenerativeAI
 
+# from langchain_google_vertexai import ChatVertexAI
+
 load_dotenv()
 GOOGLE_API_KEY = config("PALM_API_KEY")
+# os.environ["GOOGLE_API_KEY"] = GOOGLE_API_KEY
 
 LOCAL_LLM_PORT = config("LLM_PORT")
 LOCAL_LLM_URL = f"http://127.0.0.1:{LOCAL_LLM_PORT}"
@@ -58,3 +63,5 @@ model = ChatGoogleGenerativeAI(
     google_api_key=GOOGLE_API_KEY,
     temperature=0.2,
 )
+
+# model = ChatVertexAI(model="gemini-pro")
