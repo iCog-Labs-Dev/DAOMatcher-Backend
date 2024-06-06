@@ -118,8 +118,6 @@ def handle_google_signin(data):
         email = data.get("email")
         display_name = data.get("name")
 
-        
-
         if not email or not display_name:
             return (
                 jsonify(
@@ -150,13 +148,13 @@ def handle_google_signin(data):
             verified=True,  # Mark new user as verified
         )
 
-
         db.session.add(user)
         db.session.commit()
 
         return login_with_google(user)
 
     except Exception as e:
+        # print("Error from sign up google: ", e)
         return (
             jsonify(
                 {
@@ -168,7 +166,6 @@ def handle_google_signin(data):
             ),
             500,
         )
-
 
 
 def login_with_google(user):
@@ -186,13 +183,12 @@ def login_with_google(user):
             )
         )
 
-        response.set_cookie(
-            "refresh_token", refresh_token, secure=True, httponly=True
-        )
+        response.set_cookie("refresh_token", refresh_token, secure=True, httponly=True)
 
         return response, 200
 
     except Exception as e:
+        # print("Error from google login: ", e)
         return (
             jsonify(
                 {
