@@ -19,7 +19,14 @@ def token_required(f):
         print("args", request.args.get("token"))
 
         if "Authorization" in request.headers:
-            token = request.headers["Authorization"].split(" ")[1]
+            try:
+                token = request.headers["Authorization"].split(" ")[1]
+            except IndexError:
+                return {
+                    "message": "Authentication Token is missing!",
+                    "data": None,
+                    "error": "Unauthorized",
+                }, 401
 
         elif "token" in request.args:
             token = request.args["token"]
