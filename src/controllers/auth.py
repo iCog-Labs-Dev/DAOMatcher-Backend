@@ -79,6 +79,7 @@ def login(body: dict = None):
                     secure=True,
                     httponly=True,
                     expires=expiry_date,
+                    samesite='None'
                 )
 
                 return response, 200
