@@ -1,13 +1,41 @@
 name: Run RAG evaluation tests
-on: push
+on: 
+  push:
+    branches:
+      - dev
+  pull-request:
+    branches:
+      - main
 
 jobs:
-  rule-based-eval:
+  test:
     name: Perform Rule-Based Evaluation
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Run Pytest
-        uses: actions/checkout@v2
+      - name: Install Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.11.6'
+
+      - name: Install Poetry
+        run: pip install poetry
+
+      - name: Install Dependencies
+        run: poetry install
+
+      - name: Activate Virtual Environement
+        run: poetry shell
+
+      - name: Run tests(Rule-Based Evaluation)
+        if: github.event == 'push'
+        run: pytest test_rule_based_eval.py
+
+      - name: Run tests(Model-Graded Evaluation)
+        if: github.event == 'pull_request'
+        run: pytest test_model_graded_eval.py
+
+    strategy:
+      fail-fast: true
