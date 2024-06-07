@@ -8,6 +8,7 @@ from flask import jsonify, make_response, request
 from src.controllers.user import get_user_by_email
 from src.extensions import db
 from src.models.user import User
+
 from src.utils.token import confirm_token, generate_and_send
 from src.utils.utils import generate_access_token, generate_refresh_token
 
@@ -69,8 +70,15 @@ def login(body: dict = None):
                     )
                 )
 
+                expiry_day = int(config("REFRESH_TOKEN_EXPIRY_IN_DAYS", 1))
+                expiry_date = datetime.now() + timedelta(days=expiry_day)
+
                 response.set_cookie(
-                    "refresh_token", refresh_token, secure=True, httponly=True
+                    "refresh_token",
+                    refresh_token,
+                    secure=True,
+                    httponly=True,
+                    expires=expiry_date,
                 )
 
                 return response, 200
@@ -105,6 +113,95 @@ def login(body: dict = None):
                     "message": "Something went wrong!",
                     "error": str(e),
                     "data": None,
+                    "success": False,
+                }
+            ),
+            500,
+        )
+
+
+def handle_google_signin(data):
+    try:
+        email = data.get("email")
+        display_name = data.get("name")
+
+        if not email or not display_name:
+            return (
+                jsonify(
+                    {
+                        "message": "Email and name are required",
+                        "data": None,
+                        "error": "Bad request",
+                        "success": False,
+                    }
+                ),
+                400,
+            )
+
+        # Check if the user exists
+        found_user = get_user_by_email(email)
+        if found_user:
+            found_user.verified = True  # Mark user as verified
+            db.session.commit()
+            return login_with_google(found_user)
+
+        # Create a new user since it does not exist
+        user = User(
+            display_name=display_name,
+            email=email,
+            api_key=None,
+            password=None,  # No password since using Google for authentication
+            password_salt=None,
+            verified=True,  # Mark new user as verified
+        )
+
+        db.session.add(user)
+        db.session.commit()
+
+        return login_with_google(user)
+
+    except Exception as e:
+        # print("Error from sign up google: ", e)
+        return (
+            jsonify(
+                {
+                    "message": "Something went wrong!",
+                    "error": str(e),
+                    "data": None,
+                    "success": False,
+                }
+            ),
+            500,
+        )
+
+
+def login_with_google(user):
+    try:
+        access_token = generate_access_token(user.id)
+        refresh_token = generate_refresh_token(user.id)
+        response = make_response(
+            jsonify(
+                {
+                    "message": "Login successful",
+                    "data": {"user": user.serialize(), "token": access_token},
+                    "error": None,
+                    "success": True,
+                },
+            )
+        )
+
+        response.set_cookie("refresh_token", refresh_token, secure=True, httponly=True)
+
+        return response, 200
+
+    except Exception as e:
+        # print("Error from google login: ", e)
+        return (
+            jsonify(
+                {
+                    "message": "Something went wrong",
+                    "data": None,
+                    "error": str(e),
                     "success": False,
                 }
             ),
