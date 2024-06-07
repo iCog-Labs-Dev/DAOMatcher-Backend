@@ -69,8 +69,15 @@ def login(body: dict = None):
                     )
                 )
 
+                expiry_day = int(config("REFRESH_TOKEN_EXPIRY_IN_DAYS", 1))
+                expiry_date = datetime.now() + timedelta(days=expiry_day)
+
                 response.set_cookie(
-                    "refresh_token", refresh_token, secure=True, httponly=True
+                    "refresh_token",
+                    refresh_token,
+                    secure=True,
+                    httponly=True,
+                    expires=expiry_date,
                 )
 
                 return response, 200
