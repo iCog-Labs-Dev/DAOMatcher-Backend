@@ -1,9 +1,10 @@
 import json
 from flask import Blueprint
 
-from src.controllers.auth import login, confirm_email, refresh_token, resend_token
+from src.controllers.auth import login, confirm_email, refresh_token, resend_token, handle_google_signin
 from src.utils.decorators import token_required
 from src.controllers.user import add_user, request
+
 
 auth = Blueprint("auth", __name__)
 base_url = "/api/auth"
@@ -27,6 +28,12 @@ def create():
         response.data = json.dumps(data)
         print(response.json)
         return response
+    return response, status
+
+@auth.route(f"{base_url}/google-signin", methods=["POST"])
+def google_signin():
+    print(request.json)
+    response, status = handle_google_signin(request.json)
     return response, status
 
 
