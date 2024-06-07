@@ -1,0 +1,13 @@
+name: Run RAG evaluation tests
+on: push
+
+jobs:
+  rule-based-eval:
+    name: Perform Rule-Based Evaluation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Run Pytest
+        uses: actions/checkout@v2
