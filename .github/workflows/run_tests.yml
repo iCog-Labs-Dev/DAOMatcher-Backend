@@ -24,11 +24,11 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Run tests(Rule-Based Evaluation)
-        if: github.event == 'push'
+        if: github.event_name == 'push'
         run: pytest test_rule_based_eval.py
 
       - name: Run tests(Model-Graded Evaluation)
-        if: github.event == 'pull_request'
+        if: github.event_name == 'pull_request'
         run: pytest test_model_graded_eval.py
 
     strategy:
