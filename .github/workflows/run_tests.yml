@@ -7,6 +7,13 @@ on:
     branches:
       - main
 
+env:
+  TWITTER_API_KEY: ${{secrets.TWITTER_API_KEY}}
+  TWITTER_API_SECRET: ${{secrets.TWITTER_API_SECRET}}
+  TWITTER_TOKEN: ${{secrets.TWITTER_API_SECRET}}
+  LIX_API_KEY: ${{secrets.LIX_API_KEY}}
+  PALM_API_KEY: ${{secrets.PALM_API_KEY}}
+
 jobs:
   test:
     name: Perform RAG Evaluation
