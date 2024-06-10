@@ -29,13 +29,13 @@ jobs:
 
       - name: Install dependencies
         run: |
-          python -m install pip install --upgrade pip poetry
+          python -m pip install --upgrade pip poetry
           python -m poetry install
           source $(poetry env info --path)/bin/activate
           
       - name: Run tests(Rule-Based Evaluation)
         if: github.event_name == 'push'
-        run: pytest test_model_graded_eval.py
+        run: pytest test_rule_base_eval.py
 
       - name: Run tests(Model-Graded Evaluation)
         if: github.event_name == 'pull_request'
