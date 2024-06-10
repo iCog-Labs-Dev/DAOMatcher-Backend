@@ -1,6 +1,5 @@
 name: Run RAG evaluation tests
-
-on:
+on: 
   push:
     branches:
       - dev
@@ -10,7 +9,8 @@ on:
 
 env:
   TWITTER_API_KEY: ${{ secrets.TWITTER_API_KEY }}
-  TWITTER_API_SECRET: ${{ secrets.TWITTER_API_SECRET }}  # Assuming typo correction
+  TWITTER_API_SECRET: ${{ secrets.TWITTER_API_SECRET }}
+  TWITTER_TOKEN: ${{ secrets.TWITTER_API_SECRET }}
   LIX_API_KEY: ${{ secrets.LIX_API_KEY }}
   PALM_API_KEY: ${{ secrets.PALM_API_KEY }}
 
@@ -22,27 +22,30 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Install Poetry
-        uses: poetry/poetry@v3
+      - name: Install Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.11.6'
 
-      - name: Create virtual environment
+
+      - name: Install Poetry
+        run: pip install poetry
+
+      - name: Create and activate Virtual Environment
         run: poetry env use 3.11.6
 
       - name: Install requirements
-        run: poetry install pytest  # Install pytest within the virtual environment
+        run: poetry install
 
       - name: Run tests(Rule-Based Evaluation)
         if: github.event_name == 'push'
-        run: |
-          source poetry/env/bin/activate  # Activate virtual environment
-          pytest test_rule_based_eval.py
+        run: | 
+            poetry shell
+            pytest test_rule_based_eval.py
 
       - name: Run tests(Model-Graded Evaluation)
         if: github.event_name == 'pull_request'
-        run: |
-          source poetry/env/bin/activate  # Activate virtual environment
-          pytest test_model_graded_eval.py
+        run: pytest test_model_graded_eval.py
 
     strategy:
       fail-fast: true
-
