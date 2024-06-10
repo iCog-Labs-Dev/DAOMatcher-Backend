@@ -53,6 +53,3 @@ def test_rag_rule_based_evaluation():
 
         # Assert the RAG output matches the expected_outputs based on rules
         assert get_rag_output(score) == expected_output
-
-
-test_rag_rule_based_evaluation()
