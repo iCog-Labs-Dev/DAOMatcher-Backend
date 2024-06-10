@@ -1,34 +1,9 @@
 import pytest
 
-from src.utils.serverLogic import twitter
 from src.utils.llm.LLM import LLM
 
 from tests.utils.eval_llm.EvalLLM import EvalLLM
-
-
-def get_userdata(username, account_type):
-    if account_type == "Twitter":
-        profile = twitter.getTwitterProfile(username)
-
-        if profile:
-            content = []
-
-            if "description" in profile and profile["description"]:
-                content.append(profile["description"])
-
-            for p in twitter.getUserPosts(profile["id"], 10):
-                if "text" in p and p["text"]:
-                    content.append(p["text"])
-
-            content = "\n\n------------------\n".join(content)
-
-            return content
-        return None
-
-    elif account_type == "linkedin":
-        pass
-    else:
-        pass
+from tests.utils.eval_llm import get_userdata
 
 
 def load_rag_llm():

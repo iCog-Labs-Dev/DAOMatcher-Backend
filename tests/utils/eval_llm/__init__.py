@@ -2,6 +2,8 @@ from decouple import config
 from dotenv import load_dotenv
 from langchain_google_genai import ChatGoogleGenerativeAI
 
+from src.utils.serverLogic import twitter
+
 load_dotenv()
 GOOGLE_API_KEY = config("PALM_API_KEY")
 SYSTEM_PROMPT = """
@@ -21,6 +23,31 @@ SYSTEM_PROMPT = """
     Output:
         Response: Based on the given information give a response by saying Yes if the overall requirements have been considered, otherwise respond by a simple No.
 """
+
+
+def get_userdata(username, account_type):
+    if account_type == "Twitter":
+        profile = twitter.getTwitterProfile(username)
+
+        if profile:
+            content = []
+
+            if "description" in profile and profile["description"]:
+                content.append(profile["description"])
+
+            for p in twitter.getUserPosts(profile["id"], 10):
+                if "text" in p and p["text"]:
+                    content.append(p["text"])
+
+            content = "\n\n------------------\n".join(content)
+
+            return content
+        return None
+
+    elif account_type == "linkedin":
+        pass
+    else:
+        pass
 
 
 def get_rag_output(score):
