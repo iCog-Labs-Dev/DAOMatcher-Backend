@@ -27,23 +27,19 @@ jobs:
         with:
           python-version: '3.11.6'
 
-
-      - name: Install Poetry
-        run: pip install poetry
-
-      - name: Create and activate Virtual Environment
-        run: python3 -m venv env && source env/bin/activate
-
-      - name: Install requirements
-        run: poetry install
-
+      - name: Install dependencies
+        run: |
+          python -m install pip install --upgrade pip poetry
+          python -m poetry install
+          source $(poetry env info --path)/bin/activate
+          
       - name: Run tests(Rule-Based Evaluation)
         if: github.event_name == 'push'
-        run: poetry run pytest test_model_graded_eval.py
+        run: pytest test_model_graded_eval.py
 
       - name: Run tests(Model-Graded Evaluation)
         if: github.event_name == 'pull_request'
-        run: poetry run pytest test_model_graded_eval.py
+        run: pytest test_model_graded_eval.py
 
     strategy:
       fail-fast: true
