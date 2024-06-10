@@ -27,11 +27,12 @@ jobs:
         with:
           python-version: '3.11.6'
 
-      - name: Create activate Virtual Environment
-        run: python3 -m venv test_env && source test_env/bin/activate
 
       - name: Install Poetry
         run: pip install poetry
+
+      - name: Create and activate Virtual Environment
+        run: poetry shell
 
       - name: Install requirements
         run: poetry install
