@@ -36,9 +36,6 @@ jobs:
       - name: Install requirements
         run: poetry install
 
-      - name: Install requirements
-        run: poetry shell
-
       - name: Run tests(Rule-Based Evaluation)
         if: github.event_name == 'push'
         run: pytest test_rule_based_eval.py
