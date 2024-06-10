@@ -35,9 +35,6 @@ jobs:
         run: python3 -m venv env && source env/bin/activate
 
       - name: Install requirements
-        run: poetry shell
-
-      - name: Install requirements
         run: poetry install
 
       - name: Run tests(Rule-Based Evaluation)
@@ -46,7 +43,7 @@ jobs:
 
       - name: Run tests(Model-Graded Evaluation)
         if: github.event_name == 'pull_request'
-        run: pytest test_model_graded_eval.py
+        run: pytest run test_model_graded_eval.py
 
     strategy:
       fail-fast: true
