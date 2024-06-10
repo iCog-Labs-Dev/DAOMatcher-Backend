@@ -32,16 +32,17 @@ jobs:
         run: pip install poetry
 
       - name: Create and activate Virtual Environment
-        run: poetry env use 3.11.6
+        run: python3 -m venv env && source env/bin/activate
+
+      - name: Install requirements
+        run: poetry shell
 
       - name: Install requirements
         run: poetry install
 
       - name: Run tests(Rule-Based Evaluation)
         if: github.event_name == 'push'
-        run: | 
-            poetry shell
-            pytest test_rule_based_eval.py
+        run: poetry run pytest test_rule_based_eval.py
 
       - name: Run tests(Model-Graded Evaluation)
         if: github.event_name == 'pull_request'
