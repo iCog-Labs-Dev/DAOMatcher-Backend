@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "daomatcher-backend"
+name = "DAOmatcher-Backend"
 version = "0.1.0"
 description = ""
 authors = ["Yab <yabuman46@gmail.com>"]
