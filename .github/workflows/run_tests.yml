@@ -32,7 +32,7 @@ jobs:
         run: pip install poetry
 
       - name: Create and activate Virtual Environment
-        run: poetry env use
+        run: poetry env use 3.11.6
 
       - name: Install requirements
         run: poetry install
