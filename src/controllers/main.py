@@ -34,7 +34,7 @@ def scoring_user(user_id: str):
                         "score": score,
                         "handle": handle,
                         "image": userInfo["image"],
-                        "social_media": userInfo["social"],
+                        "social_media": userInfo["social_media"],
                     }
                 )
             print(f"result: {users}")

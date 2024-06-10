@@ -154,6 +154,10 @@ class ScoreUsers:
                             username = "@" + username
                         else:
                             username = "@" + username + "@" + server
+
+                        if username and username not in visited:
+                            accounts.append(username)
+                            visited.add(username)
                 elif (
                     LINKEDIN_PREFIX in account
                 ):  # If the username input contains a "li+" it is from linkedIn. This is a prefix used to identify which is which.
@@ -169,6 +173,10 @@ class ScoreUsers:
                     for follower in linkedIn.getConnections(account, 1000):
                         username = follower["publicIdentifier"]
                         username = LINKEDIN_PREFIX + username
+
+                        if username and username not in visited:
+                            accounts.append(username)
+                            visited.add(username)
                 elif (
                     TWITTER_PREFIX in account
                 ):  # If the username input contains a "tw+" it is from twitter. This is a prefix used to identify which is which.
@@ -185,9 +193,10 @@ class ScoreUsers:
                         username = follower["username"]
                         username = TWITTER_PREFIX + username
 
-                if username and username not in visited:
-                    accounts.append(username)
-                    visited.add(username)
+                        if username and username not in visited:
+                            accounts.append(username)
+                            visited.add(username)
+
             except Exception as e:
                 print(f"\033[91;1m{e} In scour.\033[0m\n")
                 emitData(socketio, f"update", {"error": str(e)}, room=self.user_session)
