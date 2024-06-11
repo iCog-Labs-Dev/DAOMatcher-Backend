@@ -31,6 +31,7 @@ jobs:
         run: |
           python -m venv env
           pip install poetry
+          poetry lock
           poetry install
 
       - name: Run tests(Rule-Based Evaluation)
