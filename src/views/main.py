@@ -1,4 +1,3 @@
-from flask_login import login_required
 from flask import Blueprint, jsonify
 
 from src.controllers.main import scoring_user

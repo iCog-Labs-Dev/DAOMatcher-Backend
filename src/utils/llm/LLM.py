@@ -1,6 +1,6 @@
 import re
 import textwrap
-from langchain.chains import LLMChain
+from langchain_core.output_parsers import StrOutputParser
 from src.utils.llm import model
 
 from src.utils.llm import (
@@ -19,7 +19,7 @@ class LLM:
         self.max_tokens = max_tokens
         self.prompt = Prompt().get_prompt_template()
 
-        self.chain = LLMChain(prompt=self.prompt, llm=self.model)
+        self.chain = self.prompt | self.model | StrOutputParser()
 
     def generate(self, query, content):
         content = self.clean_content(content)
@@ -30,7 +30,7 @@ class LLM:
             )
         )
         try:
-            response = self.chain.predict(query=query, content=content)
+            response = self.chain.invoke({"query": query, "content": content})
             print("\033[92;1m" + response + "\033[0m\n")
             response = self.extract_response(response)
             # print(f"Prompt: {prompt.template}")  # For debugging only

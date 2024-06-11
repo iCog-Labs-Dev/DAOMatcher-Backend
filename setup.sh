@@ -39,7 +39,7 @@ gunicorn -w 1 'src.globals:llm_app' --timeout 180 --bind 127.0.0.1:5001 &
 llm_pid=$!
 
 echo "Starting App server on port 8000"
-gunicorn -w 2 'app:create_app()' --timeout 180 --bind 0.0.0.0:8000 &
+gunicorn -k geventwebsocket.gunicorn.workers.GeventWebSocketWorker -w 2 'app:create_app()' --timeout 180 &
 app_pid=$!
 
 wait

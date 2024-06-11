@@ -1,5 +1,6 @@
 #Environment files
 poetry.lock
+dependency
 
 #Vscode configuration
 .vscode
