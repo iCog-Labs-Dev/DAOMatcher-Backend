@@ -15,3 +15,16 @@ def test_sign_up():
     assert sign_up_response.status_code == 200
     pass
 
+def test_login():
+    payload= {
+	"email": "test@Daomatcher.io",
+	"password": "test@Daomatcher!"
+    }
+    login_response= requests.post(ENDPOINT + "/api/auth/login", json=payload)
+    assert login_response.status_code == 200
+    pass
+
+
+
+
+    
