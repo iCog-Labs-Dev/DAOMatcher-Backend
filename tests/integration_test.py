@@ -3,6 +3,7 @@ import uuid
 
 ENDPOINT= "http://localhost:8000"
 
+# Helper Functions:
 
 def login():
     payload = {
@@ -33,6 +34,7 @@ def get_user():
 
 
 
+# Test Functions:
 
 def test_sign_up():
     email= uuid.uuid4().hex
@@ -73,7 +75,7 @@ def test_update_user():
     }
 
     payload={
-        "api_key": "test_as87d6a987da987sd98a7sd98a7sd987df986df76876ef8"
+        "api_key": "still nothing ye"
     }
     update_user_response= requests.put(ENDPOINT + f"/api/user/{auth_data['user_id']}", headers=headers, json=payload)
     assert update_user_response.status_code == 200, f"Expected status code 200 but got {update_user_response.status_code}"
