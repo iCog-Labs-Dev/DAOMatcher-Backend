@@ -1,7 +1,9 @@
 from tests.utils.eval_llm import model
 from langchain.chains import LLMChain
 from langchain.prompts import PromptTemplate
-from tests.utils.eval_llm import SYSTEM_PROMPT
+from tests.utils.eval_llm import SYSTEM_PROMPT, INSTRUCTION, ACTIONS, InterestLevels
+
+from langchain_core.output_parsers import StrOutputParser
 
 
 class EvalLLM:
@@ -9,30 +11,36 @@ class EvalLLM:
         self.model = model
         self.temperature = temperature
         self.max_tokens = max_tokens
-        self.prompt = PromptTemplate(
-            template=SYSTEM_PROMPT,
-            input_variables=("topic", "rag_output", "user_data"),
+        self.prompt = Prompt().get_prompt_template()
+
+        self.chain = self.prompt | self.model | StrOutputParser()
+
+    def evaluate_rag_output(self, topic, score, user_data):
+        response = self.chain.invoke(
+            {
+                "topic": topic,
+                "user_data": user_data,
+                "score": score,
+            }
         )
+        print("\n" + response + "\n")
 
-        self.chain = LLMChain(prompt=self.prompt, llm=self.model)
-
-    def evaluate_rag_output(self, topic, rag_output, user_data, score):
-        prompt_data = {
-            "topic": topic,
-            "rag_output": rag_output,
-            "user_data": user_data,
-            "score": "{score}",
-        }
-
-        self.prompt.format_prompt(**prompt_data)
-        response = self.chain.predict(
-            topic=topic, rag_output=rag_output, user_data=user_data, score=score
-        )
-
-        # response = self.extract_score(response)
+        response = self.extract_score(response)
 
         return response
 
     def extract_score(self, response):
-        response = response.split("Response: ")[1]
+        response = response.split("Overall: ")[1]
         return response
+
+
+class Prompt:
+    def get_prompt_template(self, query=INSTRUCTION, system_prompt=SYSTEM_PROMPT):
+        template = system_prompt + query
+
+        prompt = PromptTemplate(
+            template=template,
+            input_variables=(["topic", "user_data", "score"]),
+        )
+        prompt = prompt.partial(actions=str(ACTIONS), intervals=str(InterestLevels))
+        return prompt
