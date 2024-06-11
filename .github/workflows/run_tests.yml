@@ -29,17 +29,17 @@ jobs:
 
       - name: Install dependencies
         run: |
-          python -m venv env
-          source env/bin/activate
-          pip install -r requirements.txt
-          
+          python -m pip install --upgrade pip
+          pip install poetry
+          poetry install --with dev
+
       - name: Run tests(Rule-Based Evaluation)
         if: github.event_name == 'push'
-        run: pytest test_rule_base_eval.py
+        run: poetry run pytest test_rule_base_eval.py
 
       - name: Run tests(Model-Graded Evaluation)
         if: github.event_name == 'pull_request'
-        run: pytest test_model_graded_eval.py
+        run: poetry run pytest test_model_graded_eval.py
 
     strategy:
       fail-fast: true
