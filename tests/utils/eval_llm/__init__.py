@@ -10,7 +10,7 @@ GOOGLE_API_KEY = config("PALM_API_KEY")
 SYSTEM_PROMPT = """
     Task: Rate the accuracy, relevance, and coherence of the provided RAG output in the context of the given topic and user data summary. Higher scores indicate a more accurate, relevant, and well-supported RAG output.
     Output:
-        Response: After stating the accuracy, relevance and coherence; based on the given information give a response by saying Yes if the overall requirements have been considered, otherwise respond by a simple No.
+        Response: After stating the accuracy, relevance and coherence; based on the given information give a response by saying Yes if the overall requirements have been considered, otherwise respond by a simple No. Your last output should be marked by a delimiter 'Overall: ' 
 """
 
 INSTRUCTION = """
@@ -69,8 +69,9 @@ def get_userdata(username, account_type, mastodon_server=None):
 
     elif account_type == "Linkedin":
         pass
-    else:
+    elif account_type == "Mastodon":
         profile = mastodon.getProfile(mastodon_server, username)
+        print(profile)
         if profile:
             content = []
             # print(id)

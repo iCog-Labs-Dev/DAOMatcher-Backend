@@ -11,8 +11,11 @@ class EvalLLM:
         self.model = model
         self.temperature = temperature
         self.max_tokens = max_tokens
-        self.prompt = Prompt().get_prompt_template()
-
+        template = SYSTEM_PROMPT + INSTRUCTION
+        self.prompt = PromptTemplate(
+            template=template,
+            input_variables=["topic", "user_data", "score"],
+        ).partial(actions=str(ACTIONS), intervals=str(InterestLevels))
         self.chain = self.prompt | self.model | StrOutputParser()
 
     def evaluate_rag_output(self, topic, score, user_data):
@@ -25,22 +28,14 @@ class EvalLLM:
         )
         print("\n" + response + "\n")
 
-        response = self.extract_score(response)
+        try:
+            score = self.extract_score(response)
+        except (ValueError, AttributeError):
+            # Handle cases where score extraction fails (e.g., missing "Overall:")
+            score = None
 
-        return response
+        return score
 
     def extract_score(self, response):
         response = response.split("Overall: ")[1]
         return response
-
-
-class Prompt:
-    def get_prompt_template(self, query=INSTRUCTION, system_prompt=SYSTEM_PROMPT):
-        template = system_prompt + query
-
-        prompt = PromptTemplate(
-            template=template,
-            input_variables=(["topic", "user_data", "score"]),
-        )
-        prompt = prompt.partial(actions=str(ACTIONS), intervals=str(InterestLevels))
-        return prompt
