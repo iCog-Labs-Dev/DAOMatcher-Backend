@@ -68,7 +68,7 @@ def rag_model_graded_evaluation_linkedin_negative():
 
 def test_rag_model_graded_evaluation_mastodon_negative():
     mastodon_username = "@QasimRashid"
-    topic = "Space Exploration and colonization"
+    topic = "Art and Literature"
     user_data = get_userdata(mastodon_username, "Mastodon", "@mastodon.social")
 
     if not user_data:

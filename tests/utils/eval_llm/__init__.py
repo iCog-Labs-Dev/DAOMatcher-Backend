@@ -10,17 +10,7 @@ GOOGLE_API_KEY = config("PALM_API_KEY")
 SYSTEM_PROMPT = """
     Task: Rate the accuracy, relevance, and coherence of the provided RAG output in the context of the given topic and user data summary. Higher scores indicate a more accurate, relevant, and well-supported RAG output.
     Output:
-        Response: After stating the accuracy, relevance and coherence; based on the given information give a response by saying Yes if the overall requirements have been considered, otherwise respond by a simple No. Your last output should be marked by a delimiter 'Overall: ' 
-"""
-
-INSTRUCTION = """
-    You are an expert tester who would be interested in a certain topic.
-    Your task is to evaluate the accuracy, relevance and coherence of a topic in relation to user data provided in the following form and judge whether the score provided is in the appropriate range for the given topic vs user data:    
-
-    Input:
-        Topic: {topic}
-        User Data: {user_data}
-        Score: {score}
+        Response: After stating the accuracy, relevance and coherence, based on the provided information, give a response by saying Yes if the overall requirements have been met and the score is what it ought to be, otherwise respond by a simple No. Your last output should be marked by a delimiter 'Overall: ' 
 """
 
 
@@ -29,7 +19,31 @@ ACTIONS = [
     "Search for indication of interest in the topic from the user data",
     "Search for topics that could belong to the same category as the given topic",
     "Pick a number from the interest levels matching the user's interest in the topic of question",
+    "Compare {score} with the number you have picked and Return Yes if they are close to eachother. Otherwise Return No",
 ]
+INSTRUCTION = """
+    You are an expert tester who would be interested in a certain topic.
+    Your task is to evaluate the accuracy, relevance and coherence of a topic in relation to user data provided in the following form and judge whether the score provided is in the appropriate range for the given topic vs user data:    
+
+
+Use the following format:
+Question: The topic the human asked you
+
+Thought: you should always think about what to do
+Action: the action to take, should be one of {actions}
+Action Input: the input to the action
+Observation: verbal description of what you learned after performing the above action
+(... this pattern 'Thought/Action/Action Input/Observation' can be repeated N times as needed)
+
+Analysis: your analysis of the user's interest based on Explicit mentions, Indications of interest and similar topics or field of work to the given topic
+Observation: What you learned after performing the above action and what led to such conclusion
+
+    Input:
+        Topic: {topic}
+        User Data: {user_data}
+        Score: {score}
+"""
+
 
 InterestLevels = [
     "The user's posts talks about completely different topic and show no interest in the topic given = 10-20",

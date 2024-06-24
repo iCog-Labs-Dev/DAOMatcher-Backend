@@ -26,7 +26,7 @@ class EvalLLM:
                 "score": score,
             }
         )
-        print("\n" + response + "\n")
+        print("\033[31m" + response + "\033[0m")
 
         try:
             score = self.extract_score(response)

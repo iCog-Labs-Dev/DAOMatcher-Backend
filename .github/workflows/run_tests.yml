@@ -36,7 +36,7 @@ jobs:
 
       - name: Run tests(Rule-Based Evaluation)
         if: github.event_name == 'push'
-        run: poetry run pytest test_rule_based_eval.py
+        run: poetry run pytest test_model_graded_eval.py
 
       - name: Run tests(Model-Graded Evaluation)
         if: github.event_name == 'pull_request'
