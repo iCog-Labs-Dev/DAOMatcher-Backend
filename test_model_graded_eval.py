@@ -62,6 +62,7 @@ def rag_model_graded_evaluation_linkedin_negative():
             "score": score,
         }
         evaluation_score = evaluator_llm.evaluate_rag_output(**evaluator_input)
+        print(evaluation_score)
 
         assert evaluation_score == "Yes"
 
