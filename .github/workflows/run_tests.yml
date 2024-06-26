@@ -1,5 +1,5 @@
 name: Run RAG evaluation tests
-on: 
+on:
   push:
     branches:
       - dev
@@ -25,7 +25,7 @@ jobs:
       - name: Install Python
         uses: actions/setup-python@v3
         with:
-          python-version: '3.11.6'
+          python-version: "3.11.6"
 
       - name: Install dependencies
         run: |
@@ -34,14 +34,9 @@ jobs:
           poetry lock
           poetry install
 
-      - name: Run tests(Rule-Based Evaluation)
-        if: github.event_name == 'push'
-        run: poetry run pytest test_model_graded_eval.py
-
       - name: Run tests(Model-Graded Evaluation)
         if: github.event_name == 'pull_request'
         run: poetry run pytest test_model_graded_eval.py
-
 
     strategy:
       fail-fast: true
