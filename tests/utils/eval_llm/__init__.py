@@ -1,3 +1,4 @@
+import logging
 from decouple import config
 from dotenv import load_dotenv
 from langchain_google_genai import ChatGoogleGenerativeAI
@@ -5,10 +6,19 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 from src.utils.serverLogic import twitter, mastodon
 from urllib.parse import urlparse
 
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+
+handler = logging.StreamHandler()
+handler.setLevel(logging.INFO)
+
+logger.addHandler(handler)
+
+
 load_dotenv()
 GOOGLE_API_KEY = config("PALM_API_KEY")
 SYSTEM_PROMPT = """
-    Task: Rate the accuracy, relevance, and coherence of the provided RAG output in the context of the given topic and user data summary. Higher scores indicate a more accurate, relevant, and well-supported RAG output.
+    Task: Rate the accuracy and relevance of the provided RAG output in the context of the given topic and user data summary. Higher scores indicate a more accurate, relevant, and well-supported RAG output.
     Output:
         Response: After stating the accuracy, relevance and coherence, based on the provided information, give a response by saying Yes if the overall requirements have been met and the score is what it ought to be, otherwise respond by a simple No. Your last output should be marked by a delimiter 'Overall: ' 
 """
@@ -40,7 +50,6 @@ Observation: What you learned after performing the above action and what led to 
 
 Accuracy: Your numerical evaluation of the accuracy of the RAG output. You should only output number from 1 - 100 nothing else.
 Relevance: Your numerical evaluation of the relevance of the RAG output. You should only output number from 1 - 100 nothing else.
-Coherence: Your numerical evaluation of the coherence of the RAG output. You should only output number from 1 - 100 nothing else.
 Overall: Your final evaluation of the RAG output as a Yes or No
 
     Input:

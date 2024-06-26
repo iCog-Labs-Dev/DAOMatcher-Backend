@@ -33,7 +33,7 @@ def rag_model_graded_evaluation_linkedin_positive():
             "rag_output": rag_output,
             "score": score,
         }
-        evaluation_score = evaluator_llm.evaluate_rag_output(**evaluator_input)
+        evaluation_score, _, _ = evaluator_llm.evaluate_rag_output(**evaluator_input)
 
         assert evaluation_score == "Yes"
 
@@ -59,7 +59,7 @@ def rag_model_graded_evaluation_linkedin_negative():
             "rag_output": rag_output,
             "score": score,
         }
-        evaluation_score = evaluator_llm.evaluate_rag_output(**evaluator_input)
+        evaluation_score, _, _ = evaluator_llm.evaluate_rag_output(**evaluator_input)
         print(evaluation_score)
 
         assert evaluation_score == "Yes"
@@ -83,7 +83,7 @@ def test_rag_model_graded_evaluation_mastodon_negative():
             "user_data": user_data,
             "score": score,
         }
-        evaluation_score = evaluator_llm.evaluate_rag_output(**evaluator_input)
+        evaluation_score, _, _ = evaluator_llm.evaluate_rag_output(**evaluator_input)
 
         assert evaluation_score == "No"
 
@@ -106,9 +106,13 @@ def test_rag_model_graded_evaluation_mastodon_positive():
             "user_data": user_data,
             "score": score,
         }
-        evaluation_score = evaluator_llm.evaluate_rag_output(**evaluator_input)
+        evaluation_score, accuracy, relevance = evaluator_llm.evaluate_rag_output(
+            **evaluator_input
+        )
 
         assert evaluation_score == "Yes"
+        assert accuracy > 50
+        assert relevance > 50
 
 
 def rag_model_graded_evaluation_twitter_positive():
@@ -129,9 +133,13 @@ def rag_model_graded_evaluation_twitter_positive():
             "user_data": user_data,
             "score": score,
         }
-        evaluation_score = evaluator_llm.evaluate_rag_output(**evaluator_input)
+        evaluation_score, accuracy, relevance = evaluator_llm.evaluate_rag_output(
+            **evaluator_input
+        )
 
         assert evaluation_score == "Yes"
+        assert accuracy > 50
+        assert relevance > 50
 
 
 def rag_model_graded_evaluation_twitter_negative():
@@ -152,6 +160,6 @@ def rag_model_graded_evaluation_twitter_negative():
             "user_data": user_data,
             "score": score,
         }
-        evaluation_score = evaluator_llm.evaluate_rag_output(**evaluator_input)
+        evaluation_score, _, _ = evaluator_llm.evaluate_rag_output(**evaluator_input)
 
         assert evaluation_score == "No"
