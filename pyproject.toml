@@ -33,5 +33,11 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 
-[pytest]
-log_cli = true
+# pyproject.toml
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q"
+testpaths = [
+    "tests",
+    "integration",
+]
