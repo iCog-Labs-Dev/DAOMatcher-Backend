@@ -1,5 +1,3 @@
-import pytest
-
 from src.utils.llm.LLM import LLM
 
 from tests.utils.eval_llm.EvalLLM import EvalLLM

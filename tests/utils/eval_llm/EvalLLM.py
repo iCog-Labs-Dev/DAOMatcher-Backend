@@ -1,3 +1,4 @@
+import logging
 from tests.utils.eval_llm import model
 from langchain.chains import LLMChain
 from langchain.prompts import PromptTemplate
@@ -5,6 +6,7 @@ from tests.utils.eval_llm import SYSTEM_PROMPT, INSTRUCTION, ACTIONS, InterestLe
 
 from langchain_core.output_parsers import StrOutputParser
 
+logger = logging.getLogger(__name__)
 
 class EvalLLM:
     def __init__(self, temperature=0.1, max_tokens=512):
@@ -26,10 +28,16 @@ class EvalLLM:
                 "score": score,
             }
         )
-        print("\033[31m" + response + "\033[0m")
+        # print("\033[31m" + response + "\033[0m")
 
         try:
             score = self.extract_score(response)
+            accuracy = self.extract_integer(response, "Accuracy:")
+            relevance = self.extract_integer(response, "Relevance:")
+            coherence = self.extract_integer(response, "Coherence:")
+            logger.info(f"Accuracy: {accuracy}\n, Relevance: {relevance}\n, Coherence: {coherence}\n, Passed: {score}\n")
+            print("Logger is called here")
+
         except (ValueError, AttributeError):
             # Handle cases where score extraction fails (e.g., missing "Overall:")
             score = None
@@ -39,3 +47,17 @@ class EvalLLM:
     def extract_score(self, response):
         response = response.split("Overall: ")[1]
         return response
+    
+    def extract_integer(self, output, start_string):
+        try:
+            start_index = output.index(start_string)
+        except ValueError:
+            return None
+
+        end_of_line_index = output.index('\n', start_index)
+        line = output[start_index:end_of_line_index]
+
+        try:
+            return int(line.split(':')[1].strip())
+        except (IndexError, ValueError):
+            return None

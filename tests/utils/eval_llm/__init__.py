@@ -38,6 +38,11 @@ Observation: verbal description of what you learned after performing the above a
 Analysis: your analysis of the user's interest based on Explicit mentions, Indications of interest and similar topics or field of work to the given topic
 Observation: What you learned after performing the above action and what led to such conclusion
 
+Accuracy: Your numerical evaluation of the accuracy of the RAG output. You should only output number from 1 - 100 nothing else.
+Relevance: Your numerical evaluation of the relevance of the RAG output. You should only output number from 1 - 100 nothing else.
+Coherence: Your numerical evaluation of the coherence of the RAG output. You should only output number from 1 - 100 nothing else.
+Overall: Your final evaluation of the RAG output as a Yes or No
+
     Input:
         Topic: {topic}
         User Data: {user_data}
@@ -85,7 +90,7 @@ def get_userdata(username, account_type, mastodon_server=None):
         pass
     elif account_type == "Mastodon":
         profile = mastodon.getProfile(mastodon_server, username)
-        print(profile)
+        # print(profile)
         if profile:
             content = []
             # print(id)
@@ -129,5 +134,5 @@ def get_rag_output(score):
 model = ChatGoogleGenerativeAI(
     model="gemini-pro",
     google_api_key=GOOGLE_API_KEY,
-    temperature=0.2,
+    temperature=0.0,
 )
