@@ -12,7 +12,7 @@ class Config:
 
     # Mail Settings
     MAIL_DEFAULT_SENDER = config("MAIL_DEFAULT_SENDER")
-    MAIL_SERVER = "smtp.gmail.com"
+    MAIL_SERVER = config("MAIL_SERVER")
     MAIL_PORT = 587
     MAIL_USE_TLS = True
     MAIL_USE_SSL = False
