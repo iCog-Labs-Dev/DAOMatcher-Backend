@@ -11,6 +11,7 @@ from src.models.user import User
 
 from src.utils.token import confirm_token, generate_and_send
 from src.utils.utils import generate_access_token, generate_refresh_token
+from werkzeug.security import generate_password_hash
 
 
 def login(body: dict = None):
@@ -381,3 +382,79 @@ def refresh_token():
             "success": True,
         }
     )
+
+def confirm_reset_pwd_email(current_user: dict, token: str):
+    try:
+        email = confirm_token(token)
+        user = get_user_by_email(current_user.get("email"))
+        if not email or not user:
+            return (
+                jsonify(
+                    {
+                        "message": "Invalid token",
+                        "data": None,
+                        "error": "Unauthorized",
+                        "success": False,
+                    }
+                ),
+                401,
+            )
+        if user.email == email:
+            new_password = request.json.get('password')
+            if not new_password:
+                return (
+                    jsonify(
+                        {
+                            "message": "Password is required",
+                            "data": None,
+                            "error": "Bad Request",
+                            "success": False,
+                        }
+                    ),
+                    400,
+                )
+
+            password = request.get("password").encode("utf-8")
+            salt = bcrypt.gensalt()
+            hashed_password = bcrypt.hashpw(password, salt)
+
+            user.password = hashed_password.decode("utf-8")
+            user.password_salt = salt.decode("utf-8")
+
+            db.session.update(user)
+            db.session.commit()
+
+            return jsonify(
+                {
+                    "message": "Password reset successful",
+                    "data": None,
+                    "error": None,
+                    "success": True,
+                }
+            )
+        
+    except Exception as e:
+        return (
+            jsonify(
+                {
+                    "message": "Something went wrong",
+                    "data": None,
+                    "error": str(e),
+                    "success": False,
+                }
+            ),
+            500,
+        )
+
+def update_password(email, new_password):
+    password = new_password.encode("utf-8")
+    salt = bcrypt.gensalt()
+    hashed_password = bcrypt.hashpw(password, salt)
+    
+    user = User.query.filter_by(email=email).first()
+    if user:
+        user.password = hashed_password.decode("utf-8")
+        user.password_salt = salt.decode("utf-8")
+        db.session.commit()
+        return True
+    return False
