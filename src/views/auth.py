@@ -1,9 +1,10 @@
 import json
-from flask import Blueprint
+from flask import Blueprint, jsonify
 
-from src.controllers.auth import login, confirm_email, refresh_token, resend_token, handle_google_signin
+from src.controllers.auth import login, confirm_email, refresh_token, resend_token, handle_google_signin, update_password
 from src.utils.decorators import token_required
-from src.controllers.user import add_user, request
+from src.utils.token import confirm_token
+from src.controllers.user import add_user, request, request_password_reset
 
 
 auth = Blueprint("auth", __name__)
@@ -61,3 +62,50 @@ def resend_confirmation(current_user: dict):
 def refresh():
     response = refresh_token()
     return response
+
+@auth.route(f"{base_url}/request-reset-password", methods=["POST"])
+def forgot_password():
+    
+    response, status = request_password_reset()
+
+    if status == 200:    
+        data = response.json
+        data.update(
+            {
+                "message": "Password reset email sent successfully. Please check your email to reset your password."
+            }
+        )
+        response.data = json.dumps(data)
+        return response
+
+    return response, status 
+
+
+@auth.route(f"{base_url}/confirm-reset-password/<token>", methods=['GET'])
+def confirm_reset_password(token):
+    email = confirm_token(token)
+    
+    if not email:
+        return jsonify({"message": "Invalid or expired token", "error": "Token verification failed"}), 400
+
+    return jsonify({"message": "Token is valid", "email": email}), 200
+
+@auth.route(f"{base_url}/reset-password", methods=['POST'])
+def reset_password():
+    data = request.get_json()
+    token = data.get('token')
+    new_password = data.get('new_password')
+    
+    if not token or not new_password:
+        return jsonify({"message": "Token and new password are required"}), 400
+    
+    email = confirm_token(token)
+    
+    if not email:
+        return jsonify({"message": "Invalid or expired token", "error": "Token verification failed"}), 400
+    
+    if update_password(email, new_password):
+        return jsonify({"message": "Password has been reset successfully"}), 200
+    else:
+        return jsonify({"message": "Failed to reset password", "error": "User not found"}), 500
+
