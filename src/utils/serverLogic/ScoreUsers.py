@@ -192,7 +192,7 @@ class ScoreUsers:
                         continue
 
                     # Get followers for twitter
-                    for follower in twitter.getFollowers(account, 1000):
+                    for follower in twitter.getRelatedUsers(10):
                         username = follower["username"]
                         username = TWITTER_PREFIX + username
 

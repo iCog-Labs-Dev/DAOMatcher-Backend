@@ -11,6 +11,7 @@ from src.models.user import User
 
 from src.utils.token import confirm_token, generate_and_send
 from src.utils.utils import generate_access_token, generate_refresh_token
+from werkzeug.security import generate_password_hash
 
 
 def login(body: dict = None):
@@ -381,3 +382,16 @@ def refresh_token():
             "success": True,
         }
     )
+
+def update_password(email, new_password):
+    password = new_password.encode("utf-8")
+    salt = bcrypt.gensalt()
+    hashed_password = bcrypt.hashpw(password, salt)
+    
+    user = User.query.filter_by(email=email).first()
+    if user:
+        user.password = hashed_password.decode("utf-8")
+        user.password_salt = salt.decode("utf-8")
+        db.session.commit()
+        return True
+    return False
