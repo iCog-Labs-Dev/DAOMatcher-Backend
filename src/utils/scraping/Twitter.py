@@ -15,6 +15,8 @@ class Twitter:
     # Username used here is the username used in twitter.
     auth = (api_key, api_secret)
 
+    # Used to cache user tweets for the get related users
+    RELATED_USERS= []
     def getTwitterProfile(self, username):
         url = f"{base_url}/users/by/username/{username}?user.fields=created_at,description,profile_image_url,public_metrics&expansions=pinned_tweet_id,most_recent_tweet_id"
         response = requests.request("GET", url, headers=headers, data=payload)
@@ -24,26 +26,22 @@ class Twitter:
         return userInfo
 
     # Get user Followers
-    def getFollowers(self, id, count):
-        url = f"{base_url}/users/{id}/followers/?max_results={count}"
+    def getRelatedUsers(self, count):
 
-        # TODO: Find alternative endpoint to get user followers
-        # response = requests.request(
-        #     "GET", url, auth=self.auth, headers=headers, data=payload
-        # )
-        # userConns = self.__handleException(response)
-        userConns = []
-        return userConns
+        relatedUsers= Twitter.RELATED_USERS[:count] if len(Twitter.RELATED_USERS) > count else Twitter.RELATED_USERS
 
+        return relatedUsers
     # Given the userInfo returned from user profile,
     # this function can return the posts made by a user
     def getUserPosts(self, id, count=5):
-        url = f"{base_url}/users/{id}/tweets?max_results={count}"
+        url = f"{base_url}/users/{id}/tweets?max_results={count}&expansions=referenced_tweets.id.author_id"
         # print(url)
 
         response = requests.request("GET", url, headers=headers, data=payload)
         userPosts = self.__handleException(response)
-        userPosts = response.json().get("data", None)
+        userPosts = response.json().get("data", {})
+        Twitter.RELATED_USERS= response.json().get("includes", {}).get("users", [])
+        Twitter.RELATED_USERS = [user for user in Twitter.RELATED_USERS if user["id"] != id]
 
         return userPosts
 

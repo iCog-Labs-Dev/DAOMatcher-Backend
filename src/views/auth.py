@@ -63,7 +63,7 @@ def refresh():
     response = refresh_token()
     return response
 
-@auth.route(f"{base_url}/request-reset-password", methods=["POST"])
+@auth.route(f"{base_url}/forgot_password", methods=["POST"])
 def forgot_password():
     
     response, status = request_password_reset()
@@ -81,17 +81,8 @@ def forgot_password():
     return response, status 
 
 
-@auth.route(f"{base_url}/confirm-reset-password/<token>", methods=['GET'])
-def confirm_reset_password(token):
-    email = confirm_token(token)
-    
-    if not email:
-        return jsonify({"message": "Invalid or expired token", "error": "Token verification failed"}), 400
-
-    return jsonify({"message": "Token is valid", "email": email}), 200
-
 @auth.route(f"{base_url}/reset-password", methods=['POST'])
-def reset_password():
+def reset_password(token):
     data = request.get_json()
     token = data.get('token')
     new_password = data.get('new_password')
