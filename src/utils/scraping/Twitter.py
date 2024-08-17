@@ -28,11 +28,7 @@ class Twitter:
     # Get user Followers
     def getRelatedUsers(self, count):
 
-        print("Getting related users")
-        print("Found tweet ids number: ", len(Twitter.RELATED_USERS))
         relatedUsers= Twitter.RELATED_USERS[:count] if len(Twitter.RELATED_USERS) > count else Twitter.RELATED_USERS
-
-        print("relatedUsers: ", relatedUsers)
 
         return relatedUsers
     # Given the userInfo returned from user profile,
@@ -45,7 +41,7 @@ class Twitter:
         userPosts = self.__handleException(response)
         userPosts = response.json().get("data", {})
         Twitter.RELATED_USERS= response.json().get("includes", {}).get("users", [])
-        Twitter.RELATED_USERS.filter(lambda user: user["id"] != id)
+        Twitter.RELATED_USERS = [user for user in Twitter.RELATED_USERS if user["id"] != id]
 
         return userPosts
 
